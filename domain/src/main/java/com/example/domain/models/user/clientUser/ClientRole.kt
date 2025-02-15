@@ -1,7 +1,7 @@
 package com.example.domain.models.user.clientUser
 
-import com.example.domain.models.salaryProject.SalaryProjectCompany
+import com.example.domain.models.salaryProject.ISalaryProjectCompany
 
 interface ClientRole {
-    val salaryProjects: List<SalaryProjectCompany>
+    val salariesProjectsCompany: List<ISalaryProjectCompany>
 }

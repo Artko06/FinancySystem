@@ -1,20 +1,30 @@
 package com.example.data.local.entity.bank.bankAccount.creditBankAccount
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.data.local.entity.bank.bankAccount.BaseBankAccountEntity
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
 import com.example.domain.models.bank.bankAccount.creditBankAccount.CreditBankAccount
 import com.example.domain.models.bank.bankAccount.creditBankAccount.StatusCreditBid
 
-@Entity(tableName = "credit_bank_accounts")
+@Entity(
+    tableName = "credit_bank_accounts",
+    foreignKeys = [
+        ForeignKey(
+            entity = BaseBankAccountEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["baseBankAccountId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index(value = ["baseBankAccountId"])]
+)
 data class CreditBankAccountEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val bankId: Int,
-    val userId: Int,
-    val balance: Double,
-    val statusBankAccount: String,
-
+    val baseBankAccountId: Int,
     val interestRate: Double,
     val creditLastDate: String,
     val creditTotalSum: Double,
@@ -22,11 +32,7 @@ data class CreditBankAccountEntity(
 )
 
 //fun CreditBankAccountEntity.toDomain() = CreditBankAccount(
-//    id = id,
-//    bank = getBankById(bankId = bankId),
-//    user = getUserByID(userId = userId),
-//    balance = balance,
-//    statusBankAccount = enumValueOf<StatusBankAccount>(statusBankAccount),
+//    baseBankAccount = getBaseBankAccountById(baseBankAccountId = baseBankAccountId),
 //    interestRate = interestRate,
 //    creditLastDate = creditLastDate,
 //    creditTotalSum = creditTotalSum,

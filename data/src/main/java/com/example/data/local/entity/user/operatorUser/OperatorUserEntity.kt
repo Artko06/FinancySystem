@@ -8,7 +8,7 @@ import com.example.data.local.entity.user.BaseUserEntity
 import com.example.domain.models.user.operatorUser.OperatorUser
 
 @Entity(
-    tableName = "client_users",
+    tableName = "operator_users",
     foreignKeys = [
         ForeignKey(
             entity = BaseUserEntity::class,
@@ -28,5 +28,5 @@ data class OperatorUserEntity(
 //fun OperatorUserEntity.toDomain() = OperatorUser(
 //    baseUser = getBaseUserById(baseUserId),
 //    transfers = getAllTransfers(),
-//    salaryProjectCompany = getAllSalaryProject()
+//    salariesProjectCompany = getAllSalaryProjects()
 //)

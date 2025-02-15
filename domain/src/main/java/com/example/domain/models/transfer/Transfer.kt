@@ -1,11 +1,13 @@
 package com.example.domain.models.transfer
 
-import com.example.domain.models.bank.bankAccount.BankAccount
+import com.example.domain.models.bank.bankAccount.BaseBankAccount
 
 data class Transfer(
     override val id: Int,
-    override val fromAccount: BankAccount,
-    override val toAccount: BankAccount,
+    override val fromBaseBankAccount: BaseBankAccount,
+    override val toBaseBankAccount: BaseBankAccount,
     override val amount: Double,
+    override val dateTransfer: String,
+    override val timeTransfer: String,
     override val status: StatusTransfer
 ) : ITransfer

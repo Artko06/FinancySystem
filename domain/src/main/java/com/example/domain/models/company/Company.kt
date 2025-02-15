@@ -1,7 +1,7 @@
 package com.example.domain.models.company
 
-import com.example.domain.models.bank.bankAccount.BankAccount
-import com.example.domain.models.salaryProject.SalaryProjectCompany
+import com.example.domain.models.bank.bankAccount.companyBankAccount.ICompanyBankAccount
+import com.example.domain.models.salaryProject.ISalaryProjectCompany
 
 data class Company(
      val id: Int,
@@ -10,6 +10,6 @@ data class Company(
      val unp: String,  // УНП
      val bic: String,  // БИК банка
      val address: String,
-     val salaryProjectsCompany: List<SalaryProjectCompany>,
-     val bankAccount: BankAccount
+     val salaryProjectsCompany: List<ISalaryProjectCompany>,
+     val companyBankAccounts: List<ICompanyBankAccount>
 )

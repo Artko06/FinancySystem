@@ -22,4 +22,6 @@ data class CompanyEntity(
 //    unp = unp,
 //    bic = bic,
 //    address = address,
+//    salaryProjectsCompany = getSalaryProjectByCompanyId(companyId = id),
+//    companyBankAccounts = getCompanyBankAccountsByCompanyId(companyId = id)
 //)

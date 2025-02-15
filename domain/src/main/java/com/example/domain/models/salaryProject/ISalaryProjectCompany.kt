@@ -5,7 +5,7 @@ import com.example.domain.models.user.clientUser.ClientRole
 
 interface ISalaryProjectCompany {
     val id: Int
-    val client: ClientRole  // ID клиента, который подал заявку
-    val company: Company // ID предприятия
+    val client: ClientRole  // Клиент, который подал заявку
+    val company: Company
     val status: StatusJobBid // Статус заявки
 }

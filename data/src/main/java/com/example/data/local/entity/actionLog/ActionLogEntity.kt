@@ -17,7 +17,7 @@ data class ActionLogEntity(
 
 //fun ActionLogEntity.toDomain() = ActionLog(
 //    id = id,
-//    baseUser = getBaseUserById(baseUserId),
+//    baseUser = getBaseUserById(baseUserId = baseUserId),
 //    actionType = enumValueOf<ActionType>(actionType),
 //    date = date,
 //    time = time

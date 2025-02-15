@@ -27,8 +27,15 @@ data class ClientUserEntity(
 
 //fun ClientUserEntity.toDomain() = ClientUser(
 //    baseUser = getBaseUserById(baseUserId),
-//    bankAccounts = getBankAccountsById(baseUserId),
-//    salaryProjects = getSalariesProjectById(baseUserId)
+//    standardBankAccounts = getStandardBankAccountByBaseBankAccountId(
+//        listBaseBankAccount = getBaseBankAccountsByBaseUserId(baseUserId = baseUserId)
+//    ),
+//    creditBankAccounts = getCreditBankAccountByBaseBankAccountId(
+//        listBaseBankAccount = getBaseBankAccountsByBaseUserId(baseUserId = baseUserId)
+//    ),
+//    salariesProjectsCompany = getSalariesProjectByClientUserId(
+//       clientUser =  getClientUserByBaseUserId(baseUserId = baseUserId)
+//    )
 //)
 
 

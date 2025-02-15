@@ -9,14 +9,14 @@ import com.example.domain.models.salaryProject.StatusJobBid
 data class SalaryProjectCompanyEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val clientId: Int,
+    val clientUserId: Int,
     val companyId: Int,
     val status: String
 )
 
 //fun SalaryProjectCompanyEntity.toDomain() = SalaryProjectCompany(
 //    id = id,
-//    client = getClientUserById(clientId),
-//    company = getCompanyById(companyId),
+//    client = getClientUserById(clientUserId = clientUserId),
+//    company = getCompanyById(companyId = companyId),
 //    status = enumValueOf<StatusJobBid>(status)
 //)

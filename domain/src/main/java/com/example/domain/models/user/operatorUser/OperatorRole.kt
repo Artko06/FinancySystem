@@ -5,5 +5,5 @@ import com.example.domain.models.transfer.ITransfer
 
 interface OperatorRole {
     val transfers: List<ITransfer>
-    val salaryProjectCompany: List<ISalaryProjectCompany>
+    val salaryProjectsCompany: List<ISalaryProjectCompany>
 }

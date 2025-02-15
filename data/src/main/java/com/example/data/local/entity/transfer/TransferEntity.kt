@@ -9,16 +9,20 @@ import com.example.domain.models.transfer.Transfer
 data class TransferEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val fromAccountId: Int,
-    val toAccountId: Int,
+    val fromBaseBankAccountId: Int,
+    val toBaseBankAccountId: Int,
     val amount: Double,
+    val dateTransfer: String,
+    val timeTransfer: String,
     val status: String
 )
 
 //fun TransferEntity.toDomain() = Transfer(
 //    id = id,
-//    fromAccount = getBankAccountById(fromAccountId),
-//    toAccount = getBankAccountById(toAccountId),
+//    fromBaseBankAccount = getBaseBankAccountById(baseBankAccountId = fromBaseBankAccountId),
+//    toBaseBankAccount = getBankAccountById(baseBankAccountId = toBaseBankAccountId),
 //    amount = amount,
+//    dateTransfer = dateTransfer,
+//    timeTransfer = timeTransfer,
 //    status = enumValueOf<StatusTransfer>(status)
 //)

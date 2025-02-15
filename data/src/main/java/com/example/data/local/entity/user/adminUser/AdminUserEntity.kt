@@ -28,6 +28,6 @@ data class AdminUserEntity(
 
 //fun AdminUserEntity.toDomain() = AdminUser(
 //    baseUser = getBaseUserById(baseUserId),
-//    actionLogs = getActionLogs()
+//    actionLogs = getAllActionLogs()
 //)
 

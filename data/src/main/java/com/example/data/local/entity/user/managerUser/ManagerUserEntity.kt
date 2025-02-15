@@ -8,7 +8,7 @@ import com.example.data.local.entity.user.BaseUserEntity
 import com.example.domain.models.user.managerUser.ManagerUser
 
 @Entity(
-    tableName = "client_users",
+    tableName = "manager_users",
     foreignKeys = [
         ForeignKey(
             entity = BaseUserEntity::class,
@@ -27,7 +27,7 @@ data class ManagerUserEntity(
 
 //fun ManagerUserEntity.toDomain() = ManagerUser(
 //    baseUser = getBaseUserById(baseUserId),
-//    transfers = getTransfersByWaitingCreditBid(),
-//    salaryProjectCompany = getAllSalaryProject(),
-//    bankAccount = getAllBankAccount()
+//    transfers = getAllTransfers(),
+//    salariesProjectCompany = getAllSalaryProjects(),
+//    baseBankAccounts = getAllBaseBankAccount()
 //)

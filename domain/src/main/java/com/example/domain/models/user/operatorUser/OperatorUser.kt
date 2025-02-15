@@ -7,5 +7,5 @@ import com.example.domain.models.user.BaseUser
 data class OperatorUser(
     val baseUser: BaseUser,
     override val transfers: List<ITransfer>,
-    override val salaryProjectCompany: List<ISalaryProjectCompany>
+    override val salaryProjectsCompany: List<ISalaryProjectCompany>
 ) : OperatorRole
