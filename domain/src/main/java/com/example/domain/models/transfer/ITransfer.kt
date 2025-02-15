@@ -1,11 +1,11 @@
 package com.example.domain.models.transfer
 
-import com.example.domain.models.bank.bankAccount.IBankAccount
+import com.example.domain.models.bank.bankAccount.BankAccount
 
 interface ITransfer {
-    val id: String
-    val fromAccount: IBankAccount
-    val toAccount: IBankAccount
+    val id: Int
+    val fromAccount: BankAccount
+    val toAccount: BankAccount
     val amount: Double
     val status: StatusTransfer
 }

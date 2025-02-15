@@ -1,17 +1,14 @@
-package com.example.domain.models.bank.bankAccount.companyBankAccount
+package com.example.domain.models.bank.bankAccount.standartBankAccount
 
 import com.example.domain.models.bank.Bank
 import com.example.domain.models.bank.bankAccount.BankAccount
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
-import com.example.domain.models.company.Company
-import com.example.domain.models.user.clientUser.ClientUser
+import com.example.domain.models.user.ClientBank
 
-data class CompanyBankAccount(
-    val company: Company,
-
+data class StandardBankAccount(
     override val id: Int,
     override val bank: Bank,
-    override val user: ClientUser,
+    override val user: ClientBank,
     override val balance: Double,
     override val statusBankAccount: StatusBankAccount
 ) : BankAccount()

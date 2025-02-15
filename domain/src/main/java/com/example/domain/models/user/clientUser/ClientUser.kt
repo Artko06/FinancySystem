@@ -1,12 +1,12 @@
 package com.example.domain.models.user.clientUser
 
-import com.example.domain.models.bank.bankAccount.IBankAccount
+import com.example.domain.models.bank.bankAccount.BankAccount
 import com.example.domain.models.salaryProject.SalaryProjectCompany
 import com.example.domain.models.user.BaseUser
 import com.example.domain.models.user.ClientBank
 
-class ClientUser(
+data class ClientUser(
     val baseUser: BaseUser,
-    override val bankAccounts: List<IBankAccount>,
+    override val bankAccounts: List<BankAccount>,
     override val salaryProjects: List<SalaryProjectCompany>
 ) : ClientRole, ClientBank

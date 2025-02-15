@@ -1,7 +1,7 @@
 package com.example.domain.models.user.managerUser
 
-import com.example.domain.models.bank.bankAccount.IBankAccount
+import com.example.domain.models.bank.bankAccount.BankAccount
 
 interface ManagerRole {
-    val idCreditsAccount: List<IBankAccount>
+    val bankAccounts: List<BankAccount>
 }
