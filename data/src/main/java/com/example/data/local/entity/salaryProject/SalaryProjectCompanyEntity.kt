@@ -2,21 +2,37 @@ package com.example.data.local.entity.salaryProject
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.domain.models.company.Company
 import com.example.domain.models.salaryProject.SalaryProjectCompany
 import com.example.domain.models.salaryProject.StatusJobBid
+import com.example.domain.models.user.BaseUser
 
 @Entity(tableName = "salary_project_companies")
 data class SalaryProjectCompanyEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val clientUserId: Int,
+    val clientBaseUserId: Int,
     val companyId: Int,
     val status: String
 )
 
-//fun SalaryProjectCompanyEntity.toDomain() = SalaryProjectCompany(
-//    id = id,
-//    client = getClientUserById(clientUserId = clientUserId),
-//    company = getCompanyById(companyId = companyId),
-//    status = enumValueOf<StatusJobBid>(status)
-//)
+fun SalaryProjectCompanyEntity.toDomain(
+    clientBaseUser: BaseUser,
+    company: Company
+) = SalaryProjectCompany(
+    id = id,
+    clientBaseUser = clientBaseUser,
+    company = company,
+    status = enumValueOf<StatusJobBid>(status)
+)
+
+fun SalaryProjectCompany.toEntity(
+    clientBaseUserId: Int,
+    companyId: Int
+) = SalaryProjectCompanyEntity(
+    id = id,
+    clientBaseUserId = clientBaseUserId,
+    companyId = companyId,
+    status = status.toString()
+)
+

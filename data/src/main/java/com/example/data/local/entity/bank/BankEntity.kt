@@ -17,3 +17,9 @@ fun BankEntity.toDomain() = Bank(
     name = name,
     bic = bic
 )
+
+fun Bank.toEntity() = BankEntity(
+    id = id,
+    name = name,
+    bic = bic
+)

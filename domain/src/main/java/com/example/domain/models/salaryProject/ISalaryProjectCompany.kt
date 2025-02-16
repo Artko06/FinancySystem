@@ -1,11 +1,11 @@
 package com.example.domain.models.salaryProject
 
 import com.example.domain.models.company.Company
-import com.example.domain.models.user.clientUser.ClientRole
+import com.example.domain.models.user.BaseUser
 
 interface ISalaryProjectCompany {
     val id: Int
-    val client: ClientRole  // Клиент, который подал заявку
+    val clientBaseUser: BaseUser  // Клиент, который подал заявку
     val company: Company
     val status: StatusJobBid // Статус заявки
 }

@@ -2,6 +2,7 @@ package com.example.data.local.entity.transfer
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.domain.models.bank.bankAccount.BaseBankAccount
 import com.example.domain.models.transfer.StatusTransfer
 import com.example.domain.models.transfer.Transfer
 
@@ -17,12 +18,28 @@ data class TransferEntity(
     val status: String
 )
 
-//fun TransferEntity.toDomain() = Transfer(
-//    id = id,
-//    fromBaseBankAccount = getBaseBankAccountById(baseBankAccountId = fromBaseBankAccountId),
-//    toBaseBankAccount = getBankAccountById(baseBankAccountId = toBaseBankAccountId),
-//    amount = amount,
-//    dateTransfer = dateTransfer,
-//    timeTransfer = timeTransfer,
-//    status = enumValueOf<StatusTransfer>(status)
-//)
+fun TransferEntity.toDomain(
+    fromBaseBankAccount: BaseBankAccount,
+    toBaseBankAccount: BaseBankAccount
+) = Transfer(
+    id = id,
+    fromBaseBankAccount = fromBaseBankAccount,
+    toBaseBankAccount = toBaseBankAccount,
+    amount = amount,
+    dateTransfer = dateTransfer,
+    timeTransfer = timeTransfer,
+    status = enumValueOf<StatusTransfer>(status)
+)
+
+fun Transfer.toEntity(
+    fromBaseBankAccountId: Int,
+    toBaseBankAccountId: Int
+) = TransferEntity(
+    id = id,
+    fromBaseBankAccountId = fromBaseBankAccountId,
+    toBaseBankAccountId = toBaseBankAccountId,
+    amount = amount,
+    dateTransfer = dateTransfer,
+    timeTransfer = timeTransfer,
+    status = status.toString()
+)

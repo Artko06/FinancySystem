@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.data.local.entity.bank.bankAccount.BaseBankAccountEntity
-import com.example.domain.models.bank.bankAccount.StatusBankAccount
+import com.example.domain.models.bank.bankAccount.BaseBankAccount
 import com.example.domain.models.bank.bankAccount.standartBankAccount.StandardBankAccount
 
 
@@ -27,6 +27,12 @@ data class StandardBankAccountEntity(
     val baseBankAccountId: Int
 )
 
-//fun StandardBankAccountEntity.toDomain() = StandardBankAccount(
-//    baseBankAccount = getBaseBankAccountById(baseBankAccountId = baseBankAccountId)
-//)
+fun StandardBankAccountEntity.toDomain(baseBankAccount: BaseBankAccount) = StandardBankAccount(
+    id = id,
+    baseBankAccount = baseBankAccount
+)
+
+fun StandardBankAccount.toEntity(baseBankAccountId: Int) = StandardBankAccountEntity(
+    id = id,
+    baseBankAccountId = baseBankAccountId
+)

@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.data.local.entity.user.BaseUserEntity
+import com.example.domain.models.user.BaseUser
 import com.example.domain.models.user.adminUser.AdminUser
 
 
@@ -26,8 +27,15 @@ data class AdminUserEntity(
     val baseUserId: Int
 )
 
-//fun AdminUserEntity.toDomain() = AdminUser(
-//    baseUser = getBaseUserById(baseUserId),
-//    actionLogs = getAllActionLogs()
-//)
+fun AdminUserEntity.toDomain(
+    baseUser: BaseUser
+) = AdminUser(
+    adminUserId = id,
+    baseUser = baseUser,
+)
+
+fun AdminUser.toEntity(baseUserId: Int) = AdminUserEntity(
+    id = adminUserId,
+    baseUserId = baseUserId
+)
 

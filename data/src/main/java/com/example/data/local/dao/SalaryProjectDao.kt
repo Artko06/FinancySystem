@@ -14,10 +14,10 @@ interface SalaryProjectDao {
     fun getAllSalaryProjects() : Flow<List<SalaryProjectCompanyEntity>>
 
     @Query("Select * FROM salary_project_companies WHERE companyId = :companyId")
-    fun getSalaryProjectByCompanyId(companyId: Int) : Flow<List<SalaryProjectCompanyEntity>>
+    fun getSalaryProjectsByCompanyId(companyId: Int) : Flow<List<SalaryProjectCompanyEntity>>
 
-    @Query("Select * FROM salary_project_companies WHERE clientUserId = :clientUserId")
-    fun getSalaryProjectByClientUserId(clientUserId: Int) : Flow<List<SalaryProjectCompanyEntity>>
+    @Query("Select * FROM salary_project_companies WHERE clientBaseUserId = :clientBaseUserId")
+    fun getSalaryProjectsByClientUserId(clientBaseUserId: Int) : Flow<List<SalaryProjectCompanyEntity>>
 
     @Upsert
     suspend fun insertSalaryProject(salaryProjectCompanyEntity: SalaryProjectCompanyEntity)

@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.data.local.entity.bank.bankAccount.BaseBankAccountEntity
-import com.example.domain.models.bank.bankAccount.StatusBankAccount
+import com.example.domain.models.bank.bankAccount.BaseBankAccount
 import com.example.domain.models.bank.bankAccount.creditBankAccount.CreditBankAccount
 import com.example.domain.models.bank.bankAccount.creditBankAccount.StatusCreditBid
 
@@ -31,10 +31,20 @@ data class CreditBankAccountEntity(
     val statusCreditBid: String
 )
 
-//fun CreditBankAccountEntity.toDomain() = CreditBankAccount(
-//    baseBankAccount = getBaseBankAccountById(baseBankAccountId = baseBankAccountId),
-//    interestRate = interestRate,
-//    creditLastDate = creditLastDate,
-//    creditTotalSum = creditTotalSum,
-//    statusCreditBid = enumValueOf<StatusCreditBid>(statusCreditBid)
-//)
+fun CreditBankAccountEntity.toDomain(baseBankAccount: BaseBankAccount) = CreditBankAccount(
+    id = id,
+    baseBankAccount = baseBankAccount,
+    interestRate = interestRate,
+    creditLastDate = creditLastDate,
+    creditTotalSum = creditTotalSum,
+    statusCreditBid = enumValueOf<StatusCreditBid>(statusCreditBid)
+)
+
+fun CreditBankAccount.toEntity(baseBankAccountId: Int) = CreditBankAccountEntity(
+    id = id,
+    baseBankAccountId = baseBankAccountId,
+    interestRate = interestRate,
+    creditLastDate = creditLastDate,
+    creditTotalSum = creditTotalSum,
+    statusCreditBid = statusCreditBid.toString()
+)

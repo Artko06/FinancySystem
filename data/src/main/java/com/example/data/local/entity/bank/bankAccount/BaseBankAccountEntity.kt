@@ -2,8 +2,10 @@ package com.example.data.local.entity.bank.bankAccount
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.domain.models.bank.Bank
 import com.example.domain.models.bank.bankAccount.BaseBankAccount
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
+import com.example.domain.models.user.BaseUser
 
 @Entity(tableName = "base_bank_accounts")
 data class BaseBankAccountEntity(
@@ -15,10 +17,18 @@ data class BaseBankAccountEntity(
     val statusBankAccount: String
 )
 
-//fun BaseBankAccountEntity.toDomain() = BaseBankAccount(
-//    id = id,
-//    bank = getBankById(bankId = bankId),
-//    baseUser = getBaseUserById(baseUserId = baseUserId),
-//    balance = balance,
-//    statusBankAccount = enumValueOf<StatusBankAccount>(statusBankAccount)
-//)
+fun BaseBankAccountEntity.toDomain(baseUser: BaseUser, bank: Bank) = BaseBankAccount(
+    id = id,
+    bank = bank,
+    baseUser = baseUser,
+    balance = balance,
+    statusBankAccount = enumValueOf<StatusBankAccount>(statusBankAccount)
+)
+
+fun BaseBankAccount.toEntity(baseUserId: Int, bankId: Int) = BaseBankAccountEntity(
+    id = id,
+    bankId = bankId,
+    baseUserId = baseUserId,
+    balance = balance,
+    statusBankAccount = statusBankAccount.toString()
+)

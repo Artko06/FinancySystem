@@ -4,6 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.domain.models.actionLog.ActionLog
 import com.example.domain.models.actionLog.ActionType
+import com.example.domain.models.actionLog.IActionLog
+import com.example.domain.models.user.BaseUser
 
 @Entity(tableName = "action_logs")
 data class ActionLogEntity(
@@ -15,10 +17,18 @@ data class ActionLogEntity(
     val time: String
 )
 
-//fun ActionLogEntity.toDomain() = ActionLog(
-//    id = id,
-//    baseUser = getBaseUserById(baseUserId = baseUserId),
-//    actionType = enumValueOf<ActionType>(actionType),
-//    date = date,
-//    time = time
-//)
+fun ActionLogEntity.toDomain(baseUser: BaseUser) = ActionLog(
+    id = id,
+    baseUser = baseUser,
+    actionType = enumValueOf<ActionType>(actionType),
+    date = date,
+    time = time
+)
+
+fun IActionLog.toEntity(baseUserId: Int) = ActionLogEntity(
+    id = id,
+    baseUserId = baseUserId,
+    actionType = actionType.toString(),
+    date = date,
+    time = time
+)

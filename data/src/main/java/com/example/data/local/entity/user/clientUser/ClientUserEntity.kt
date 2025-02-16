@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.data.local.entity.user.BaseUserEntity
+import com.example.domain.models.user.BaseUser
 import com.example.domain.models.user.clientUser.ClientUser
 
 @Entity(
@@ -25,17 +26,13 @@ data class ClientUserEntity(
     val baseUserId: Int
 )
 
-//fun ClientUserEntity.toDomain() = ClientUser(
-//    baseUser = getBaseUserById(baseUserId),
-//    standardBankAccounts = getStandardBankAccountByBaseBankAccountId(
-//        listBaseBankAccount = getBaseBankAccountsByBaseUserId(baseUserId = baseUserId)
-//    ),
-//    creditBankAccounts = getCreditBankAccountByBaseBankAccountId(
-//        listBaseBankAccount = getBaseBankAccountsByBaseUserId(baseUserId = baseUserId)
-//    ),
-//    salariesProjectsCompany = getSalariesProjectByClientUserId(
-//       clientUser =  getClientUserByBaseUserId(baseUserId = baseUserId)
-//    )
-//)
+fun ClientUserEntity.toDomain(baseUser: BaseUser) = ClientUser(
+    clientUserId = id,
+    baseUser = baseUser
+)
 
+fun ClientUser.toEntity(baseUserId: Int) = ClientUserEntity(
+    id = clientUserId,
+    baseUserId = baseUserId
+)
 

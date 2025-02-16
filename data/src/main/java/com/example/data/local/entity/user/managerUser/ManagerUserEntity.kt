@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.data.local.entity.user.BaseUserEntity
+import com.example.domain.models.user.BaseUser
 import com.example.domain.models.user.managerUser.ManagerUser
 
 @Entity(
@@ -25,9 +26,12 @@ data class ManagerUserEntity(
     val baseUserId: Int,
 )
 
-//fun ManagerUserEntity.toDomain() = ManagerUser(
-//    baseUser = getBaseUserById(baseUserId),
-//    transfers = getAllTransfers(),
-//    salariesProjectCompany = getAllSalaryProjects(),
-//    baseBankAccounts = getAllBaseBankAccount()
-//)
+fun ManagerUserEntity.toDomain(baseUser: BaseUser) = ManagerUser(
+    baseUser = baseUser,
+    managerUserId = id
+)
+
+fun ManagerUser.toEntity(baseUserId: Int) = ManagerUserEntity(
+    baseUserId = baseUserId,
+    id = managerUserId
+)

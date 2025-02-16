@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UserDao {
     // BaseUserEntity
+    @Query("SELECT * FROM base_users")
+    fun getAllBaseUser(): Flow<List<BaseUserEntity>>
+
     @Query("SELECT * FROM base_users WHERE id = :baseUserId")
     fun getBaseUserById(baseUserId: Int): Flow<BaseUserEntity?>
 
@@ -25,6 +28,9 @@ interface UserDao {
     suspend fun deleteBaseUser(baseUser: BaseUserEntity)
 
     // AdminUserEntity
+    @Query("SELECT * FROM admin_users")
+    fun getAllAdminUser(): Flow<List<AdminUserEntity>>
+
     @Query("SELECT * FROM admin_users WHERE baseUserId = :baseUserId")
     fun getAdminUserByBaseUserId(baseUserId: Int): Flow<AdminUserEntity?>
 
@@ -38,6 +44,9 @@ interface UserDao {
     suspend fun deleteAdminUser(adminUser: AdminUserEntity)
 
     // ClientUserEntity
+    @Query("SELECT * FROM client_users")
+    fun getAllClientUser(): Flow<List<ClientUserEntity>>
+
     @Query("SELECT * FROM client_users WHERE baseUserId = :baseUserId")
     fun getClientUserByBaseUserId(baseUserId: Int): Flow<ClientUserEntity?>
 
@@ -51,6 +60,9 @@ interface UserDao {
     suspend fun deleteClientUser(clientUser: ClientUserEntity)
 
     // CompanyUserEntity
+    @Query("SELECT * FROM company_users")
+    fun getAllCompanyUser(): Flow<List<CompanyUserEntity>>
+
     @Query("SELECT * FROM company_users WHERE baseUserId = :baseUserId")
     fun getCompanyUserByBaseUserId(baseUserId: Int): Flow<CompanyUserEntity?>
 
@@ -64,6 +76,9 @@ interface UserDao {
     suspend fun deleteCompanyUser(companyUser: CompanyUserEntity)
 
     // ManagerUserEntity
+    @Query("SELECT * FROM manager_users")
+    fun getAllManagerUser(): Flow<List<ManagerUserEntity>>
+
     @Query("SELECT * FROM manager_users WHERE baseUserId = :baseUserId")
     fun getManagerUserByBaseUserId(baseUserId: Int): Flow<ManagerUserEntity?>
 
@@ -77,6 +92,9 @@ interface UserDao {
     suspend fun deleteManagerUser(managerUser: ManagerUserEntity)
 
     // OperatorUserEntity
+    @Query("SELECT * FROM operator_users")
+    fun getAllOperatorUser(): Flow<List<OperatorUserEntity>>
+
     @Query("SELECT * FROM operator_users WHERE baseUserId = :baseUserId")
     fun getOperatorUserByBaseUserId(baseUserId: Int): Flow<OperatorUserEntity?>
 

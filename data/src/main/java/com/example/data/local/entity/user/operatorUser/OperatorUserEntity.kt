@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.data.local.entity.user.BaseUserEntity
+import com.example.domain.models.user.BaseUser
 import com.example.domain.models.user.operatorUser.OperatorUser
 
 @Entity(
@@ -25,8 +26,12 @@ data class OperatorUserEntity(
     val baseUserId: Int,
 )
 
-//fun OperatorUserEntity.toDomain() = OperatorUser(
-//    baseUser = getBaseUserById(baseUserId),
-//    transfers = getAllTransfers(),
-//    salariesProjectCompany = getAllSalaryProjects()
-//)
+fun OperatorUserEntity.toDomain(baseUser: BaseUser) = OperatorUser(
+    baseUser = baseUser,
+    operatorUserId = id
+)
+
+fun OperatorUser.toEntity(baseUserId: Int) = OperatorUserEntity(
+    baseUserId = baseUserId,
+    id = operatorUserId
+)

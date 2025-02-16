@@ -5,6 +5,8 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.data.local.entity.user.BaseUserEntity
+import com.example.domain.models.company.Company
+import com.example.domain.models.user.BaseUser
 import com.example.domain.models.user.companyUser.CompanyUser
 
 @Entity(
@@ -26,8 +28,14 @@ data class CompanyUserEntity(
     val companyId : Int
 )
 
-//fun CompanyUserEntity.toDomain() = CompanyUser(
-//    baseUser = getBaseUserById(baseUserId = baseUserId),
-//    company = getCompanyById(companyId = companyId),
-//    companyBankAccounts = getCompanyBankAccountsByCompanyId(companyId = companyId)
-//)
+fun CompanyUserEntity.toDomain(baseUser: BaseUser, company: Company) = CompanyUser(
+    baseUser = baseUser,
+    companyUserId = id,
+    company = company
+)
+
+fun CompanyUser.toEntity(baseUserId: Int, companyId: Int) = CompanyUserEntity(
+    baseUserId = baseUserId,
+    id = companyUserId,
+    companyId = companyId
+)

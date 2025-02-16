@@ -11,3 +11,11 @@ kotlin {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
 }
+
+dependencies {
+    val kotlinStandardLibVersion = "2.0.21"
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinStandardLibVersion") // Стандартная библиотека Kotlin
+
+    val coroutinesLibVersion = "1.7.3"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesLibVersion") // Корутины
+}

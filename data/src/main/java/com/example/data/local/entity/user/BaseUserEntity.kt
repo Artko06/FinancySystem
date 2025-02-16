@@ -29,3 +29,15 @@ fun BaseUserEntity.toDomain() = BaseUser(
     phone = phone,
     email = email
 )
+
+fun BaseUser.toEntity() = BaseUserEntity(
+    id = id,
+    firstName = firstName,
+    lastName = lastName,
+    surName = surName,
+    seriesPassword = seriesPassword,
+    numberPassword = numberPassword,
+    identityNumber = identityNumber,
+    phone = phone,
+    email = email
+)
