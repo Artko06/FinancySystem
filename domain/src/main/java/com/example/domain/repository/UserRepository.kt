@@ -27,7 +27,7 @@ interface UserRepository {
     suspend fun deleteClientUser(clientUser: ClientUser)
 
     // CompanyUser
-    fun getCompanyUserByBaseUserId(baseUserId: Int): Flow<CompanyUser>
+    fun getCompanyUserByBaseUserId(baseUserId: Int): Flow<CompanyUser?>
     fun getCompanyUserById(companyUserId: Int): Flow<CompanyUser?>
     suspend fun insertCompanyUser(companyUser: CompanyUser)
     suspend fun deleteCompanyUser(companyUser: CompanyUser)
@@ -40,7 +40,7 @@ interface UserRepository {
 
     // OperatorUser
     fun getOperatorUserByBaseUserId(baseUserId: Int): Flow<OperatorUser?>
-    fun getOperatorUserById(operatorUser: Int): Flow<OperatorUser?>
+    fun getOperatorUserById(operatorUserId: Int): Flow<OperatorUser?>
     suspend fun insertOperatorUser(operatorUser: OperatorUser)
     suspend fun deleteOperatorUser(operatorUser: OperatorUser)
 }

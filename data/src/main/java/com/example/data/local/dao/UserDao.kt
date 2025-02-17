@@ -98,8 +98,8 @@ interface UserDao {
     @Query("SELECT * FROM operator_users WHERE baseUserId = :baseUserId")
     fun getOperatorUserByBaseUserId(baseUserId: Int): Flow<OperatorUserEntity?>
 
-    @Query("SELECT * FROM operator_users WHERE id = :operatorUser")
-    fun getOperatorUserById(operatorUser: Int): Flow<OperatorUserEntity?>
+    @Query("SELECT * FROM operator_users WHERE id = :operatorUserId")
+    fun getOperatorUserById(operatorUserId: Int): Flow<OperatorUserEntity?>
 
     @Upsert
     suspend fun insertOperatorUser(operatorUser: OperatorUserEntity)
