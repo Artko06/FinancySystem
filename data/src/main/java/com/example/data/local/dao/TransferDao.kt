@@ -12,6 +12,9 @@ interface TransferDao {
     @Query("SELECT * FROM transfers ORDER BY dateTransfer DESC, timeTransfer DESC")
     fun getAllTransfers(): Flow<List<TransferEntity>>
 
+    @Query("UPDATE transfers SET status = :newStatus WHERE id = :transferId")
+    suspend fun changeTransferStatus(transferId: Int, newStatus: String)
+
     @Upsert
     suspend fun insertTransfer(transfer: TransferEntity)
 

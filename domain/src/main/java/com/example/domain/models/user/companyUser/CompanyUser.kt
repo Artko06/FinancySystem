@@ -6,5 +6,5 @@ import com.example.domain.models.user.BaseUser
 data class CompanyUser(
     val baseUser: BaseUser,
     val companyUserId: Int,
-    val company: Company,
+    val company: Company
 )

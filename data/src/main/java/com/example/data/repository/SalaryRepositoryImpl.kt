@@ -9,6 +9,7 @@ import com.example.data.local.entity.salaryProject.toEntity
 import com.example.data.local.entity.user.toDomain
 import com.example.domain.models.salaryProject.ISalaryProjectCompany
 import com.example.domain.models.salaryProject.SalaryProjectCompany
+import com.example.domain.models.salaryProject.StatusJobBid
 import com.example.domain.repository.SalaryProjectRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -65,8 +66,8 @@ class SalaryRepositoryImpl(
             }
     }
 
-    override fun getSalaryProjectsByClientUserId(clientUserId: Int): Flow<List<ISalaryProjectCompany>> {
-        return salaryProjectDao.getSalaryProjectsByClientUserId(clientUserId)
+    override fun getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int): Flow<List<ISalaryProjectCompany>> {
+        return salaryProjectDao.getSalaryProjectsByClientBaseUserId(clientBaseUserId)
             .flatMapMerge { entities ->
                 val transformedFlows = entities.map { entity ->
                     combine(
@@ -86,34 +87,44 @@ class SalaryRepositoryImpl(
             }
     }
 
-    override suspend fun insertSalaryProject(salaryProjectCompanyEntity: ISalaryProjectCompany) {
-        when(salaryProjectCompanyEntity){
+    override suspend fun changeStatusSalaryProject(
+        salaryProjectCompany: SalaryProjectCompany,
+        statusJobBid: StatusJobBid
+    ) {
+        salaryProjectDao.changeStatusSalaryProject(
+            salaryProjectId = salaryProjectCompany.id,
+            newStatusJobBid = statusJobBid.toString()
+        )
+    }
+
+    override suspend fun insertSalaryProject(salaryProjectCompany: ISalaryProjectCompany) {
+        when(salaryProjectCompany){
             is SalaryProjectCompany -> {
                 return salaryProjectDao.insertSalaryProject(
-                    salaryProjectCompanyEntity = salaryProjectCompanyEntity.toEntity(
-                        clientBaseUserId = salaryProjectCompanyEntity.clientBaseUser.id,
-                        companyId = salaryProjectCompanyEntity.company.id
+                    salaryProjectCompanyEntity = salaryProjectCompany.toEntity(
+                        clientBaseUserId = salaryProjectCompany.clientBaseUser.id,
+                        companyId = salaryProjectCompany.company.id
                     )
                 )
             }
             else -> {
-                throw IllegalArgumentException("Unsupported bank account type: ${salaryProjectCompanyEntity::class.java}")
+                throw IllegalArgumentException("Unsupported bank account type: ${salaryProjectCompany::class.java}")
             }
         }
     }
 
-    override suspend fun deleteSalaryProject(salaryProjectCompanyEntity: ISalaryProjectCompany) {
-        when(salaryProjectCompanyEntity){
+    override suspend fun deleteSalaryProject(salaryProjectCompany: ISalaryProjectCompany) {
+        when(salaryProjectCompany){
             is SalaryProjectCompany -> {
                 return salaryProjectDao.deleteSalaryProject(
-                    salaryProjectCompanyEntity = salaryProjectCompanyEntity.toEntity(
-                        clientBaseUserId = salaryProjectCompanyEntity.clientBaseUser.id,
-                        companyId = salaryProjectCompanyEntity.company.id
+                    salaryProjectCompanyEntity = salaryProjectCompany.toEntity(
+                        clientBaseUserId = salaryProjectCompany.clientBaseUser.id,
+                        companyId = salaryProjectCompany.company.id
                     )
                 )
             }
             else -> {
-                throw IllegalArgumentException("Unsupported bank account type: ${salaryProjectCompanyEntity::class.java}")
+                throw IllegalArgumentException("Unsupported bank account type: ${salaryProjectCompany::class.java}")
             }
         }
     }

@@ -22,6 +22,12 @@ interface BankAccountDao {
     @Query("SELECT * FROM base_bank_accounts WHERE baseUserId = :baseUserId")
     fun getBaseBankAccountsByBaseUserId(baseUserId: Int): Flow<List<BaseBankAccountEntity>>
 
+    @Query("UPDATE base_bank_accounts SET statusBankAccount = :newStatusBankAccount WHERE id = :baseBankAccountId")
+    suspend fun changeStatusBaseBankAccount(baseBankAccountId: Int, newStatusBankAccount: String)
+
+    @Query("UPDATE base_bank_accounts SET balance = :newBalance WHERE id = :baseBankAccountId")
+    suspend fun changeBalanceBaseBankAccount(baseBankAccountId: Int, newBalance: Double)
+
     @Upsert
     suspend fun insertBaseBankAccount(bankAccount: BaseBankAccountEntity)
 
@@ -45,8 +51,11 @@ interface BankAccountDao {
     @Query("SELECT * FROM credit_bank_accounts")
     fun getAllCreditBankAccounts(): Flow<List<CreditBankAccountEntity>>
 
-    @Query("SELECT * FROM standard_bank_accounts WHERE baseBankAccountId = :baseBankAccountId")
+    @Query("SELECT * FROM credit_bank_accounts WHERE baseBankAccountId = :baseBankAccountId")
     fun getCreditBankAccountByBaseBankAccountId(baseBankAccountId: Int): Flow<CreditBankAccountEntity?>
+
+    @Query("UPDATE credit_bank_accounts SET statusCreditBid = :newStatusCreditBid WHERE id = :creditBankAccountId")
+    suspend fun changeStatusCreditBankAccount(creditBankAccountId: Int, newStatusCreditBid: String)
 
     @Upsert
     suspend fun insertCreditBankAccount(bankAccount: CreditBankAccountEntity)

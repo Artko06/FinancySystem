@@ -4,5 +4,5 @@ import com.example.domain.models.user.BaseUser
 
 data class AdminUser(
     val baseUser: BaseUser,
-    val adminUserId: Int,
+    val adminUserId: Int
 )

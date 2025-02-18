@@ -19,10 +19,12 @@ import com.example.data.local.entity.bank.toDomain
 import com.example.data.local.entity.company.toDomain
 import com.example.data.local.entity.user.toDomain
 import com.example.domain.models.bank.bankAccount.BaseBankAccount
+import com.example.domain.models.bank.bankAccount.StatusBankAccount
 import com.example.domain.models.bank.bankAccount.companyBankAccount.CompanyBankAccount
 import com.example.domain.models.bank.bankAccount.companyBankAccount.ICompanyBankAccount
 import com.example.domain.models.bank.bankAccount.creditBankAccount.CreditBankAccount
 import com.example.domain.models.bank.bankAccount.creditBankAccount.ICreditBankAccount
+import com.example.domain.models.bank.bankAccount.creditBankAccount.StatusCreditBid
 import com.example.domain.models.bank.bankAccount.standartBankAccount.IStandardBankAccount
 import com.example.domain.models.bank.bankAccount.standartBankAccount.StandardBankAccount
 import com.example.domain.repository.BankAccountRepository
@@ -32,6 +34,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlin.collections.map
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BankAccountRepositoryImpl(
@@ -64,6 +67,27 @@ class BankAccountRepositoryImpl(
                 }
                 combine(transformedFlows) { it.filterNotNull() }
             }
+    }
+
+    override suspend fun changeStatusBaseBankAccount(
+        bankAccount: BaseBankAccount,
+        statusBankAccount: StatusBankAccount
+    )
+    {
+        bankAccountDao.changeStatusBaseBankAccount(
+            baseBankAccountId = bankAccount.id,
+            newStatusBankAccount = statusBankAccount.toString()
+        )
+    }
+
+    override suspend fun changeBalanceBaseBankAccount(
+        bankAccount: BaseBankAccount,
+        balance: Double
+    ) {
+        bankAccountDao.changeBalanceBaseBankAccount(
+            baseBankAccountId = bankAccount.id,
+            newBalance = balance
+        )
     }
 
     override suspend fun insertBaseBankAccount(bankAccount: BaseBankAccount) {
@@ -114,6 +138,18 @@ class BankAccountRepositoryImpl(
             }
     }
 
+    override fun getStandardBankAccountByBaseUserId(baseUserId: Int): Flow<List<IStandardBankAccount>> {
+        return getBaseBankAccountsByBaseUserId(baseUserId = baseUserId)
+            .flatMapMerge { baseAccounts ->
+                val creditAccountFlows = baseAccounts.map { baseAccount ->
+                    getStandardBankAccountByBaseBankAccountId(
+                        baseBankAccountId = baseAccount.id
+                    )
+                }
+                combine(creditAccountFlows) { it.filterNotNull() }
+            }
+    }
+
     override suspend fun insertStandardBankAccount(bankAccount: IStandardBankAccount) {
         when(bankAccount){
             is StandardBankAccount -> {
@@ -155,6 +191,29 @@ class BankAccountRepositoryImpl(
         return bankAccountDao.getCreditBankAccountByBaseBankAccountId(
             baseBankAccountId = baseBankAccountId
         ).mapToCreditBankAccount()
+    }
+
+    override fun getCreditBankAccountByBaseUserId(baseUserId: Int): Flow<List<ICreditBankAccount>> {
+        return getBaseBankAccountsByBaseUserId(baseUserId = baseUserId)
+            .flatMapMerge { baseAccounts ->
+                val creditAccountFlows = baseAccounts.map { baseAccount ->
+                    getCreditBankAccountByBaseBankAccountId(
+                        baseBankAccountId = baseAccount.id
+                    )
+                }
+                combine(creditAccountFlows) { it.filterNotNull() }
+            }
+    }
+
+    override suspend fun changeStatusCreditBankAccount(
+        bankAccount: CreditBankAccount,
+        statusCreditBid: StatusCreditBid
+    )
+    {
+        bankAccountDao.changeStatusCreditBankAccount(
+            creditBankAccountId = bankAccount.id,
+            newStatusCreditBid = statusCreditBid.toString()
+        )
     }
 
     override suspend fun insertCreditBankAccount(bankAccount: ICreditBankAccount) {

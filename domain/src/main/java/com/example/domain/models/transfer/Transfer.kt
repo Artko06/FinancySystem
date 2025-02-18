@@ -3,7 +3,7 @@ package com.example.domain.models.transfer
 import com.example.domain.models.bank.bankAccount.BaseBankAccount
 
 data class Transfer(
-    override val id: Int,
+    val id: Int,
     override val fromBaseBankAccount: BaseBankAccount,
     override val toBaseBankAccount: BaseBankAccount,
     override val amount: Double,

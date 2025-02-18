@@ -10,6 +10,7 @@ import com.example.data.local.entity.transfer.toDomain
 import com.example.data.local.entity.transfer.toEntity
 import com.example.data.local.entity.user.toDomain
 import com.example.domain.models.transfer.ITransfer
+import com.example.domain.models.transfer.StatusTransfer
 import com.example.domain.models.transfer.Transfer
 import com.example.domain.repository.TransferRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -63,6 +64,16 @@ class TransferRepositoryImpl(
                 }
                 combine(transformedFlows) { it.filterNotNull() }
             }
+    }
+
+    override suspend fun changeStatusTransfer(
+        transfer: Transfer,
+        statusTransfer: StatusTransfer
+    ) {
+        transferDao.changeTransferStatus(
+            transferId = transfer.id,
+            newStatus = statusTransfer.toString()
+        )
     }
 
     override suspend fun insertTransfer(transfer: ITransfer) {

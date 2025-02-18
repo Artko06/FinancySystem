@@ -1,0 +1,11 @@
+package com.example.domain.useCase.roles
+
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCreditBankAccountByBaseUserUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetStandardBankAccountsByBaseUserUseCase
+import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetSalaryProjectsByClientBaseUserUseCase
+
+interface ClientUserRole {
+    val getStandardBankAccountsByBaseUserUseCase: GetStandardBankAccountsByBaseUserUseCase
+    val getCreditBankAccountByBaseUserUseCase: GetCreditBankAccountByBaseUserUseCase
+    val getSalaryProjectsByClientBaseUserUseCase: GetSalaryProjectsByClientBaseUserUseCase
+}
