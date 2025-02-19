@@ -5,6 +5,8 @@ import com.example.domain.models.user.BaseUser
 
 data class BaseBankAccount(
     val id: Int,
+    //val email: String,
+    //val password: String,
     val bank: Bank,
     val baseUser: BaseUser,
     val balance: Double,

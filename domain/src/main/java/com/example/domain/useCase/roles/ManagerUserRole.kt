@@ -1,11 +1,9 @@
 package com.example.domain.useCase.roles
 
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetAllSalaryProjectUseCase
+import com.example.domain.useCase.allUserCases.transferUseCases.get.GetAllTransfersUseCase
 
 interface ManagerUserRole {
     val getAllSalaryProjectUseCase: GetAllSalaryProjectUseCase
+    val getAllTransfersUseCase: GetAllTransfersUseCase
 }
-
-//override val transfers: List<ITransfer>,
-//override val salaryProjectsCompany: List<ISalaryProjectCompany>,
-//override val baseBankAccounts: List<BaseBankAccount>
