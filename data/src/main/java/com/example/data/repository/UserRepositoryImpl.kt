@@ -17,6 +17,7 @@ import com.example.data.local.entity.user.operatorUser.toEntity
 import com.example.data.local.entity.user.toDomain
 import com.example.data.local.entity.user.toEntity
 import com.example.domain.models.user.BaseUser
+import com.example.domain.models.user.CertificateUser
 import com.example.domain.models.user.adminUser.AdminUser
 import com.example.domain.models.user.clientUser.ClientUser
 import com.example.domain.models.user.companyUser.CompanyUser
@@ -43,12 +44,41 @@ class UserRepositoryImpl(
         }
     }
 
+    override fun getBaseUserByEmail(email: String): Flow<BaseUser?> {
+        return userDao.getBaseUserByEmail(email = email).map { baseUserEntity ->
+            baseUserEntity?.toDomain()
+        }
+    }
+
     override suspend fun insertBaseUser(baseUser: BaseUser) {
         userDao.insertBaseUser(baseUser = baseUser.toEntity())
     }
 
     override suspend fun deleteBaseUser(baseUser: BaseUser) {
         userDao.deleteBaseUser(baseUser = baseUser.toEntity())
+    }
+
+    // CertificateUser
+    override fun getCertificateUserByBaseUserId(baseUserId: Int): Flow<CertificateUser?> {
+        return userDao.getCertificateUserByBaseUserId(baseUserId = baseUserId)
+            .mapToUserDomain(
+                getBaseUser = {user -> userDao.getBaseUserById(baseUserId)},
+                toDomain = {entity, baseUser -> entity.toDomain(baseUser)}
+            )
+    }
+
+    override suspend fun insertCertificateUser(certificateUser: CertificateUser) {
+        userDao.insertCertificateUser(certificateUser = certificateUser.toEntity(
+            baseUserId = certificateUser.baseUser.id
+            )
+        )
+    }
+
+    override suspend fun deleteCertificateUser(certificateUser: CertificateUser) {
+        userDao.deleteCertificateUser(certificateUser = certificateUser.toEntity(
+            baseUserId = certificateUser.baseUser.id
+            )
+        )
     }
 
     // AdminUser

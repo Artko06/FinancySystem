@@ -6,6 +6,10 @@ import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertClientU
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertCompanyUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertManagerUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertOperatorUserUseCase
+import com.example.domain.useCase.allUserCases.UserUseCases.other.ValidateEmailUseCase
+import com.example.domain.useCase.allUserCases.UserUseCases.other.ValidatePasswordUseCase
+import com.example.domain.useCase.allUserCases.auth_regUseCases.ValidateLoginInputUseCase
+import com.example.domain.useCase.allUserCases.auth_regUseCases.ValidateRegisterInputUseCase
 
 interface StartUserRole {
     // GET
@@ -23,4 +27,11 @@ interface StartUserRole {
     // DELETE
 
     // CHANGE
+
+
+    // OTHER
+    val validateEmailUseCase: ValidateEmailUseCase
+    val validatePasswordUseCase: ValidatePasswordUseCase
+    val validateRegisterInputUseCase: ValidateRegisterInputUseCase
+    val validateLoginInputUseCase: ValidateLoginInputUseCase
 }

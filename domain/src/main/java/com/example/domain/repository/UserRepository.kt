@@ -1,6 +1,7 @@
 package com.example.domain.repository
 
 import com.example.domain.models.user.BaseUser
+import com.example.domain.models.user.CertificateUser
 import com.example.domain.models.user.adminUser.AdminUser
 import com.example.domain.models.user.clientUser.ClientUser
 import com.example.domain.models.user.companyUser.CompanyUser
@@ -11,8 +12,14 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     // BaseUser
     fun getBaseUserById(baseUserId: Int): Flow<BaseUser?>
+    fun getBaseUserByEmail(email: String): Flow<BaseUser?>
     suspend fun insertBaseUser(baseUser: BaseUser)
     suspend fun deleteBaseUser(baseUser: BaseUser)
+
+    // CertificateUser
+    fun getCertificateUserByBaseUserId(baseUserId: Int): Flow<CertificateUser?>
+    suspend fun insertCertificateUser(certificateUser: CertificateUser)
+    suspend fun deleteCertificateUser(certificateUser: CertificateUser)
 
     // AdminUser
     fun getAdminUserByBaseUserId(baseUserId: Int): Flow<AdminUser?>

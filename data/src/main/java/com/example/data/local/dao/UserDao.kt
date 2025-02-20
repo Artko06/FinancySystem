@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.data.local.entity.user.BaseUserEntity
+import com.example.data.local.entity.user.CertificateUserEntity
 import com.example.data.local.entity.user.adminUser.AdminUserEntity
 import com.example.data.local.entity.user.clientUser.ClientUserEntity
 import com.example.data.local.entity.user.companyUser.CompanyUserEntity
@@ -21,11 +22,24 @@ interface UserDao {
     @Query("SELECT * FROM base_users WHERE id = :baseUserId")
     fun getBaseUserById(baseUserId: Int): Flow<BaseUserEntity?>
 
+    @Query("SELECT * FROM base_users WHERE email = :email")
+    fun getBaseUserByEmail(email: String) : Flow<BaseUserEntity?>
+
     @Upsert
     suspend fun insertBaseUser(baseUser: BaseUserEntity)
 
     @Delete
     suspend fun deleteBaseUser(baseUser: BaseUserEntity)
+
+    // CertificateUserEntity
+    @Query("SELECT * FROM certificate_users WHERE baseUserId = :baseUserId")
+    fun getCertificateUserByBaseUserId(baseUserId: Int) : Flow<CertificateUserEntity?>
+
+    @Upsert
+    suspend fun insertCertificateUser(certificateUser: CertificateUserEntity)
+
+    @Delete
+    suspend fun deleteCertificateUser(certificateUser: CertificateUserEntity)
 
     // AdminUserEntity
     @Query("SELECT * FROM admin_users")

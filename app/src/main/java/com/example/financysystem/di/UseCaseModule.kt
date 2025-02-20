@@ -19,8 +19,12 @@ import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertClientU
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertCompanyUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertManagerUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertOperatorUserUseCase
+import com.example.domain.useCase.allUserCases.UserUseCases.other.ValidateEmailUseCase
+import com.example.domain.useCase.allUserCases.UserUseCases.other.ValidatePasswordUseCase
 import com.example.domain.useCase.allUserCases.actionLogUseCases.get.GetAllActionLogsUseCase
 import com.example.domain.useCase.allUserCases.actionLogUseCases.insert.InsertActionLogUseCase
+import com.example.domain.useCase.allUserCases.auth_regUseCases.ValidateLoginInputUseCase
+import com.example.domain.useCase.allUserCases.auth_regUseCases.ValidateRegisterInputUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeBalanceBaseBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusBaseBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusCreditBankAccountUseCase
@@ -274,13 +278,24 @@ object UseCaseModule {
             ),
             insertOperatorUserUseCase = InsertOperatorUserUseCase(
                 userRepository = userRepository
-            )
+            ),
 
 
             // DELETE
 
 
             // CHANGE
+
+
+            // OTHER
+            validateEmailUseCase = ValidateEmailUseCase(
+                userRepository = userRepository
+            ),
+            validatePasswordUseCase = ValidatePasswordUseCase(
+                userRepository = userRepository
+            ),
+            validateLoginInputUseCase = ValidateLoginInputUseCase(),
+            validateRegisterInputUseCase = ValidateRegisterInputUseCase()
         )
     }
 }

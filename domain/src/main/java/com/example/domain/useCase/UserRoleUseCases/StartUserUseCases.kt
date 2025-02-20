@@ -6,6 +6,10 @@ import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertClientU
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertCompanyUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertManagerUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertOperatorUserUseCase
+import com.example.domain.useCase.allUserCases.UserUseCases.other.ValidateEmailUseCase
+import com.example.domain.useCase.allUserCases.UserUseCases.other.ValidatePasswordUseCase
+import com.example.domain.useCase.allUserCases.auth_regUseCases.ValidateLoginInputUseCase
+import com.example.domain.useCase.allUserCases.auth_regUseCases.ValidateRegisterInputUseCase
 import com.example.domain.useCase.roles.StartUserRole
 
 data class StartUserUseCases(
@@ -18,10 +22,17 @@ data class StartUserUseCases(
     override val insertClientUserUseCase: InsertClientUserUseCase,
     override val insertCompanyUserUseCase: InsertCompanyUserUseCase,
     override val insertManagerUserUseCase: InsertManagerUserUseCase,
-    override val insertOperatorUserUseCase: InsertOperatorUserUseCase
+    override val insertOperatorUserUseCase: InsertOperatorUserUseCase,
 
     // DELETE
 
 
     // CHANGE
+
+
+    // OTHER
+    override val validateEmailUseCase: ValidateEmailUseCase,
+    override val validatePasswordUseCase: ValidatePasswordUseCase,
+    override val validateRegisterInputUseCase: ValidateRegisterInputUseCase,
+    override val validateLoginInputUseCase: ValidateLoginInputUseCase
 ): StartUserRole
