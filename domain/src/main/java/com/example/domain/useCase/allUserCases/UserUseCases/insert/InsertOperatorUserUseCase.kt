@@ -1,13 +1,52 @@
 package com.example.domain.useCase.allUserCases.UserUseCases.insert
 
+import com.example.domain.models.user.BaseUser
+import com.example.domain.models.user.CertificateUser
+import com.example.domain.models.user.managerUser.ManagerUser
 import com.example.domain.models.user.operatorUser.OperatorUser
 import com.example.domain.repository.UserRepository
+import com.example.domain.util.PasswordHasher
 
 class InsertOperatorUserUseCase(
     private val userRepository: UserRepository
 )
 {
-    suspend operator fun invoke(operatorUser: OperatorUser){
-        userRepository.insertOperatorUser(operatorUser = operatorUser)
+    suspend operator fun invoke(
+        firstName: String,
+        lastName: String,
+        surName: String,
+        phone: String,
+        email: String,
+        password: String,
+        seriesPassport: String,
+        numberPassport: String,
+        identityNumber: String,
+    ){
+        val baseUser = BaseUser(
+            id = 0,
+            firstName = firstName,
+            lastName = lastName,
+            surName = surName,
+            phone = phone,
+            email = email,
+            seriesPassport = seriesPassport,
+            numberPassport = numberPassport,
+            identityNumber = identityNumber
+        )
+
+        val certificateUser = CertificateUser(
+            baseUser = baseUser,
+            id = 0,
+            hashedPassword = PasswordHasher.hashPassword(password)
+        )
+
+        val operatorUser = OperatorUser(
+            baseUser = baseUser,
+            operatorUserId = 0,
+        )
+
+        userRepository.insertBaseUser(baseUser)
+        userRepository.insertCertificateUser(certificateUser)
+        userRepository.insertOperatorUser(operatorUser)
     }
 }

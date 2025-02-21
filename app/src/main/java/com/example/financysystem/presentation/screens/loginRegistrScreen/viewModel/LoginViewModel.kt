@@ -1,5 +1,6 @@
 package com.example.financysystem.presentation.screens.loginRegistrScreen.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.auth_reg.LoginInputValidationType
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val startUserUseCases: StartUserUseCases
-) : ViewModel() {
+) : ViewModel()
+{
     private val _loginState = MutableStateFlow(LoginState())
     val loginState = _loginState.asStateFlow()
 
@@ -26,25 +28,24 @@ class LoginViewModel @Inject constructor(
                 _loginState.update { it.copy(
                     email = event.newValue
                 ) }
+                Log.d("LoginViewModel", "Email changed: ${event.newValue} ${_loginState.value.email}")
             }
 
             LoginEvent.onLoginClick -> {
-                login()
+                processInputValidationType(
+                    loginInputValidationType = startUserUseCases.validateLoginInputUseCase.invoke(
+                        email = _loginState.value.email,
+                        password = _loginState.value.password
+                    )
+                )
+
+                if(_loginState.value.isInputValid) login()
             }
 
             is LoginEvent.onPasswordInputChange -> {
                 _loginState.update { it.copy(
                     password = event.newValue
                 ) }
-            }
-
-            LoginEvent.onSendCodeToEmail -> {
-                processInputValidationType(
-                loginInputValidationType = startUserUseCases.validateLoginInputUseCase.invoke(
-                    email = _loginState.value.email,
-                    password = _loginState.value.password
-                    )
-                )
             }
 
             LoginEvent.onToggleVisualTransformation -> {
@@ -58,12 +59,13 @@ class LoginViewModel @Inject constructor(
                     typeOfUser = event.typeOfUser
                 ) }
             }
-
         }
     }
 
     private fun login() {
         viewModelScope.launch {
+            _loginState.update { it.copy(isLoading = true) }
+
             val emailResult = startUserUseCases.validateEmailUseCase.invoke(
                 email = _loginState.value.email
             )
@@ -71,6 +73,8 @@ class LoginViewModel @Inject constructor(
             if (!emailResult){
                 _loginState.update { it.copy(isSuccessfullyLoggedIn = false) }
                 _loginState.update{ it.copy(errorMessageLoginProcess = "Incorrect email") }
+                _loginState.update { it.copy(isLoading = false) }
+                return@launch
             } else{
                 val loginResult = startUserUseCases.validatePasswordUseCase.invoke(
                     email = _loginState.value.email,
@@ -78,10 +82,17 @@ class LoginViewModel @Inject constructor(
                 )
 
                 if(loginResult){
-                    _loginState.update { it.copy(isSuccessfullyLoggedIn = true) }
+                    _loginState.update { it.copy(
+                        isSuccessfullyLoggedIn = true,
+                        errorMessageLoginProcess = null,
+                        isLoading = false
+                        ) }
                 } else{
-                    _loginState.update { it.copy(isSuccessfullyLoggedIn = false) }
-                    _loginState.update{ it.copy(errorMessageLoginProcess = "Incorrect password") }
+                    _loginState.update { it.copy(
+                        isSuccessfullyLoggedIn = false,
+                        errorMessageLoginProcess = "Incorrect password",
+                        isLoading = false
+                    ) }
                 }
             }
         }

@@ -7,6 +7,5 @@ sealed class LoginEvent {
     data class onPasswordInputChange(val newValue: String): LoginEvent()
     data class onTypeOfUserInputChange(val typeOfUser: TypeOfUser): LoginEvent()
     object onToggleVisualTransformation: LoginEvent()
-    object onSendCodeToEmail: LoginEvent()
     object onLoginClick: LoginEvent()
 }

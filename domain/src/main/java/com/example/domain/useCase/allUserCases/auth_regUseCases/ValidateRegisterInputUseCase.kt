@@ -4,15 +4,36 @@ import com.example.domain.models.auth_reg.RegisterInputValidationType
 
 class ValidateRegisterInputUseCase {
     operator fun invoke(
+        firstName: String,
+        lastName: String,
+        surName: String,
+        seriesPassport: String,
+        numberPassport: String,
+        identityNumber: String,
+        phone: String,
         email: String,
         password: String,
-        passwordRepeated: String
+        passwordRepeated: String,
+
     ): RegisterInputValidationType {
-        if(email.isEmpty() || password.isEmpty() || passwordRepeated.isEmpty()){
+        if(email.isBlank()
+            || password.isBlank()
+            || passwordRepeated.isBlank()
+            || firstName.isBlank()
+            || lastName.isBlank()
+            || surName.isBlank()
+            || seriesPassport.isBlank()
+            || numberPassport.isBlank()
+            || identityNumber.isBlank()
+            || phone.isBlank())
+        {
             return RegisterInputValidationType.EmptyField
         }
         if("@" !in email){
             return RegisterInputValidationType.NoEmail
+        }
+        if("+" !in phone){
+            return RegisterInputValidationType.IncorrectPhone
         }
         if(password != passwordRepeated){
             return RegisterInputValidationType.PasswordsDoNotMatch

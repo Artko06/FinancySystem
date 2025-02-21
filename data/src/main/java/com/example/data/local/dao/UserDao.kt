@@ -23,7 +23,7 @@ interface UserDao {
     fun getBaseUserById(baseUserId: Int): Flow<BaseUserEntity?>
 
     @Query("SELECT * FROM base_users WHERE email = :email")
-    fun getBaseUserByEmail(email: String) : Flow<BaseUserEntity?>
+    fun getBaseUserByEmail(email: String): Flow<BaseUserEntity?>
 
     @Upsert
     suspend fun insertBaseUser(baseUser: BaseUserEntity)
@@ -33,7 +33,7 @@ interface UserDao {
 
     // CertificateUserEntity
     @Query("SELECT * FROM certificate_users WHERE baseUserId = :baseUserId")
-    fun getCertificateUserByBaseUserId(baseUserId: Int) : Flow<CertificateUserEntity?>
+    fun getCertificateUserByBaseUserId(baseUserId: Int): Flow<CertificateUserEntity?>
 
     @Upsert
     suspend fun insertCertificateUser(certificateUser: CertificateUserEntity)

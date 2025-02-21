@@ -11,8 +11,8 @@ data class BaseUserEntity(
     val firstName: String,
     val lastName: String,
     val surName: String,
-    val seriesPassword: String,
-    val numberPassword: String,
+    val seriesPassport: String,
+    val numberPassport: String,
     val identityNumber: String,
     val phone: String,
     val email: String
@@ -23,8 +23,8 @@ fun BaseUserEntity.toDomain() = BaseUser(
     firstName = firstName,
     lastName = lastName,
     surName = surName,
-    seriesPassword = seriesPassword,
-    numberPassword = numberPassword,
+    seriesPassport = seriesPassport,
+    numberPassport = numberPassport,
     identityNumber = identityNumber,
     phone = phone,
     email = email
@@ -35,8 +35,8 @@ fun BaseUser.toEntity() = BaseUserEntity(
     firstName = firstName,
     lastName = lastName,
     surName = surName,
-    seriesPassword = seriesPassword,
-    numberPassword = numberPassword,
+    seriesPassport = seriesPassport,
+    numberPassport = numberPassport,
     identityNumber = identityNumber,
     phone = phone,
     email = email

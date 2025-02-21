@@ -14,7 +14,6 @@ import com.example.domain.useCase.UserRoleUseCases.ManagerUserUseCases
 import com.example.domain.useCase.UserRoleUseCases.OperatorUserUseCases
 import com.example.domain.useCase.UserRoleUseCases.StartUserUseCases
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertAdminUserUseCase
-import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertBaseUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertClientUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertCompanyUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertManagerUserUseCase
@@ -262,9 +261,6 @@ object UseCaseModule {
 
             // INSERT
             insertAdminUserUseCase = InsertAdminUserUseCase(
-                userRepository = userRepository
-            ),
-            insertBaseUserUseCase = InsertBaseUserUseCase(
                 userRepository = userRepository
             ),
             insertClientUserUseCase = InsertClientUserUseCase(

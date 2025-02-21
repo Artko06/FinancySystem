@@ -1,6 +1,7 @@
 package com.example.domain.useCase.allUserCases.UserUseCases.other
 
 import com.example.domain.repository.UserRepository
+import com.example.domain.util.PasswordHasher
 import kotlinx.coroutines.flow.firstOrNull
 
 class ValidatePasswordUseCase(
@@ -12,9 +13,11 @@ class ValidatePasswordUseCase(
 
         if(baseUser == null) return false
 
-        val passwordFromRepository = userRepository.getCertificateUserByBaseUserId(baseUser.id)
+        val hashPasswordFromRepository = userRepository.getCertificateUserByBaseUserId(baseUser.id)
             .firstOrNull()?.hashedPassword
 
-        return passwordFromRepository == password
+        if(hashPasswordFromRepository == null) return false
+
+        return PasswordHasher.verifyPassword(password, hashPasswordFromRepository)
     }
 }

@@ -7,8 +7,8 @@ data class BaseUser(
     val lastName: String,
     val surName: String,
 
-    val seriesPassword: String,
-    val numberPassword: String,
+    val seriesPassport: String,
+    val numberPassport: String,
     val identityNumber: String,
 
     val phone: String,

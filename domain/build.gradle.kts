@@ -18,4 +18,7 @@ dependencies {
 
     val coroutinesLibVersion = "1.7.3"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesLibVersion") // Корутины
+
+    val versionBCrypt = "0.4"
+    implementation("org.mindrot:jbcrypt:$versionBCrypt")
 }

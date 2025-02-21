@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
+    id("com.google.dagger.hilt.android")
     kotlin("kapt")
 }
 
@@ -60,6 +61,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    val versionIcons = "1.5.4"
+    implementation("androidx.compose.material:material-icons-extended:$versionIcons")
 
     //Dagger - Hilt
     val hilt_version = "2.55"

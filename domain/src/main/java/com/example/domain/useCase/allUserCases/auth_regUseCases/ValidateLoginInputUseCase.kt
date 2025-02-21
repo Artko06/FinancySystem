@@ -5,7 +5,7 @@ import com.example.domain.models.auth_reg.LoginInputValidationType
 class ValidateLoginInputUseCase() {
 
     operator fun invoke(email: String, password: String): LoginInputValidationType {
-        if (email.isEmpty() || password.isEmpty()) {
+        if (email.isBlank() || password.isBlank()) {
             return LoginInputValidationType.EmptyField
         }
         if ("@" !in email) {

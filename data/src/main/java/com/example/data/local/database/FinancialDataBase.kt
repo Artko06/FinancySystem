@@ -19,11 +19,13 @@ import com.example.data.local.entity.company.CompanyEntity
 import com.example.data.local.entity.salaryProject.SalaryProjectCompanyEntity
 import com.example.data.local.entity.transfer.TransferEntity
 import com.example.data.local.entity.user.BaseUserEntity
+import com.example.data.local.entity.user.CertificateUserEntity
 import com.example.data.local.entity.user.adminUser.AdminUserEntity
 import com.example.data.local.entity.user.clientUser.ClientUserEntity
 import com.example.data.local.entity.user.companyUser.CompanyUserEntity
 import com.example.data.local.entity.user.managerUser.ManagerUserEntity
 import com.example.data.local.entity.user.operatorUser.OperatorUserEntity
+import com.example.domain.models.user.CertificateUser
 
 @Database(
     entities = [
@@ -44,6 +46,7 @@ import com.example.data.local.entity.user.operatorUser.OperatorUserEntity
         TransferEntity::class,
         // Users
         BaseUserEntity::class,
+        CertificateUserEntity::class,
         AdminUserEntity::class,
         ClientUserEntity::class,
         CompanyUserEntity::class,
