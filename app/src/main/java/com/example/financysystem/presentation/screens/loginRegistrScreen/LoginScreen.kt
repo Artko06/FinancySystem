@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +45,7 @@ import com.example.financysystem.presentation.screens.loginRegistrScreen.event.L
 import com.example.financysystem.presentation.screens.loginRegistrScreen.viewModel.LoginViewModel
 import com.example.financysystem.ui.theme.gray
 import com.example.financysystem.ui.theme.green
+import com.example.financysystem.ui.theme.redOrange
 import com.example.financysystem.ui.theme.white
 import com.example.financysystem.ui.theme.whiteGray
 
@@ -50,12 +55,13 @@ fun LoginScreen(
     onNavigateToRegisterScreen: () -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
+    val stateViewModel = loginViewModel.loginState.collectAsState().value
+
     NavHelper(
-        shouldNavigate = { loginViewModel.loginState.value.isSuccessfullyLoggedIn },
+        shouldNavigate = { stateViewModel.isSuccessfullyLoggedIn },
         toNavigate = { onLoginSuccessNavigation() }
     )
 
-    val stateViewModel = loginViewModel.loginState.collectAsState().value
 
     Box(
         modifier = Modifier
@@ -82,14 +88,10 @@ fun LoginScreen(
         }
         LoginContainer(
             emailValue = {
-                Log.d("LoginScreen", "Email changed: ${loginViewModel.loginState.value.email}")
                 stateViewModel.email
             },
             passwordValue = {
-                loginViewModel.loginState.value.password
-            },
-            buttonEnabled = {
-                loginViewModel.loginState.value.isInputValid
+                stateViewModel.password
             },
             onEmailChanged = { newEmail ->
                 loginViewModel.onEvent(LoginEvent.onEmailInputChange(newValue = newEmail))
@@ -99,16 +101,16 @@ fun LoginScreen(
             },
             onLoginButtonClick = { loginViewModel.onEvent(LoginEvent.onLoginClick) },
             isPasswordShown = {
-                loginViewModel.loginState.value.isPasswordShown
+                stateViewModel.isPasswordShown
             },
             onTrailingPasswordIconClick = {
                 loginViewModel.onEvent(LoginEvent.onToggleVisualTransformation)
             },
             errorHint = {
-                loginViewModel.loginState.value.errorMessageInput
+                stateViewModel.errorMessageInput
             },
             isLoading = {
-                loginViewModel.loginState.value.isLoading
+                stateViewModel.isLoading
             },
             modifier = Modifier
                 .padding(top = 200.dp)
@@ -128,7 +130,7 @@ fun LoginScreen(
         )
         Row(
             modifier = Modifier
-                .padding(bottom = 10.dp)
+                .padding(bottom = 20.dp)
                 .align(Alignment.BottomCenter),
             horizontalArrangement = Arrangement.Center
         ) {
@@ -151,7 +153,6 @@ fun LoginScreen(
 fun LoginContainer(
     emailValue: () -> String,
     passwordValue: () -> String,
-    buttonEnabled: () -> Boolean,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onLoginButtonClick: () -> Unit,
@@ -165,38 +166,44 @@ fun LoginContainer(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        TextEntry(
-            modifier = Modifier
-                .fillMaxWidth(),
-            description = "Email address",
-            hint = "KOXAN@bsuir.by",
-            textValue = emailValue(),
-            textColor = gray,
-            cursorColor = green,
-            onValueChanged = onEmailChanged,
-            trailingIcon = null,
-            onTrailingIconClick = null,
-            leadingIcon = Icons.Default.Email
-        )
-        TextEntry(
-            modifier = Modifier
-                .fillMaxWidth(),
-            description = "Password",
-            hint = "Enter password",
-            textValue = passwordValue(),
-            textColor = gray,
-            cursorColor = green,
-            onValueChanged = onPasswordChanged,
-            trailingIcon = Icons.Default.Visibility,
-            onTrailingIconClick = {
-                onTrailingPasswordIconClick()
-            },
-            leadingIcon = Icons.Default.VpnKey,
-            visualTransformation = if (isPasswordShown()) {
-                VisualTransformation.None
-            } else PasswordVisualTransformation(),
-            keyboardType = KeyboardType.Password
-        )
+        Column(
+            modifier = Modifier.fillMaxHeight(0.3f).verticalScroll(rememberScrollState())
+        ) {
+            TextEntry(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                description = "Email address",
+                hint = "KOXAN@bsuir.by",
+                textValue = emailValue(),
+                keyboardType = KeyboardType.Email,
+                textColor = gray,
+                cursorColor = green,
+                onValueChanged = onEmailChanged,
+                trailingIcon = null,
+                onTrailingIconClick = null,
+                leadingIcon = Icons.Default.Email
+            )
+            TextEntry(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                description = "Password",
+                hint = "Enter password",
+                textValue = passwordValue(),
+                textColor = gray,
+                cursorColor = green,
+                onValueChanged = onPasswordChanged,
+                trailingIcon = if (isPasswordShown()) Icons.Default.Visibility
+                else Icons.Default.VisibilityOff,
+                onTrailingIconClick = {
+                    onTrailingPasswordIconClick()
+                },
+                leadingIcon = Icons.Default.VpnKey,
+                visualTransformation = if (isPasswordShown()) {
+                    VisualTransformation.None
+                } else PasswordVisualTransformation(),
+                keyboardType = KeyboardType.Password
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -206,7 +213,7 @@ fun LoginContainer(
                 text = "Login",
                 backgroundColor = green,
                 contentColor = white,
-                enabled = buttonEnabled(),
+                enabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(45.dp)
@@ -214,7 +221,10 @@ fun LoginContainer(
                 isLoading = isLoading(),
                 onButtonClick = onLoginButtonClick
             )
-            Text(text = errorHint() ?: "")
+            Text(
+                text = errorHint() ?: "",
+                color = redOrange
+                )
         }
     }
 }

@@ -56,11 +56,11 @@ fun TextEntry(
                 .fillMaxWidth()
                 .padding(top = 3.dp)
                 .shadow(3.dp, RoundedCornerShape(25.dp))
-                .border(1.5.dp, textColor, RoundedCornerShape(15.dp))
-                .height(50.dp),
+                .height(60.dp),
             value = textValue,
             colors = TextFieldDefaults.colors(
-                cursorColor = cursorColor
+                cursorColor = cursorColor,
+                focusedIndicatorColor = cursorColor
             ),
             onValueChange = onValueChanged,
             shape = RoundedCornerShape(15.dp),

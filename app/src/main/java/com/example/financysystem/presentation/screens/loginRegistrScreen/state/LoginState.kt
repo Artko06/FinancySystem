@@ -9,5 +9,4 @@ data class LoginState(
     val isPasswordShown: Boolean = false,
     val errorMessageInput: String? = null,
     val isSuccessfullyLoggedIn: Boolean = false,
-    val errorMessageLoginProcess: String? = null
 )

@@ -18,5 +18,4 @@ data class RegistrationState(
     val isLoading: Boolean = false,
     val errorMessageInput: String? = null,
     val isSuccessfullyRegistered: Boolean = false,
-    val errorMessageRegisterProcess: String? = null
 )

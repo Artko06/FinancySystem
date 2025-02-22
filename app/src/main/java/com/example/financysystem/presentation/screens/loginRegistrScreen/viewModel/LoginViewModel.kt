@@ -71,9 +71,11 @@ class LoginViewModel @Inject constructor(
             )
 
             if (!emailResult){
-                _loginState.update { it.copy(isSuccessfullyLoggedIn = false) }
-                _loginState.update{ it.copy(errorMessageLoginProcess = "Incorrect email") }
-                _loginState.update { it.copy(isLoading = false) }
+                _loginState.update { it.copy(
+                    isSuccessfullyLoggedIn = false,
+                    errorMessageInput = "Nonexistent email",
+                    isLoading = false
+                    ) }
                 return@launch
             } else{
                 val loginResult = startUserUseCases.validatePasswordUseCase.invoke(
@@ -84,13 +86,13 @@ class LoginViewModel @Inject constructor(
                 if(loginResult){
                     _loginState.update { it.copy(
                         isSuccessfullyLoggedIn = true,
-                        errorMessageLoginProcess = null,
+                        errorMessageInput = null,
                         isLoading = false
                         ) }
                 } else{
                     _loginState.update { it.copy(
                         isSuccessfullyLoggedIn = false,
-                        errorMessageLoginProcess = "Incorrect password",
+                        errorMessageInput = "Incorrect password for login",
                         isLoading = false
                     ) }
                 }
@@ -102,11 +104,15 @@ class LoginViewModel @Inject constructor(
         _loginState.update {
             when (loginInputValidationType) {
                 LoginInputValidationType.EmptyField -> it.copy(
-                    errorMessageInput = "Empty fields left",
+                    errorMessageInput = "Empty fields",
                     isInputValid = false
                 )
-                LoginInputValidationType.NoEmail -> it.copy(
-                    errorMessageInput = "No valid email",
+                LoginInputValidationType.PasswordTooShort -> it.copy(
+                    errorMessageInput = "Password too short",
+                    isInputValid = false
+                )
+                LoginInputValidationType.IncorrectEmail -> it.copy(
+                    errorMessageInput = "Incorrect email address",
                     isInputValid = false
                 )
                 LoginInputValidationType.Valid -> it.copy(

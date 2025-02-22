@@ -59,7 +59,7 @@ fun AuthButtonPreview() {
         text = "Login",
         backgroundColor = green,
         contentColor = white,
-        onButtonClick = { /*TODO*/ },
+        onButtonClick = { },
         isLoading = true,
         modifier = Modifier.fillMaxWidth()
     )

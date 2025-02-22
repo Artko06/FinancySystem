@@ -2,12 +2,12 @@ package com.example.domain.models.auth_reg
 
 enum class RegisterInputValidationType {
     EmptyField,
-    NoEmail,
+    IncorrectEmail,
     IncorrectPhone,
     PasswordsDoNotMatch,
+    PasswordLowerCaseMissing,
     PasswordUpperCaseMissing,
     PasswordNumberMissing,
-    PasswordSpecialCharMissing,
     PasswordTooShort,
     Valid
 }

@@ -29,8 +29,8 @@ class ValidateRegisterInputUseCase {
         {
             return RegisterInputValidationType.EmptyField
         }
-        if("@" !in email){
-            return RegisterInputValidationType.NoEmail
+        if("@" !in email || "." !in email){
+            return RegisterInputValidationType.IncorrectEmail
         }
         if("+" !in phone){
             return RegisterInputValidationType.IncorrectPhone
@@ -47,8 +47,8 @@ class ValidateRegisterInputUseCase {
         if(!password.containsUpperCase()){
             return RegisterInputValidationType.PasswordUpperCaseMissing
         }
-        if(!password.containsSpecialChar()){
-            return RegisterInputValidationType.PasswordSpecialCharMissing
+        if(!password.containsLowerCase()){
+            return RegisterInputValidationType.PasswordLowerCaseMissing
         }
         return RegisterInputValidationType.Valid
     }
@@ -64,7 +64,7 @@ fun String.containsUpperCase(): Boolean {
     return regex.matches(this)
 }
 
-fun String.containsSpecialChar(): Boolean {
-    val regex = Regex(".*[^A-Za-z\\d]+.*")
+fun String.containsLowerCase(): Boolean {
+    val regex = Regex(".*[a-z]+.*")
     return regex.matches(this)
 }

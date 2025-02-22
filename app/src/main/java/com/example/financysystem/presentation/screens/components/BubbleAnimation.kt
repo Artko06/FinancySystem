@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.financysystem.ui.theme.gray
@@ -28,51 +30,57 @@ fun BubbleAnimation(
     bubbleColor2: Color,
     modifier: Modifier = Modifier
 ) {
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current
+    val screenWidthPx = with(density) { configuration.screenWidthDp.dp.toPx() }
+    val radiusBigCircle = 100.dp
+    val radiusSmallCircle = 75.dp
     val infiniteTransition = rememberInfiniteTransition()
+
     Box(
         modifier = modifier
     ) {
         val xValue = infiniteTransition.animateFloat(
-            initialValue = 100f,
-            targetValue = 1340f,
+            initialValue = radiusBigCircle.value,
+            targetValue = screenWidthPx - radiusBigCircle.value,
             animationSpec = infiniteRepeatable(
-                animation = tween(7000, easing = LinearEasing),
+                animation = tween(9000, easing = LinearEasing),
                 repeatMode = RepeatMode.Reverse
             )
         ).value
 
         val yValue = infiniteTransition.animateFloat(
-            initialValue = 100f,
-            targetValue = 700f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(6000, easing = LinearEasing),
-                repeatMode = RepeatMode.Reverse
-            )
-        ).value
-
-        val xValue2 = infiniteTransition.animateFloat(
-            initialValue = 1340f,
-            targetValue = 100f,
+            initialValue = 0f,
+            targetValue = 600f,
             animationSpec = infiniteRepeatable(
                 animation = tween(8000, easing = LinearEasing),
                 repeatMode = RepeatMode.Reverse
             )
         ).value
 
+        val xValue2 = infiniteTransition.animateFloat(
+            initialValue = screenWidthPx - radiusBigCircle.value,
+            targetValue = radiusBigCircle.value,
+            animationSpec = infiniteRepeatable(
+                animation = tween(9500, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
+            )
+        ).value
+
         val yValue2 = infiniteTransition.animateFloat(
-            initialValue = 400f,
+            initialValue = 600f,
             targetValue = 200f,
             animationSpec = infiniteRepeatable(
-                animation = tween(7000, easing = LinearEasing),
+                animation = tween(8500, easing = LinearEasing),
                 repeatMode = RepeatMode.Reverse
             )
         ).value
 
         val xValue3 = infiniteTransition.animateFloat(
-            initialValue = 1000f,
-            targetValue = 400f,
+            initialValue = screenWidthPx - radiusSmallCircle.value,
+            targetValue = radiusSmallCircle.value,
             animationSpec = infiniteRepeatable(
-                animation = tween(7500, easing = LinearEasing),
+                animation = tween(6000, easing = LinearEasing),
                 repeatMode = RepeatMode.Reverse
             )
         ).value
@@ -81,7 +89,7 @@ fun BubbleAnimation(
             initialValue = 150f,
             targetValue = 600f,
             animationSpec = infiniteRepeatable(
-                animation = tween(6000, easing = LinearEasing),
+                animation = tween(7000, easing = LinearEasing),
                 repeatMode = RepeatMode.Reverse
             )
         ).value
@@ -96,7 +104,7 @@ fun BubbleAnimation(
                     start = Offset(xValue - 90, yValue),
                     end = Offset(xValue + 90, yValue)
                 ),
-                radius = 100f,
+                radius = radiusBigCircle.value,
                 center = Offset(xValue, yValue)
             )
             drawCircle(
@@ -105,7 +113,7 @@ fun BubbleAnimation(
                     start = Offset(xValue2 - 90, yValue2),
                     end = Offset(xValue2 + 90, yValue2)
                 ),
-                radius = 100f,
+                radius = radiusBigCircle.value,
                 center = Offset(xValue2, yValue2)
             )
             drawCircle(
@@ -114,7 +122,7 @@ fun BubbleAnimation(
                     start = Offset(xValue3 - 90, yValue3),
                     end = Offset(xValue3 + 90, yValue3)
                 ),
-                radius = 70f,
+                radius = radiusSmallCircle.value,
                 center = Offset(xValue3, yValue3)
             )
         }

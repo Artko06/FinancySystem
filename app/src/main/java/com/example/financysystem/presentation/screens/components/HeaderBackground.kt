@@ -27,7 +27,7 @@ fun HeaderBackground(
     ) {
         drawCircle(
             radius = size.width,
-            center = Offset(center.x, -size.width / 1.5f),
+            center = Offset(center.x, -size.width * 2/3f),
             brush = Brush.linearGradient(colorList, end = Offset(center.x + 500f, 0f))
         )
     }

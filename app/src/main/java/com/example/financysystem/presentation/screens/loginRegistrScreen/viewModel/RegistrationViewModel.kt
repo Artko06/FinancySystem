@@ -140,7 +140,7 @@ class RegistrationViewModel @Inject constructor(
                 true -> {
                     _regState.update { it.copy(
                         isSuccessfullyRegistered = false,
-                        errorMessageRegisterProcess = "This email is already registered",
+                        errorMessageInput = "This email is already registered",
                         isLoading = false
                     )
                     }
@@ -160,7 +160,7 @@ class RegistrationViewModel @Inject constructor(
 
                     _regState.update { it.copy(
                         isSuccessfullyRegistered = true,
-                        errorMessageRegisterProcess = null,
+                        errorMessageInput = null,
                         isLoading = false
                     )
                     }
@@ -175,14 +175,14 @@ class RegistrationViewModel @Inject constructor(
             when(registerInputValidationType){
                 RegisterInputValidationType.EmptyField -> {
                     it.copy(
-                        errorMessageInput = "Empty fields left",
+                        errorMessageInput = "Empty fields",
                         isInputValid = false
                     )
                 }
 
-                RegisterInputValidationType.NoEmail -> {
+                RegisterInputValidationType.IncorrectEmail -> {
                     it.copy(
-                        errorMessageInput = "No valid email",
+                        errorMessageInput = "Incorrect email address",
                         isInputValid = false
                     )
                 }
@@ -201,16 +201,16 @@ class RegistrationViewModel @Inject constructor(
                     )
                 }
 
-                RegisterInputValidationType.PasswordUpperCaseMissing -> {
+                RegisterInputValidationType.PasswordLowerCaseMissing -> {
                     it.copy(
-                        errorMessageInput = "Password needs to contain at least one upper case char",
+                        errorMessageInput = "Password needs to contain at least one lower case char",
                         isInputValid = false
                     )
                 }
 
-                RegisterInputValidationType.PasswordSpecialCharMissing -> {
+                RegisterInputValidationType.PasswordUpperCaseMissing -> {
                     it.copy(
-                        errorMessageInput = "Password needs to contain at least one special char",
+                        errorMessageInput = "Password needs to contain at least one upper case char",
                         isInputValid = false
                     )
                 }
