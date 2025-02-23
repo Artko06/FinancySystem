@@ -11,7 +11,6 @@ data class RegistrationState(
     val seriesPassportInput: String = "",
     val numberPassportInput: String = "",
     val identityNumberInput: String = "",
-    val typeOfUser: TypeOfUser = TypeOfUser.ClientUser,
     val isInputValid: Boolean = false,
     val isPasswordShown: Boolean = false,
     val isPasswordRepeatedShown: Boolean = false,

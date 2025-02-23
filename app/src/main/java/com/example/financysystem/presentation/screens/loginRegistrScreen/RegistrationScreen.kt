@@ -23,6 +23,8 @@ import androidx.compose.material.icons.filled.SwitchAccount
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.VpnKey
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -50,7 +52,7 @@ import com.example.financysystem.ui.theme.whiteGray
 
 @Composable
 fun RegistrationScreen(
-    onRegistrationSuccessNavigation: () -> Unit,
+    onRegistrationSuccessNavigation: (String) -> Unit,
     onNavigateToLoginScreen: () -> Unit,
     registrationViewModel: RegistrationViewModel = hiltViewModel()
 ) {
@@ -58,150 +60,166 @@ fun RegistrationScreen(
 
     NavHelper(
         shouldNavigate = { stateViewModel.isSuccessfullyRegistered },
-        toNavigate = { onRegistrationSuccessNavigation() }
+        toNavigate = { onRegistrationSuccessNavigation(stateViewModel.emailInput) }
     )
 
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(white),
-    ) {
+    Scaffold { paddingValues ->
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp),
-            contentAlignment = Alignment.Center
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxSize()
         ) {
-            HeaderBackground(
-                leftColor = green,
-                rightColor = gray,
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-            )
-            Text(
-                text = "Registration",
-                color = white,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-        RegisterContainer(
-            emailValue = {
-                stateViewModel.emailInput
-            },
-            passwordValue = {
-                stateViewModel.passwordInput
-            },
-            passwordRepeatedValue = {
-                stateViewModel.passwordRepeatedInput
-            },
-            phoneValue = {
-                stateViewModel.phoneInput
-            },
-            firstNameValue = {
-                stateViewModel.firstNameInput
-            },
-            lastNameValue = {
-                stateViewModel.lastNameInput
-            },
-            surNameValue = {
-                stateViewModel.surNameInput
-            },
-            seriesPassportValue = {
-                stateViewModel.seriesPassportInput
-            },
-            numberPassportValue = {
-                stateViewModel.numberPassportInput
-            },
-            identityNumberValue = {
-                stateViewModel.identityNumberInput
-            },
-            onEmailChanged = { newEmail ->
-                registrationViewModel.onEvent(RegistrationEvent.onEmailInputChange(newValue = newEmail))
-            },
-            onPasswordChanged = { newPassword ->
-                registrationViewModel.onEvent(RegistrationEvent.onPasswordInputChange(newValue = newPassword))
-            },
-            onPasswordRepeatedChanged = { newPasswordRepeated ->
-                registrationViewModel.onEvent(
-                    RegistrationEvent.onPasswordRepeatedInputChange(
-                        newValue = newPasswordRepeated
-                    )
+                    .fillMaxWidth()
+                    .height(paddingValues.calculateTopPadding() + 75.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                HeaderBackground(
+                    leftColor = green,
+                    rightColor = gray,
+                    modifier = Modifier
+                        .fillMaxSize()
                 )
-            },
-            onPhoneInputChanged = { newPhone ->
-                registrationViewModel.onEvent(RegistrationEvent.onPhoneInputChange(newValue = newPhone))
-            },
-            onFirstNameChanged = { newFirstName ->
-                registrationViewModel.onEvent(RegistrationEvent.onFirstNameInputChange(newValue = newFirstName))
-            },
-            onLastNameChanged = { newLastName ->
-                registrationViewModel.onEvent(RegistrationEvent.onLastNameInputChange(newValue = newLastName))
-            },
-            onSurNameChanged = { newSurName ->
-                registrationViewModel.onEvent(RegistrationEvent.onSurNameInputChange(newValue = newSurName))
-            },
-            onSeriesPassportChanged = { newSeriesPassport ->
-                registrationViewModel.onEvent(RegistrationEvent.onSeriesPassportInputChange(newValue = newSeriesPassport))
-            },
-            onNumberPassportChanged = { newNumberPassport ->
-                registrationViewModel.onEvent(RegistrationEvent.onNumberPassportInputChange(newValue = newNumberPassport))
-            },
-            onIdentityNumberChanged = { newIdentityNumber ->
-                registrationViewModel.onEvent(RegistrationEvent.onIdentityNumberInputChange(newValue = newIdentityNumber))
-            },
-            onButtonClick = { registrationViewModel.onEvent(RegistrationEvent.onRegisterClick) },
-            isPasswordShown = {
-                stateViewModel.isPasswordShown
-            },
-            isPasswordRepeatedShown = {
-                stateViewModel.isPasswordRepeatedShown
-            },
-            onTrailingPasswordIconClick = {
-                registrationViewModel.onEvent(RegistrationEvent.onToggleVisualTransformationPassword)
-            },
-            onTrailingPasswordRepeatedIconClick = {
-                registrationViewModel.onEvent(RegistrationEvent.onToggleVisualTransformationPasswordRepeated)
-            },
-            errorHint = {
-                stateViewModel.errorMessageInput
-            },
-            isLoading = {
-                stateViewModel.isLoading
-            },
-            modifier = Modifier
-                .padding(top = 200.dp)
-                .fillMaxWidth(0.9f)
-                .shadow(5.dp, RoundedCornerShape(15.dp))
-                .background(whiteGray, RoundedCornerShape(15.dp))
-                .padding(10.dp, 15.dp, 10.dp, 5.dp)
-                .align(Alignment.TopCenter)
-        )
-        BubbleAnimation(
-            bubbleColor1 = gray,
-            bubbleColor2 = green,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(220.dp)
-                .align(Alignment.BottomCenter),
-        )
-        Row(
-            modifier = Modifier
-                .padding(bottom = 20.dp)
-                .align(Alignment.BottomCenter),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(text = "Already have an account?")
-            Text(
+                Text(
+                    text = "Registration",
+                    color = white,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+            RegisterContainer(
+                emailValue = {
+                    stateViewModel.emailInput
+                },
+                passwordValue = {
+                    stateViewModel.passwordInput
+                },
+                passwordRepeatedValue = {
+                    stateViewModel.passwordRepeatedInput
+                },
+                phoneValue = {
+                    stateViewModel.phoneInput
+                },
+                firstNameValue = {
+                    stateViewModel.firstNameInput
+                },
+                lastNameValue = {
+                    stateViewModel.lastNameInput
+                },
+                surNameValue = {
+                    stateViewModel.surNameInput
+                },
+                seriesPassportValue = {
+                    stateViewModel.seriesPassportInput
+                },
+                numberPassportValue = {
+                    stateViewModel.numberPassportInput
+                },
+                identityNumberValue = {
+                    stateViewModel.identityNumberInput
+                },
+                onEmailChanged = { newEmail ->
+                    registrationViewModel.onEvent(RegistrationEvent.onEmailInputChange(newValue = newEmail))
+                },
+                onPasswordChanged = { newPassword ->
+                    registrationViewModel.onEvent(RegistrationEvent.onPasswordInputChange(newValue = newPassword))
+                },
+                onPasswordRepeatedChanged = { newPasswordRepeated ->
+                    registrationViewModel.onEvent(
+                        RegistrationEvent.onPasswordRepeatedInputChange(
+                            newValue = newPasswordRepeated
+                        )
+                    )
+                },
+                onPhoneInputChanged = { newPhone ->
+                    registrationViewModel.onEvent(RegistrationEvent.onPhoneInputChange(newValue = newPhone))
+                },
+                onFirstNameChanged = { newFirstName ->
+                    registrationViewModel.onEvent(RegistrationEvent.onFirstNameInputChange(newValue = newFirstName))
+                },
+                onLastNameChanged = { newLastName ->
+                    registrationViewModel.onEvent(RegistrationEvent.onLastNameInputChange(newValue = newLastName))
+                },
+                onSurNameChanged = { newSurName ->
+                    registrationViewModel.onEvent(RegistrationEvent.onSurNameInputChange(newValue = newSurName))
+                },
+                onSeriesPassportChanged = { newSeriesPassport ->
+                    registrationViewModel.onEvent(
+                        RegistrationEvent.onSeriesPassportInputChange(
+                            newValue = newSeriesPassport
+                        )
+                    )
+                },
+                onNumberPassportChanged = { newNumberPassport ->
+                    registrationViewModel.onEvent(
+                        RegistrationEvent.onNumberPassportInputChange(
+                            newValue = newNumberPassport
+                        )
+                    )
+                },
+                onIdentityNumberChanged = { newIdentityNumber ->
+                    registrationViewModel.onEvent(
+                        RegistrationEvent.onIdentityNumberInputChange(
+                            newValue = newIdentityNumber
+                        )
+                    )
+                },
+                onButtonClick = { registrationViewModel.onEvent(RegistrationEvent.onRegisterClick) },
+                isPasswordShown = {
+                    stateViewModel.isPasswordShown
+                },
+                isPasswordRepeatedShown = {
+                    stateViewModel.isPasswordRepeatedShown
+                },
+                onTrailingPasswordIconClick = {
+                    registrationViewModel.onEvent(RegistrationEvent.onToggleVisualTransformationPassword)
+                },
+                onTrailingPasswordRepeatedIconClick = {
+                    registrationViewModel.onEvent(RegistrationEvent.onToggleVisualTransformationPasswordRepeated)
+                },
+                errorHint = {
+                    stateViewModel.errorMessageInput
+                },
+                isLoading = {
+                    stateViewModel.isLoading
+                },
                 modifier = Modifier
-                    .padding(start = 5.dp)
-                    .clickable {
-                        onNavigateToLoginScreen()
-                    },
-                text = "Login",
-                color = green,
-                fontWeight = FontWeight.Bold,
+                    .padding(top = 200.dp)
+                    .fillMaxWidth(0.9f)
+                    .shadow(5.dp, RoundedCornerShape(15.dp))
+                    .background(whiteGray, RoundedCornerShape(15.dp))
+                    .padding(10.dp, 15.dp, 10.dp, 5.dp)
+                    .align(Alignment.TopCenter)
             )
+            BubbleAnimation(
+                bubbleColor1 = gray,
+                bubbleColor2 = green,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .align(Alignment.BottomCenter),
+            )
+            Row(
+                modifier = Modifier
+                    .padding(bottom = 20.dp)
+                    .align(Alignment.BottomCenter),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Already have an account?",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .clickable {
+                            onNavigateToLoginScreen()
+                        },
+                    text = "Login",
+                    color = green,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
         }
     }
 }

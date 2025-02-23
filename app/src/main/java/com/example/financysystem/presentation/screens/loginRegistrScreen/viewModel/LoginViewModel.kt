@@ -52,11 +52,6 @@ class LoginViewModel @Inject constructor(
                 ) }
             }
 
-            is LoginEvent.onTypeOfUserInputChange -> {
-                _loginState.update { it.copy(
-                    typeOfUser = event.typeOfUser
-                ) }
-            }
         }
     }
 

@@ -1,9 +1,11 @@
 package com.example.financysystem.presentation.navigarionScreen
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.financysystem.presentation.screens.loginRegistrScreen.LoginScreen
 import com.example.financysystem.presentation.screens.loginRegistrScreen.RegistrationScreen
 import com.example.financysystem.presentation.screens.userScreen.UserScreen
@@ -19,14 +21,14 @@ fun NavigationScreen(){
     {
         composable(route = Screen.LoginScreen.route){
             LoginScreen(
-                onLoginSuccessNavigation = {
-                    navController.navigate(Screen.UserScreen.route){
+                onLoginSuccessNavigation = { email ->
+                    navController.navigate(route = "${Screen.UserScreen.route}/$email"){
                         popUpTo(0)
                     }
                 },
 
                 onNavigateToRegisterScreen = {
-                    navController.navigate(Screen.RegistrationScreen.route){
+                    navController.navigate(route = Screen.RegistrationScreen.route){
                         popUpTo(0)
                     }
                 }
@@ -35,22 +37,27 @@ fun NavigationScreen(){
 
         composable(route = Screen.RegistrationScreen.route){
             RegistrationScreen(
-                onRegistrationSuccessNavigation = {
-                    navController.navigate(Screen.UserScreen.route){
+                onRegistrationSuccessNavigation = { email ->
+                    navController.navigate(route = "${Screen.UserScreen.route}/$email"){
                         popUpTo(0)
                     }
                 },
 
                 onNavigateToLoginScreen = {
-                    navController.navigate(Screen.LoginScreen.route){
+                    navController.navigate(route = Screen.LoginScreen.route){
                         popUpTo(0)
                     }
                 }
             )
         }
 
-        composable(route = Screen.UserScreen.route){
-            UserScreen()
+        composable(
+            route = "${Screen.UserScreen.route}/{userEmail}",
+            arguments = listOf(navArgument("userEmail") { type = NavType.StringType })
+
+        ){ getArg ->
+            val userEmail = getArg.arguments?.getString("userEmail")!!
+            UserScreen(userEmail = userEmail)
         }
     }
 }

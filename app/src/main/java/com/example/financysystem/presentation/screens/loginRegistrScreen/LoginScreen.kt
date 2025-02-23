@@ -19,6 +19,8 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.VpnKey
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -46,7 +48,7 @@ import com.example.financysystem.ui.theme.whiteGray
 
 @Composable
 fun LoginScreen(
-    onLoginSuccessNavigation: () -> Unit,
+    onLoginSuccessNavigation: (String) -> Unit,
     onNavigateToRegisterScreen: () -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
@@ -54,92 +56,96 @@ fun LoginScreen(
 
     NavHelper(
         shouldNavigate = { stateViewModel.isSuccessfullyLoggedIn },
-        toNavigate = { onLoginSuccessNavigation() }
+        toNavigate = { onLoginSuccessNavigation(stateViewModel.email) }
     )
 
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(white)
-    ) {
+    Scaffold { paddingValues ->
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp),
-            contentAlignment = Alignment.Center
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxSize()
         ) {
-            HeaderBackground(
-                leftColor = green,
-                rightColor = gray,
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-            )
-            Text(
-                text = "Login",
-                color = white,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-        LoginContainer(
-            emailValue = {
-                stateViewModel.email
-            },
-            passwordValue = {
-                stateViewModel.password
-            },
-            onEmailChanged = { newEmail ->
-                loginViewModel.onEvent(LoginEvent.onEmailInputChange(newValue = newEmail))
-            },
-            onPasswordChanged = { newPassword ->
-                loginViewModel.onEvent(LoginEvent.onPasswordInputChange(newValue = newPassword))
-            },
-            onLoginButtonClick = { loginViewModel.onEvent(LoginEvent.onLoginClick) },
-            isPasswordShown = {
-                stateViewModel.isPasswordShown
-            },
-            onTrailingPasswordIconClick = {
-                loginViewModel.onEvent(LoginEvent.onToggleVisualTransformation)
-            },
-            errorHint = {
-                stateViewModel.errorMessageInput
-            },
-            isLoading = {
-                stateViewModel.isLoading
-            },
-            modifier = Modifier
-                .padding(top = 200.dp)
-                .fillMaxWidth(0.9f)
-                .shadow(5.dp, RoundedCornerShape(15.dp))
-                .background(whiteGray, RoundedCornerShape(15.dp))
-                .padding(10.dp, 15.dp, 10.dp, 5.dp)
-                .align(Alignment.TopCenter)
-        )
-        BubbleAnimation(
-            bubbleColor1 = green,
-            bubbleColor2 = gray,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .align(Alignment.BottomCenter)
-        )
-        Row(
-            modifier = Modifier
-                .padding(bottom = 20.dp)
-                .align(Alignment.BottomCenter),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(text = "No account yet?")
-            Text(
-                "Register",
+                    .fillMaxWidth()
+                    .height(paddingValues.calculateTopPadding() + 75.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                HeaderBackground(
+                    leftColor = green,
+                    rightColor = gray,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+                Text(
+                    text = "Login",
+                    color = white,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+            LoginContainer(
+                emailValue = {
+                    stateViewModel.email
+                },
+                passwordValue = {
+                    stateViewModel.password
+                },
+                onEmailChanged = { newEmail ->
+                    loginViewModel.onEvent(LoginEvent.onEmailInputChange(newValue = newEmail))
+                },
+                onPasswordChanged = { newPassword ->
+                    loginViewModel.onEvent(LoginEvent.onPasswordInputChange(newValue = newPassword))
+                },
+                onLoginButtonClick = { loginViewModel.onEvent(LoginEvent.onLoginClick) },
+                isPasswordShown = {
+                    stateViewModel.isPasswordShown
+                },
+                onTrailingPasswordIconClick = {
+                    loginViewModel.onEvent(LoginEvent.onToggleVisualTransformation)
+                },
+                errorHint = {
+                    stateViewModel.errorMessageInput
+                },
+                isLoading = {
+                    stateViewModel.isLoading
+                },
                 modifier = Modifier
-                    .padding(start = 5.dp)
-                    .clickable {
-                        onNavigateToRegisterScreen()
-                    },
-                color = green,
-                fontWeight = FontWeight.Bold
+                    .padding(top = 200.dp)
+                    .fillMaxWidth(0.9f)
+                    .shadow(5.dp, RoundedCornerShape(15.dp))
+                    .background(whiteGray, RoundedCornerShape(15.dp))
+                    .padding(10.dp, 15.dp, 10.dp, 5.dp)
+                    .align(Alignment.TopCenter)
             )
+            BubbleAnimation(
+                bubbleColor1 = green,
+                bubbleColor2 = gray,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .align(Alignment.BottomCenter)
+            )
+            Row(
+                modifier = Modifier
+                    .padding(bottom = 20.dp)
+                    .align(Alignment.BottomCenter),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "No account yet?",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    "Register",
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .clickable {
+                            onNavigateToRegisterScreen()
+                        },
+                    color = green,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
