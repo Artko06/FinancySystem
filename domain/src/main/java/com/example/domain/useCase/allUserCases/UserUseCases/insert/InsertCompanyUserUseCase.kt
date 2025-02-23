@@ -3,10 +3,10 @@ package com.example.domain.useCase.allUserCases.UserUseCases.insert
 import com.example.domain.models.company.Company
 import com.example.domain.models.user.BaseUser
 import com.example.domain.models.user.CertificateUser
-import com.example.domain.models.user.adminUser.AdminUser
 import com.example.domain.models.user.companyUser.CompanyUser
 import com.example.domain.repository.UserRepository
 import com.example.domain.util.PasswordHasher
+import kotlinx.coroutines.flow.firstOrNull
 
 class InsertCompanyUserUseCase(
     private val userRepository: UserRepository
@@ -24,7 +24,7 @@ class InsertCompanyUserUseCase(
         identityNumber: String,
         company: Company
     ){
-        val baseUser = BaseUser(
+        var baseUser = BaseUser(
             id = 0,
             firstName = firstName,
             lastName = lastName,
@@ -35,6 +35,9 @@ class InsertCompanyUserUseCase(
             numberPassport = numberPassport,
             identityNumber = identityNumber
         )
+
+        userRepository.insertBaseUser(baseUser)
+        baseUser = userRepository.getBaseUserByEmail(email = email).firstOrNull()!!
 
         val certificateUser = CertificateUser(
             baseUser = baseUser,
@@ -48,7 +51,6 @@ class InsertCompanyUserUseCase(
             company = company
         )
 
-        userRepository.insertBaseUser(baseUser)
         userRepository.insertCertificateUser(certificateUser)
         userRepository.insertCompanyUser(companyUser)
     }

@@ -18,6 +18,9 @@ interface BankDao {
     @Upsert
     suspend fun insertBank(bank: BankEntity)
 
+    @Upsert
+    suspend fun insertListOfBank(banks: List<BankEntity>)
+
     @Delete
     suspend fun deleteBank(bank: BankEntity)
 }

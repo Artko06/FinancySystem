@@ -18,6 +18,9 @@ interface CompanyDao {
     @Upsert
     suspend fun insertCompany(company: CompanyEntity)
 
+    @Upsert
+    suspend fun insertListOfCompany(companies: List<CompanyEntity>)
+
     @Delete
     suspend fun deleteCompany(company: CompanyEntity)
 }

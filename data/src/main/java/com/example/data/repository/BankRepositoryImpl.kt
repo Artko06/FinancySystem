@@ -28,6 +28,12 @@ class BankRepositoryImpl(
         bankDao.insertBank(bank = bank.toEntity())
     }
 
+    override suspend fun insertListOfBank(banks: List<Bank>) {
+        bankDao.insertListOfBank(
+            banks = banks.map { it.toEntity() }
+        )
+    }
+
     override suspend fun deleteBank(bank: Bank) {
         bankDao.deleteBank(bank = bank.toEntity())
     }

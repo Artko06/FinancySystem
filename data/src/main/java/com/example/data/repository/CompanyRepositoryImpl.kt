@@ -30,6 +30,12 @@ class CompanyRepositoryImpl(
         companyDao.insertCompany(company.toEntity())
     }
 
+    override suspend fun insertListOfCompany(companies: List<Company>) {
+        companyDao.insertListOfCompany(
+            companies = companies.map { it.toEntity() }
+        )
+    }
+
     override suspend fun deleteCompany(company: Company) {
         companyDao.deleteCompany(company.toEntity())
     }

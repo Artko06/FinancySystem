@@ -25,7 +25,6 @@ import com.example.data.local.entity.user.clientUser.ClientUserEntity
 import com.example.data.local.entity.user.companyUser.CompanyUserEntity
 import com.example.data.local.entity.user.managerUser.ManagerUserEntity
 import com.example.data.local.entity.user.operatorUser.OperatorUserEntity
-import com.example.domain.models.user.CertificateUser
 
 @Database(
     entities = [
@@ -54,7 +53,7 @@ import com.example.domain.models.user.CertificateUser
         OperatorUserEntity::class
                ],
     version = 1,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class FinancialDataBase : RoomDatabase() {
 

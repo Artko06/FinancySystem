@@ -28,6 +28,9 @@ interface UserDao {
     @Upsert
     suspend fun insertBaseUser(baseUser: BaseUserEntity)
 
+    @Upsert
+    suspend fun insertListOfBaseUser(baseUsers: List<BaseUserEntity>)
+
     @Delete
     suspend fun deleteBaseUser(baseUser: BaseUserEntity)
 
@@ -37,6 +40,9 @@ interface UserDao {
 
     @Upsert
     suspend fun insertCertificateUser(certificateUser: CertificateUserEntity)
+
+    @Upsert
+    suspend fun insertListOfCertificateUser(certificateUsers: List<CertificateUserEntity>)
 
     @Delete
     suspend fun deleteCertificateUser(certificateUser: CertificateUserEntity)
@@ -54,6 +60,9 @@ interface UserDao {
     @Upsert
     suspend fun insertAdminUser(adminUser: AdminUserEntity)
 
+    @Upsert
+    suspend fun insertListOfAdminUser(adminUsers: List<AdminUserEntity>)
+
     @Delete
     suspend fun deleteAdminUser(adminUser: AdminUserEntity)
 
@@ -69,6 +78,9 @@ interface UserDao {
 
     @Upsert
     suspend fun insertClientUser(clientUser: ClientUserEntity)
+
+    @Upsert
+    suspend fun insertListOfClientUser(clientUsers: List<ClientUserEntity>)
 
     @Delete
     suspend fun deleteClientUser(clientUser: ClientUserEntity)
@@ -86,6 +98,9 @@ interface UserDao {
     @Upsert
     suspend fun insertCompanyUser(companyUser: CompanyUserEntity)
 
+    @Upsert
+    suspend fun insertListOfCompanyUser(companyUsers: List<CompanyUserEntity>)
+
     @Delete
     suspend fun deleteCompanyUser(companyUser: CompanyUserEntity)
 
@@ -102,6 +117,9 @@ interface UserDao {
     @Upsert
     suspend fun insertManagerUser(managerUser: ManagerUserEntity)
 
+    @Upsert
+    suspend fun insertListOfManagerUser(managerUsers: List<ManagerUserEntity>)
+
     @Delete
     suspend fun deleteManagerUser(managerUser: ManagerUserEntity)
 
@@ -117,6 +135,9 @@ interface UserDao {
 
     @Upsert
     suspend fun insertOperatorUser(operatorUser: OperatorUserEntity)
+
+    @Upsert
+    suspend fun insertListOfOperatorUser(operatorUsers: List<OperatorUserEntity>)
 
     @Delete
     suspend fun deleteOperatorUser(operatorUser: OperatorUserEntity)

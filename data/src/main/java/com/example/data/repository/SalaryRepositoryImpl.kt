@@ -100,7 +100,7 @@ class SalaryRepositoryImpl(
     override suspend fun insertSalaryProject(salaryProjectCompany: ISalaryProjectCompany) {
         when(salaryProjectCompany){
             is SalaryProjectCompany -> {
-                return salaryProjectDao.insertSalaryProject(
+                salaryProjectDao.insertSalaryProject(
                     salaryProjectCompanyEntity = salaryProjectCompany.toEntity(
                         clientBaseUserId = salaryProjectCompany.clientBaseUser.id,
                         companyId = salaryProjectCompany.company.id
@@ -116,7 +116,7 @@ class SalaryRepositoryImpl(
     override suspend fun deleteSalaryProject(salaryProjectCompany: ISalaryProjectCompany) {
         when(salaryProjectCompany){
             is SalaryProjectCompany -> {
-                return salaryProjectDao.deleteSalaryProject(
+                salaryProjectDao.deleteSalaryProject(
                     salaryProjectCompanyEntity = salaryProjectCompany.toEntity(
                         clientBaseUserId = salaryProjectCompany.clientBaseUser.id,
                         companyId = salaryProjectCompany.company.id

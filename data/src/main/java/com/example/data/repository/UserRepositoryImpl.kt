@@ -54,6 +54,11 @@ class UserRepositoryImpl(
         userDao.insertBaseUser(baseUser = baseUser.toEntity())
     }
 
+    override suspend fun insertListOfBaseUser(baseUsers: List<BaseUser>) {
+        userDao.insertListOfBaseUser(
+            baseUsers = baseUsers.map { it.toEntity() }
+        )
+    }
     override suspend fun deleteBaseUser(baseUser: BaseUser) {
         userDao.deleteBaseUser(baseUser = baseUser.toEntity())
     }
@@ -71,6 +76,12 @@ class UserRepositoryImpl(
         userDao.insertCertificateUser(certificateUser = certificateUser.toEntity(
             baseUserId = certificateUser.baseUser.id
             )
+        )
+    }
+
+    override suspend fun insertListOfCertificateUser(certificateUsers: List<CertificateUser>) {
+        userDao.insertListOfCertificateUser(
+            certificateUsers = certificateUsers.map { it.toEntity(baseUserId = it.baseUser.id) }
         )
     }
 
@@ -99,14 +110,20 @@ class UserRepositoryImpl(
     }
 
     override suspend fun insertAdminUser(adminUser: AdminUser) {
-        return userDao.insertAdminUser(adminUser = adminUser.toEntity(
+        userDao.insertAdminUser(adminUser = adminUser.toEntity(
             baseUserId = adminUser.baseUser.id
             )
         )
     }
 
+    override suspend fun insertListOfAdminUser(adminUsers: List<AdminUser>) {
+        userDao.insertListOfAdminUser(
+            adminUsers = adminUsers.map { it.toEntity(baseUserId = it.baseUser.id) }
+        )
+    }
+
     override suspend fun deleteAdminUser(adminUser: AdminUser) {
-        return userDao.deleteAdminUser(adminUser = adminUser.toEntity(
+        userDao.deleteAdminUser(adminUser = adminUser.toEntity(
             baseUserId = adminUser.baseUser.id
         )
         )
@@ -133,6 +150,12 @@ class UserRepositoryImpl(
         userDao.insertClientUser(clientUser = clientUser.toEntity(
             baseUserId = clientUser.baseUser.id
             )
+        )
+    }
+
+    override suspend fun insertListOfClientUser(clientUsers: List<ClientUser>) {
+        userDao.insertListOfClientUser(
+            clientUsers = clientUsers.map { it.toEntity(baseUserId = it.baseUser.id) }
         )
     }
 
@@ -191,15 +214,24 @@ class UserRepositoryImpl(
     }
 
     override suspend fun insertCompanyUser(companyUser: CompanyUser) {
-        return userDao.insertCompanyUser(companyUser = companyUser.toEntity(
+        userDao.insertCompanyUser(companyUser = companyUser.toEntity(
             baseUserId = companyUser.baseUser.id,
             companyId = companyUser.companyUserId
         )
         )
     }
 
+    override suspend fun insertListOfCompanyUser(companyUsers: List<CompanyUser>) {
+        userDao.insertListOfCompanyUser(
+            companyUsers = companyUsers.map { it.toEntity(
+                baseUserId = it.baseUser.id,
+                companyId = it.company.id
+            ) }
+        )
+    }
+
     override suspend fun deleteCompanyUser(companyUser: CompanyUser) {
-        return userDao.deleteCompanyUser(companyUser = companyUser.toEntity(
+        userDao.deleteCompanyUser(companyUser = companyUser.toEntity(
                 baseUserId = companyUser.baseUser.id,
                 companyId = companyUser.companyUserId
             )
@@ -227,6 +259,12 @@ class UserRepositoryImpl(
         userDao.insertManagerUser(managerUser = managerUser.toEntity(
             baseUserId = managerUser.baseUser.id
         )
+        )
+    }
+
+    override suspend fun insertListOfManagerUser(managerUsers: List<ManagerUser>) {
+        userDao.insertListOfManagerUser(
+            managerUsers = managerUsers.map { it.toEntity(it.baseUser.id) }
         )
     }
 
@@ -258,6 +296,12 @@ class UserRepositoryImpl(
         userDao.insertOperatorUser(operatorUser = operatorUser.toEntity(
             baseUserId = operatorUser.baseUser.id
             )
+        )
+    }
+
+    override suspend fun insertListOfOperatorUser(operatorUsers: List<OperatorUser>) {
+        userDao.insertListOfOperatorUser(
+            operatorUsers = operatorUsers.map { it.toEntity(baseUserId = it.baseUser.id) }
         )
     }
 

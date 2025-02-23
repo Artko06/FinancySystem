@@ -1,6 +1,5 @@
 package com.example.financysystem.presentation.screens.loginRegistrScreen.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.auth_reg.LoginInputValidationType
@@ -28,7 +27,6 @@ class LoginViewModel @Inject constructor(
                 _loginState.update { it.copy(
                     email = event.newValue
                 ) }
-                Log.d("LoginViewModel", "Email changed: ${event.newValue} ${_loginState.value.email}")
             }
 
             LoginEvent.onLoginClick -> {

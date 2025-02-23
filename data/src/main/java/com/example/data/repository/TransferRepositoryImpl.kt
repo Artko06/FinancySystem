@@ -79,7 +79,7 @@ class TransferRepositoryImpl(
     override suspend fun insertTransfer(transfer: ITransfer) {
         when(transfer){
             is Transfer -> {
-                return transferDao.insertTransfer(transfer = transfer.toEntity(
+                transferDao.insertTransfer(transfer = transfer.toEntity(
                     fromBaseBankAccountId = transfer.fromBaseBankAccount.id,
                     toBaseBankAccountId = transfer.toBaseBankAccount.id
                     )
@@ -94,7 +94,7 @@ class TransferRepositoryImpl(
     override suspend fun deleteTransfer(transfer: ITransfer) {
         when(transfer){
             is Transfer -> {
-                return transferDao.deleteTransfer(transfer = transfer.toEntity(
+                transferDao.deleteTransfer(transfer = transfer.toEntity(
                     fromBaseBankAccountId = transfer.fromBaseBankAccount.id,
                     toBaseBankAccountId = transfer.toBaseBankAccount.id
                 )

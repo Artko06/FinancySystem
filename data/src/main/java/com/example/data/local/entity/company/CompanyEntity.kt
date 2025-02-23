@@ -11,7 +11,6 @@ data class CompanyEntity(
     val type: String, // ИП, ООО, ЗАО и т.д.
     val name: String,
     val unp: String, // УНП
-    val bic: String, // БИК банка
     val address: String
 )
 
@@ -20,7 +19,6 @@ fun CompanyEntity.toDomain() = Company(
     type = type,
     name = name,
     unp = unp,
-    bic = bic,
     address = address
 )
 
@@ -29,6 +27,5 @@ fun Company.toEntity() = CompanyEntity(
     type = type,
     name = name,
     unp = unp,
-    bic = bic,
     address = address
 )

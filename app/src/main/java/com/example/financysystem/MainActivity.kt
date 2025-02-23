@@ -15,6 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FinancySystemTheme {
+//              deleteDatabase(FinancialDataBase.DATABASE_NAME)
                 NavigationScreen()
             }
         }

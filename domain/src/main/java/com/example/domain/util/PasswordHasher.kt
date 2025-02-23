@@ -5,7 +5,7 @@ import org.mindrot.jbcrypt.BCrypt
 object PasswordHasher {
     // Хеширование пароля
     fun hashPassword(password: String): String {
-        return BCrypt.hashpw(password, BCrypt.gensalt(12)) // 12 - уровень сложности
+        return BCrypt.hashpw(password, BCrypt.gensalt(4)) // 4 - уровень сложности
     }
 
     // Проверка пароля

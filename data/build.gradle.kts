@@ -32,6 +32,12 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+    }
 }
 
 dependencies {
@@ -43,6 +49,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //Dagger - Hilt
+    val hilt_version = "2.55"
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt ("com.google.dagger:hilt-android-compiler:$hilt_version")
 
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:$room_version")
