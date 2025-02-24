@@ -1,5 +1,6 @@
 package com.example.domain.useCase.roles
 
+import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertAdminUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertClientUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertCompanyUserUseCase
@@ -12,6 +13,7 @@ import com.example.domain.useCase.allUserCases.auth_regUseCases.ValidateRegister
 
 interface StartUserRole {
     // GET
+    val getBaseUserUseCase: GetBaseUserUseCase
 
 
     // INSERT

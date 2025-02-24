@@ -9,6 +9,7 @@ import com.example.financysystem.presentation.screens.loginRegistrScreen.state.L
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -76,13 +77,17 @@ class LoginViewModel @Inject constructor(
                     password = _loginState.value.password
                 )
 
+                val typeOfUser = startUserUseCases.getBaseUserUseCase.invoke(_loginState.value.email)
+                    .firstOrNull()!!.typeOfUser
+
                 if(loginResult){
                     _loginState.update { it.copy(
+                        typeOfUser = typeOfUser,
                         isSuccessfullyLoggedIn = true,
                         errorMessageInput = null,
-                        isLoading = false
+                        isLoading = false,
                         ) }
-                } else{
+                } else {
                     _loginState.update { it.copy(
                         isSuccessfullyLoggedIn = false,
                         errorMessageInput = "Incorrect password for login",

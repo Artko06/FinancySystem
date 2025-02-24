@@ -14,6 +14,7 @@ import com.example.data.local.entity.user.clientUser.ClientUserEntity
 import com.example.data.local.entity.user.companyUser.CompanyUserEntity
 import com.example.data.local.entity.user.managerUser.ManagerUserEntity
 import com.example.data.local.entity.user.operatorUser.OperatorUserEntity
+import com.example.domain.models.user.TypeOfUser
 import com.example.domain.util.PasswordHasher
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineScope
@@ -103,21 +104,21 @@ class DatabaseInitializer @Inject constructor(
                         "Role: ${
                             when {
                                 index < COUNT_CLIENT_USERS
-                                    -> "ClientUser"
+                                    -> TypeOfUser.ClientUser.name
 
                                 index in COUNT_CLIENT_USERS until COUNT_CLIENT_USERS + COUNT_COMPANY_USERS
-                                    -> "CompanyUser"
+                                    -> TypeOfUser.CompanyUser.name
 
                                 index in COUNT_CLIENT_USERS + COUNT_COMPANY_USERS until
                                         COUNT_CLIENT_USERS + COUNT_COMPANY_USERS + COUNT_MANAGER_USERS
-                                    -> "ManagerUser"
+                                    -> TypeOfUser.ManagerUser.name
 
                                 index in COUNT_CLIENT_USERS + COUNT_COMPANY_USERS + COUNT_MANAGER_USERS until
                                         COUNT_CLIENT_USERS + COUNT_COMPANY_USERS + COUNT_MANAGER_USERS
                                         + COUNT_OPERATOR_USERS
-                                    -> "OperatorUser"
+                                    -> TypeOfUser.OperatorUser.name
 
-                                else -> "AdminUser"
+                                else -> TypeOfUser.AdminUser.name
                             }
                         }\n\n"
             )

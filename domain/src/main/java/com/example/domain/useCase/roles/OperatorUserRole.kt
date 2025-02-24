@@ -1,5 +1,6 @@
 package com.example.domain.useCase.roles
 
+import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusCreditBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCreditBankAccountByBaseUserUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.change.ChangeStatusSalaryProjectUseCase
@@ -11,6 +12,7 @@ interface OperatorUserRole {
     val getAllSalaryProjectUseCase: GetAllSalaryProjectUseCase
     val getCreditBankAccountByBaseUserUseCase: GetCreditBankAccountByBaseUserUseCase
     val getAllTransfersUseCase: GetAllTransfersUseCase
+    val getBaseUserUseCase: GetBaseUserUseCase
 
     // INSERT
 

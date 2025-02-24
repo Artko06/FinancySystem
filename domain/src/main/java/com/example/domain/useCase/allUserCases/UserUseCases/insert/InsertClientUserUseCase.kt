@@ -2,11 +2,10 @@ package com.example.domain.useCase.allUserCases.UserUseCases.insert
 
 import com.example.domain.models.user.BaseUser
 import com.example.domain.models.user.CertificateUser
+import com.example.domain.models.user.TypeOfUser
 import com.example.domain.models.user.clientUser.ClientUser
 import com.example.domain.repository.UserRepository
 import com.example.domain.util.PasswordHasher
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
 class InsertClientUserUseCase(
@@ -22,7 +21,8 @@ class InsertClientUserUseCase(
         password: String,
         seriesPassport: String,
         numberPassport: String,
-        identityNumber: String
+        identityNumber: String,
+        typeOfUser: TypeOfUser
     ){
         var baseUser = BaseUser(
             id = 0,
@@ -33,7 +33,8 @@ class InsertClientUserUseCase(
             email = email,
             seriesPassport = seriesPassport,
             numberPassport = numberPassport,
-            identityNumber = identityNumber
+            identityNumber = identityNumber,
+            typeOfUser = typeOfUser
         )
 
         userRepository.insertBaseUser(baseUser)

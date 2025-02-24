@@ -6,9 +6,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.financysystem.presentation.screens.loginRegistrScreen.LoginScreen
-import com.example.financysystem.presentation.screens.loginRegistrScreen.RegistrationScreen
-import com.example.financysystem.presentation.screens.userScreen.UserScreen
+import com.example.domain.models.user.TypeOfUser
+import com.example.financysystem.presentation.screens.loginRegistrScreen.screen.LoginScreen
+import com.example.financysystem.presentation.screens.loginRegistrScreen.screen.RegistrationScreen
+import com.example.financysystem.presentation.screens.userScreen.screen.AdminUserMainScreen
+import com.example.financysystem.presentation.screens.userScreen.screen.ClientUserMainScreen
+import com.example.financysystem.presentation.screens.userScreen.screen.CompanyUserMainScreen
+import com.example.financysystem.presentation.screens.userScreen.screen.ManagerUserMainScreen
+import com.example.financysystem.presentation.screens.userScreen.screen.OperatorUserMainScreen
 
 @Composable
 fun NavigationScreen(){
@@ -21,9 +26,33 @@ fun NavigationScreen(){
     {
         composable(route = Screen.LoginScreen.route){
             LoginScreen(
-                onLoginSuccessNavigation = { email ->
-                    navController.navigate(route = "${Screen.UserScreen.route}/$email"){
-                        popUpTo(0)
+                onLoginSuccessNavigation = { email, typeOfUser ->
+                    when(typeOfUser){
+                        TypeOfUser.AdminUser -> {
+                            navController.navigate(route = "${Screen.AdminUserScreen.route}/$email"){
+                                popUpTo(0)
+                            }
+                        }
+                        TypeOfUser.ClientUser -> {
+                            navController.navigate(route = "${Screen.ClientUserScreen.route}/$email"){
+                                popUpTo(0)
+                            }
+                        }
+                        TypeOfUser.CompanyUser -> {
+                            navController.navigate(route = "${Screen.CompanyUserScreen.route}/$email"){
+                                popUpTo(0)
+                            }
+                        }
+                        TypeOfUser.ManagerUser -> {
+                            navController.navigate(route = "${Screen.ManagerUserScreen.route}/$email"){
+                                popUpTo(0)
+                            }
+                        }
+                        TypeOfUser.OperatorUser -> {
+                            navController.navigate(route = "${Screen.OperatorUserScreen.route}/$email"){
+                                popUpTo(0)
+                            }
+                        }
                     }
                 },
 
@@ -38,7 +67,7 @@ fun NavigationScreen(){
         composable(route = Screen.RegistrationScreen.route){
             RegistrationScreen(
                 onRegistrationSuccessNavigation = { email ->
-                    navController.navigate(route = "${Screen.UserScreen.route}/$email"){
+                    navController.navigate(route = "${Screen.ClientUserScreen.route}/$email"){
                         popUpTo(0)
                     }
                 },
@@ -52,12 +81,33 @@ fun NavigationScreen(){
         }
 
         composable(
-            route = "${Screen.UserScreen.route}/{userEmail}",
+            route = "${Screen.AdminUserScreen.route}/{userEmail}",
             arguments = listOf(navArgument("userEmail") { type = NavType.StringType })
 
-        ){ getArg ->
-            val userEmail = getArg.arguments?.getString("userEmail")!!
-            UserScreen(userEmail = userEmail)
-        }
+        ){ AdminUserMainScreen() }
+
+        composable(
+            route = "${Screen.ClientUserScreen.route}/{userEmail}",
+            arguments = listOf(navArgument("userEmail") { type = NavType.StringType })
+
+        ){ ClientUserMainScreen() }
+
+        composable(
+            route = "${Screen.CompanyUserScreen.route}/{userEmail}",
+            arguments = listOf(navArgument("userEmail") { type = NavType.StringType })
+
+        ){ CompanyUserMainScreen() }
+
+        composable(
+            route = "${Screen.ManagerUserScreen.route}/{userEmail}",
+            arguments = listOf(navArgument("userEmail") { type = NavType.StringType })
+
+        ){ ManagerUserMainScreen() }
+
+        composable(
+            route = "${Screen.OperatorUserScreen.route}/{userEmail}",
+            arguments = listOf(navArgument("userEmail") { type = NavType.StringType })
+
+        ){ OperatorUserMainScreen() }
     }
 }

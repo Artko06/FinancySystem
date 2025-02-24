@@ -13,6 +13,7 @@ import com.example.domain.useCase.UserRoleUseCases.CompanyUserUseCases
 import com.example.domain.useCase.UserRoleUseCases.ManagerUserUseCases
 import com.example.domain.useCase.UserRoleUseCases.OperatorUserUseCases
 import com.example.domain.useCase.UserRoleUseCases.StartUserUseCases
+import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertAdminUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertClientUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertCompanyUserUseCase
@@ -56,12 +57,16 @@ object UseCaseModule {
     @Provides
     @Singleton
     fun provideAdminUserUseCases(
-        actionLogRepository: ActionLogRepository
+        actionLogRepository: ActionLogRepository,
+        userRepository: UserRepository
     ): AdminUserUseCases {
         return AdminUserUseCases(
             // GET
             getAllActionLogsUseCase = GetAllActionLogsUseCase(
                 actionLogRepository = actionLogRepository
+            ),
+            getBaseUserUseCase = GetBaseUserUseCase(
+                userRepository = userRepository
             )
 
             // INSERT
@@ -82,7 +87,8 @@ object UseCaseModule {
         bankRepository: BankRepository,
         companyRepository: CompanyRepository,
         salaryProjectRepository: SalaryProjectRepository,
-        transferRepository: TransferRepository
+        transferRepository: TransferRepository,
+        userRepository: UserRepository
         ): ClientUserUseCases {
         return ClientUserUseCases(
             // GET
@@ -100,6 +106,9 @@ object UseCaseModule {
             ),
             getAllCompanyUseCase = GetAllCompanyUseCase(
                 companyRepository = companyRepository
+            ),
+            getBaseUserUseCase = GetBaseUserUseCase(
+                userRepository = userRepository
             ),
 
             // INSERT
@@ -139,7 +148,8 @@ object UseCaseModule {
         bankAccountRepository: BankAccountRepository,
         bankRepository: BankRepository,
         salaryProjectRepository: SalaryProjectRepository,
-        transferRepository: TransferRepository
+        transferRepository: TransferRepository,
+        userRepository: UserRepository
     ): CompanyUserUseCases {
         return CompanyUserUseCases(
             // GET
@@ -151,6 +161,9 @@ object UseCaseModule {
             ),
             getSalaryProjectsByCompanyUseCase = GetSalaryProjectsByCompanyUseCase(
                 salaryProjectRepository = salaryProjectRepository
+            ),
+            getBaseUserUseCase = GetBaseUserUseCase(
+                userRepository = userRepository
             ),
 
             // INSERT
@@ -185,7 +198,8 @@ object UseCaseModule {
     fun provideManagerUserUseCases(
         bankAccountRepository: BankAccountRepository,
         salaryProjectRepository: SalaryProjectRepository,
-        transferRepository: TransferRepository
+        transferRepository: TransferRepository,
+        userRepository: UserRepository
     ): ManagerUserUseCases {
         return ManagerUserUseCases(
             // GET
@@ -197,6 +211,9 @@ object UseCaseModule {
             ),
             getCreditBankAccountByBaseUserUseCase = GetCreditBankAccountByBaseUserUseCase(
                 bankAccountRepository = bankAccountRepository
+            ),
+            getBaseUserUseCase = GetBaseUserUseCase(
+                userRepository = userRepository
             ),
 
             // INSERT
@@ -220,7 +237,8 @@ object UseCaseModule {
     fun provideOperatorUserUseCases(
         bankAccountRepository: BankAccountRepository,
         salaryProjectRepository: SalaryProjectRepository,
-        transferRepository: TransferRepository
+        transferRepository: TransferRepository,
+        userRepository: UserRepository
     ): OperatorUserUseCases {
         return OperatorUserUseCases (
             // GET
@@ -232,6 +250,9 @@ object UseCaseModule {
             ),
             getAllTransfersUseCase = GetAllTransfersUseCase(
                 transferRepository = transferRepository
+            ),
+            getBaseUserUseCase = GetBaseUserUseCase(
+                userRepository = userRepository
             ),
 
             // INSERT
@@ -257,6 +278,9 @@ object UseCaseModule {
     ): StartUserUseCases {
         return StartUserUseCases(
             // GET
+            getBaseUserUseCase = GetBaseUserUseCase(
+                userRepository = userRepository
+            ),
 
 
             // INSERT

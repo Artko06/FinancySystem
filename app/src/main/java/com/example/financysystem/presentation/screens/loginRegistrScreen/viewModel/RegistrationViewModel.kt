@@ -3,6 +3,7 @@ package com.example.financysystem.presentation.screens.loginRegistrScreen.viewMo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.auth_reg.RegisterInputValidationType
+import com.example.domain.models.user.TypeOfUser
 import com.example.domain.useCase.UserRoleUseCases.StartUserUseCases
 import com.example.financysystem.presentation.screens.loginRegistrScreen.event.RegistrationEvent
 import com.example.financysystem.presentation.screens.loginRegistrScreen.state.RegistrationState
@@ -155,7 +156,8 @@ class RegistrationViewModel @Inject constructor(
                         phone = _regState.value.phoneInput,
                         identityNumber = _regState.value.identityNumberInput,
                         seriesPassport = _regState.value.seriesPassportInput,
-                        numberPassport = _regState.value.numberPassportInput
+                        numberPassport = _regState.value.numberPassportInput,
+                        typeOfUser = TypeOfUser.ClientUser
                     )
 
                     _regState.update { it.copy(

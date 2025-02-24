@@ -12,5 +12,7 @@ data class BaseUser(
     val identityNumber: String,
 
     val phone: String,
-    val email: String
+    val email: String,
+
+    val typeOfUser: TypeOfUser
 )

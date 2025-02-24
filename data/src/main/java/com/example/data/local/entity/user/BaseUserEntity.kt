@@ -3,6 +3,7 @@ package com.example.data.local.entity.user
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.domain.models.user.BaseUser
+import com.example.domain.models.user.TypeOfUser
 
 @Entity(tableName = "base_users")
 data class BaseUserEntity(
@@ -15,7 +16,8 @@ data class BaseUserEntity(
     val numberPassport: String,
     val identityNumber: String,
     val phone: String,
-    val email: String
+    val email: String,
+    val typeOfUser: String,
 )
 
 fun BaseUserEntity.toDomain() = BaseUser(
@@ -27,7 +29,8 @@ fun BaseUserEntity.toDomain() = BaseUser(
     numberPassport = numberPassport,
     identityNumber = identityNumber,
     phone = phone,
-    email = email
+    email = email,
+    typeOfUser = enumValueOf<TypeOfUser>(typeOfUser)
 )
 
 fun BaseUser.toEntity() = BaseUserEntity(
@@ -39,5 +42,6 @@ fun BaseUser.toEntity() = BaseUserEntity(
     numberPassport = numberPassport,
     identityNumber = identityNumber,
     phone = phone,
-    email = email
+    email = email,
+    typeOfUser = typeOfUser.toString()
 )

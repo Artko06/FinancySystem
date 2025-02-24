@@ -1,4 +1,4 @@
-package com.example.financysystem.presentation.screens.loginRegistrScreen
+package com.example.financysystem.presentation.screens.loginRegistrScreen.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.domain.models.user.TypeOfUser
 import com.example.financysystem.presentation.navigarionScreen.NavHelper
 import com.example.financysystem.presentation.screens.components.AuthButton
 import com.example.financysystem.presentation.screens.components.BubbleAnimation
@@ -48,7 +49,7 @@ import com.example.financysystem.ui.theme.whiteGray
 
 @Composable
 fun LoginScreen(
-    onLoginSuccessNavigation: (String) -> Unit,
+    onLoginSuccessNavigation: (String, TypeOfUser) -> Unit,
     onNavigateToRegisterScreen: () -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
@@ -56,7 +57,7 @@ fun LoginScreen(
 
     NavHelper(
         shouldNavigate = { stateViewModel.isSuccessfullyLoggedIn },
-        toNavigate = { onLoginSuccessNavigation(stateViewModel.email) }
+        toNavigate = { onLoginSuccessNavigation(stateViewModel.email, stateViewModel.typeOfUser) }
     )
 
     Scaffold { paddingValues ->

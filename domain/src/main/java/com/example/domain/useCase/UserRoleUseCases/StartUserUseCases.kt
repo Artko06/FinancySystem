@@ -1,5 +1,6 @@
 package com.example.domain.useCase.UserRoleUseCases
 
+import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertAdminUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertClientUserUseCase
 import com.example.domain.useCase.allUserCases.UserUseCases.insert.InsertCompanyUserUseCase
@@ -13,6 +14,8 @@ import com.example.domain.useCase.roles.StartUserRole
 
 data class StartUserUseCases(
     // GET
+    override val getBaseUserUseCase: GetBaseUserUseCase,
+
 
 
     // INSERT
@@ -32,5 +35,5 @@ data class StartUserUseCases(
     override val validateEmailUseCase: ValidateEmailUseCase,
     override val validatePasswordUseCase: ValidatePasswordUseCase,
     override val validateRegisterInputUseCase: ValidateRegisterInputUseCase,
-    override val validateLoginInputUseCase: ValidateLoginInputUseCase
+    override val validateLoginInputUseCase: ValidateLoginInputUseCase,
 ): StartUserRole

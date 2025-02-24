@@ -1,5 +1,6 @@
 package com.example.domain.useCase.UserRoleUseCases
 
+import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
 import com.example.domain.useCase.allUserCases.actionLogUseCases.insert.InsertActionLogUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeBalanceBaseBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusBaseBankAccountUseCase
@@ -16,6 +17,7 @@ data class CompanyUserUseCases(
     override val getCompanyBankAccountsByCompanyUseCase: GetCompanyBankAccountsByCompanyUseCase,
     override val getAllBanksUseCases: GetAllBanksUseCases,
     override val getSalaryProjectsByCompanyUseCase: GetSalaryProjectsByCompanyUseCase,
+    override val getBaseUserUseCase: GetBaseUserUseCase,
 
     // INSERT
     override val insertActionLogUseCase: InsertActionLogUseCase,

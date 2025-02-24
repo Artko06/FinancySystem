@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c3acce905a7f8d38fea123a0c51a65b3",
+    "identityHash": "85b4b8fc03cad2e64e8dc1c0bc133143",
     "entities": [
       {
         "tableName": "action_logs",
@@ -438,7 +438,7 @@
       },
       {
         "tableName": "base_users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `surName` TEXT NOT NULL, `seriesPassport` TEXT NOT NULL, `numberPassport` TEXT NOT NULL, `identityNumber` TEXT NOT NULL, `phone` TEXT NOT NULL, `email` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `surName` TEXT NOT NULL, `seriesPassport` TEXT NOT NULL, `numberPassport` TEXT NOT NULL, `identityNumber` TEXT NOT NULL, `phone` TEXT NOT NULL, `email` TEXT NOT NULL, `typeOfUser` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -491,6 +491,12 @@
           {
             "fieldPath": "email",
             "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "typeOfUser",
+            "columnName": "typeOfUser",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -808,7 +814,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c3acce905a7f8d38fea123a0c51a65b3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '85b4b8fc03cad2e64e8dc1c0bc133143')"
     ]
   }
 }

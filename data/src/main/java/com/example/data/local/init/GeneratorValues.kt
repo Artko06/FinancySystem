@@ -1,6 +1,11 @@
 package com.example.data.local.init
 
 import com.example.data.local.entity.user.BaseUserEntity
+import com.example.data.local.init.DatabaseInitializer.Companion.COUNT_CLIENT_USERS
+import com.example.data.local.init.DatabaseInitializer.Companion.COUNT_COMPANY_USERS
+import com.example.data.local.init.DatabaseInitializer.Companion.COUNT_MANAGER_USERS
+import com.example.data.local.init.DatabaseInitializer.Companion.COUNT_OPERATOR_USERS
+import com.example.domain.models.user.TypeOfUser
 import kotlin.random.Random
 
 object GeneratorValues {
@@ -70,7 +75,25 @@ object GeneratorValues {
                 numberPassport = generatePassportNumber(),
                 identityNumber = generateIdentityNumber(),
                 phone = generatePhone(),
-                email = emails[index]
+                email = emails[index],
+                typeOfUser = when {
+                    index < COUNT_CLIENT_USERS
+                        -> TypeOfUser.ClientUser.toString()
+
+                    index in COUNT_CLIENT_USERS until COUNT_CLIENT_USERS + COUNT_COMPANY_USERS
+                        -> TypeOfUser.CompanyUser.toString()
+
+                    index in COUNT_CLIENT_USERS + COUNT_COMPANY_USERS until
+                            COUNT_CLIENT_USERS + COUNT_COMPANY_USERS + COUNT_MANAGER_USERS
+                        -> TypeOfUser.ManagerUser.toString()
+
+                    index in COUNT_CLIENT_USERS + COUNT_COMPANY_USERS + COUNT_MANAGER_USERS until
+                            COUNT_CLIENT_USERS + COUNT_COMPANY_USERS + COUNT_MANAGER_USERS
+                            + COUNT_OPERATOR_USERS
+                        -> TypeOfUser.OperatorUser.toString()
+
+                    else -> TypeOfUser.AdminUser.toString()
+                }
             )
         }
     }

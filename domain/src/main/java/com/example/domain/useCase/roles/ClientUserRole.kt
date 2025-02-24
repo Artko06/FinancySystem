@@ -1,5 +1,6 @@
 package com.example.domain.useCase.roles
 
+import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
 import com.example.domain.useCase.allUserCases.actionLogUseCases.insert.InsertActionLogUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusBaseBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCreditBankAccountByBaseUserUseCase
@@ -19,6 +20,7 @@ interface ClientUserRole {
     val getSalaryProjectsByClientBaseUserUseCase: GetSalaryProjectsByClientBaseUserUseCase
     val getAllBanksUseCases: GetAllBanksUseCases
     val getAllCompanyUseCase: GetAllCompanyUseCase
+    val getBaseUserUseCase: GetBaseUserUseCase
 
     // INSERT
     val insertActionLogUseCase: InsertActionLogUseCase

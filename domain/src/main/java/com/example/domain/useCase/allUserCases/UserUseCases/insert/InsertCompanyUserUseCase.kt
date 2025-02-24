@@ -3,6 +3,7 @@ package com.example.domain.useCase.allUserCases.UserUseCases.insert
 import com.example.domain.models.company.Company
 import com.example.domain.models.user.BaseUser
 import com.example.domain.models.user.CertificateUser
+import com.example.domain.models.user.TypeOfUser
 import com.example.domain.models.user.companyUser.CompanyUser
 import com.example.domain.repository.UserRepository
 import com.example.domain.util.PasswordHasher
@@ -22,6 +23,7 @@ class InsertCompanyUserUseCase(
         seriesPassport: String,
         numberPassport: String,
         identityNumber: String,
+        typeOfUser: TypeOfUser,
         company: Company
     ){
         var baseUser = BaseUser(
@@ -33,7 +35,8 @@ class InsertCompanyUserUseCase(
             email = email,
             seriesPassport = seriesPassport,
             numberPassport = numberPassport,
-            identityNumber = identityNumber
+            identityNumber = identityNumber,
+            typeOfUser = typeOfUser
         )
 
         userRepository.insertBaseUser(baseUser)

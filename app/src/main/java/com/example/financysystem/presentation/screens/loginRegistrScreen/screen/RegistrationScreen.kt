@@ -1,4 +1,4 @@
-package com.example.financysystem.presentation.screens.loginRegistrScreen
+package com.example.financysystem.presentation.screens.loginRegistrScreen.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
