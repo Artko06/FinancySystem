@@ -6,6 +6,7 @@ import com.example.financysystem.presentation.screens.userScreen.state.contentSt
 data class CompanyUserState(
     val companySelectedContent: CompanySelectedContent = CompanySelectedContent.PROFILE,
 
+    override val id: Int = 0,
     override val email: String = "",
     override val phone: String = "",
     override val firstName: String = "",

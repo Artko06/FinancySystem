@@ -26,8 +26,6 @@ import com.example.financysystem.presentation.screens.components.BottomNavigatio
 import com.example.financysystem.presentation.screens.components.HeaderBackground
 import com.example.financysystem.presentation.screens.userScreen.event.AdminUserEvent
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.adminUser.AdminUserProfileScreen
-import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.ClientUserBankAccountScreen
-import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.ClientUserSalaryProjectScreen
 import com.example.financysystem.presentation.screens.userScreen.state.AdminUserState
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.AdminSelectedContent
 import com.example.financysystem.presentation.screens.userScreen.viewModel.AdminUserViewModel
@@ -114,7 +112,7 @@ fun ContentScreen(
             phone = adminUserState.phone,
             email = adminUserState.email,
         )
-        AdminSelectedContent.BANK_ACCOUNT -> ClientUserBankAccountScreen(modifier = modifier)
-        AdminSelectedContent.SALARY_PROJECT -> ClientUserSalaryProjectScreen(modifier = modifier)
+        AdminSelectedContent.BANK_ACCOUNT -> {}//ClientUserBankAccountScreen(modifier = modifier)
+        AdminSelectedContent.SALARY_PROJECT -> {}//ClientUserSalaryProjectScreen(modifier = modifier)
     }
 }

@@ -30,6 +30,7 @@ class OperatorUserViewModel @Inject constructor(
             val baseUser = operatorUserUseCases.getBaseUserUseCase(_userEmail.value).firstOrNull()
             baseUser?.let {
                 _operatorUserState.value = OperatorUserState(
+                    id = it.id,
                     email = it.email,
                     phone = it.phone,
                     firstName = it.firstName,

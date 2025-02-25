@@ -22,6 +22,9 @@ interface BankAccountDao {
     @Query("SELECT * FROM base_bank_accounts WHERE baseUserId = :baseUserId")
     fun getBaseBankAccountsByBaseUserId(baseUserId: Int): Flow<List<BaseBankAccountEntity>>
 
+    @Query("SELECT * FROM base_bank_accounts WHERE baseUserId = :baseUserId ORDER BY id DESC LIMIT 1")
+    fun getLatestBaseBankAccountByBaseUserId(baseUserId: Int): Flow<BaseBankAccountEntity?>
+
     @Query("UPDATE base_bank_accounts SET statusBankAccount = :newStatusBankAccount WHERE id = :baseBankAccountId")
     suspend fun changeStatusBaseBankAccount(baseBankAccountId: Int, newStatusBankAccount: String)
 

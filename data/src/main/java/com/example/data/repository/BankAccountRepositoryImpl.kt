@@ -69,6 +69,10 @@ class BankAccountRepositoryImpl(
             }
     }
 
+    override fun getLatestBaseBankAccountByBaseUserId(baseUserId: Int): Flow<BaseBankAccount?> {
+        return bankAccountDao.getLatestBaseBankAccountByBaseUserId(baseUserId).mapToBaseBankAccount()
+    }
+
     override suspend fun changeStatusBaseBankAccount(
         bankAccount: BaseBankAccount,
         statusBankAccount: StatusBankAccount

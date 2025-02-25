@@ -1,5 +1,7 @@
 package com.example.financysystem.presentation.screens.userScreen.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,13 +30,15 @@ import com.example.financysystem.presentation.screens.userScreen.event.ClientUse
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.ClientUserBankAccountScreen
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.ClientUserProfileScreen
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.ClientUserSalaryProjectScreen
-import com.example.financysystem.presentation.screens.userScreen.state.ClientUserState
+import com.example.financysystem.presentation.screens.userScreen.state.clientUserState.ClientUserState
+import com.example.financysystem.presentation.screens.userScreen.state.clientUserState.TypeBankAccount
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.ClientSelectedContent
 import com.example.financysystem.presentation.screens.userScreen.viewModel.ClientUserViewModel
 import com.example.financysystem.ui.theme.gray
 import com.example.financysystem.ui.theme.green
 import com.example.financysystem.ui.theme.white
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ClientUserMainScreen(
     clientUserViewModel: ClientUserViewModel = hiltViewModel()
@@ -92,8 +96,19 @@ fun ClientUserMainScreen(
         }
 
         ContentScreen(
-            modifier = Modifier.padding(top = 200.dp),
-            clientUserState = clientUserState
+            modifier = Modifier.padding(top = 160.dp),
+            clientUserState = clientUserState,
+            onSelectBank = { index ->
+                clientUserViewModel.onEvent(ClientUserEvent.onSelectBank(index))
+            },
+            onSelectTypeBankAccount = { typeAccount ->
+                clientUserViewModel.onEvent(ClientUserEvent.onSelectTypeBankAccount(
+                    typeBankAccount = enumValueOf<TypeBankAccount>(typeAccount)
+                ))
+            },
+            onToggleMenuBank = { clientUserViewModel.onEvent(ClientUserEvent.onToggleMenuBank) },
+            onAddBankAccount = {clientUserViewModel.onEvent(ClientUserEvent.OnAddBankAccount)}
+
         )
 
     }
@@ -101,6 +116,10 @@ fun ClientUserMainScreen(
 
 @Composable
 fun ContentScreen(
+    onSelectBank: (Int) -> Unit,
+    onToggleMenuBank: () -> Unit,
+    onSelectTypeBankAccount: (String) -> Unit,
+    onAddBankAccount: () -> Unit,
     clientUserState: ClientUserState,
     modifier: Modifier = Modifier
 )
@@ -114,7 +133,14 @@ fun ContentScreen(
             phone = clientUserState.phone,
             email = clientUserState.email,
         )
-        ClientSelectedContent.BANK_ACCOUNT -> ClientUserBankAccountScreen(modifier = modifier)
+        ClientSelectedContent.BANK_ACCOUNT -> ClientUserBankAccountScreen(
+            modifier = modifier,
+            clientUserState = clientUserState,
+            onSelectBank = onSelectBank,
+            onToggleMenuBank = onToggleMenuBank,
+            onSelectTypeBankAccount = onSelectTypeBankAccount,
+            onAddBankAccount = onAddBankAccount
+        )
         ClientSelectedContent.SALARY_PROJECT -> ClientUserSalaryProjectScreen(modifier = modifier)
     }
 }

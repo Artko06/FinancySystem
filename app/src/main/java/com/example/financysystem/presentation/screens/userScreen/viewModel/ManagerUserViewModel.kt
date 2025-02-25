@@ -30,6 +30,7 @@ class ManagerUserViewModel @Inject constructor(
             val baseUser = managerUserUseCases.getBaseUserUseCase(_userEmail.value).firstOrNull()
             baseUser?.let {
                 _managerUserState.value = ManagerUserState(
+                    id = it.id,
                     email = it.email,
                     phone = it.phone,
                     firstName = it.firstName,

@@ -14,6 +14,7 @@ interface BankAccountRepository {
     fun getAllBaseBankAccounts(): Flow<List<BaseBankAccount>>
     fun getBaseBankAccountById(baseBankAccountId: Int): Flow<BaseBankAccount?>
     fun getBaseBankAccountsByBaseUserId(baseUserId: Int): Flow<List<BaseBankAccount>>
+    fun getLatestBaseBankAccountByBaseUserId(baseUserId: Int): Flow<BaseBankAccount?>
     suspend fun changeStatusBaseBankAccount(bankAccount: BaseBankAccount, statusBankAccount: StatusBankAccount)
     suspend fun changeBalanceBaseBankAccount(bankAccount: BaseBankAccount, balance: Double)
     suspend fun insertBaseBankAccount(bankAccount: BaseBankAccount)

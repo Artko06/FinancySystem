@@ -30,6 +30,7 @@ class CompanyUserViewModel @Inject constructor(
             val baseUser = companyUserUseCases.getBaseUserUseCase(_userEmail.value).firstOrNull()
             baseUser?.let {
                 _companyUserState.value = CompanyUserState(
+                    id = it.id,
                     email = it.email,
                     phone = it.phone,
                     firstName = it.firstName,
