@@ -16,6 +16,11 @@ data class ClientUserState(
     val selectedIndexBank: Int = 0,
     val isOpenMenuBank: Boolean = false,
     val selectedTypeBankAccount: TypeBankAccount = TypeBankAccount.STANDARD,
+    val sumForCredit: SumForCredit = SumForCredit.ONE_THOUSAND,
+    val monthCountCredit: MonthCountCredit = MonthCountCredit.THREE_MONTH,
+    val isOpenDialogBankAccount: Boolean = false,
+    val idOpenDialogBankAccount: Int = 0,
+    val isOpenAddingDialogBankAccount: Boolean = false,
 
     override val id: Int = 0,
     override val email: String = "",

@@ -8,5 +8,6 @@ data class CreditBankAccount(
     override val interestRate: Double,
     override val creditLastDate: String,
     override val creditTotalSum: Double,
-    override val statusCreditBid: StatusCreditBid
+    override val statusCreditBid: StatusCreditBid,
+    override val countMonthsCredit: Int
 ) : ICreditBankAccount

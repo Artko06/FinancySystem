@@ -28,6 +28,7 @@ import com.example.domain.useCase.allUserCases.auth_regUseCases.ValidateRegister
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeBalanceBaseBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusBaseBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusCreditBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetBaseBankAccountById
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCompanyBankAccountsByCompanyUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCreditBankAccountByBaseUserUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetStandardBankAccountsByBaseUserUseCase
@@ -109,6 +110,9 @@ object UseCaseModule {
             ),
             getBaseUserUseCase = GetBaseUserUseCase(
                 userRepository = userRepository
+            ),
+            getBaseBankAccountById = GetBaseBankAccountById(
+                bankAccountRepository = bankAccountRepository
             ),
 
             // INSERT

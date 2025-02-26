@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.bank.bankAccount.StatusBankAccount
 import com.example.domain.useCase.UserRoleUseCases.ClientUserUseCases
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent.OnLoadCreditBankAccounts
@@ -70,31 +71,38 @@ class ClientUserViewModel @Inject constructor(
 
                     when (_clientUserState.value.selectedTypeBankAccount) {
                         TypeBankAccount.STANDARD -> {
-                            clientUserUseCases.insertStandardBankAccountUseCase.invoke(
-                                bank = _clientUserState.value.banks[_clientUserState.value.selectedIndexBank],
-                                baseUser = baseUser,
-                                balance = 5000.0
-                            )
+                            if (_clientUserState.value.standardBankAccounts.size < 5) {
+                                clientUserUseCases.insertStandardBankAccountUseCase.invoke(
+                                    bank = _clientUserState.value.banks[_clientUserState.value.selectedIndexBank],
+                                    baseUser = baseUser,
+                                    balance = 0.0
+                                )
+                            }
                         }
+
 
                         TypeBankAccount.CREDIT -> {
-                            clientUserUseCases.insertCreditBankAccountUseCase.invoke(
-                                bank = _clientUserState.value.banks[_clientUserState.value.selectedIndexBank],
-                                baseUser = baseUser,
-                                balance = 5000.0,
-                                interestRate = 5.0,
-                                creditLastDate = LocalDate.now().plusMonths(18).toString(),
-                                creditTotalSum = 5000.0
-                            )
+                            if (_clientUserState.value.creditBankAccounts.size < 5) {
+                                clientUserUseCases.insertCreditBankAccountUseCase.invoke(
+                                    bank = _clientUserState.value.banks[_clientUserState.value.selectedIndexBank],
+                                    baseUser = baseUser,
+                                    balance = _clientUserState.value.sumForCredit.sum,
+                                    creditLastDate = LocalDate.now()
+                                        .plusMonths(_clientUserState.value.monthCountCredit.months.toLong())
+                                        .toString(),
+                                    creditTotalSum = _clientUserState.value.sumForCredit.sum,
+                                    countMonthsCredit = _clientUserState.value.monthCountCredit.months
+                                )
+                            }
                         }
-
                     }
+
                     onEvent(OnLoadStandardBankAccounts(_clientUserState.value.id)) // После добавления обновляем список
                     onEvent(OnLoadCreditBankAccounts(_clientUserState.value.id))
                 }
             }
 
-            is ClientUserEvent.OnLoadCreditBankAccounts -> {
+            is OnLoadCreditBankAccounts -> {
                 viewModelScope.launch {
                     val baseUser = clientUserUseCases.getBaseUserUseCase
                         .invoke(email = _clientUserState.value.email).first()!!
@@ -154,6 +162,50 @@ class ClientUserViewModel @Inject constructor(
                 _clientUserState.update { it.copy(
                     selectedTypeBankAccount = event.typeBankAccount
                 )
+                }
+            }
+
+            is ClientUserEvent.OnShowBankAccountDialog -> {
+                _clientUserState.update { it.copy(
+                    isOpenDialogBankAccount = !it.isOpenDialogBankAccount,
+                    idOpenDialogBankAccount = event.cardId
+                ) }
+            }
+
+            ClientUserEvent.OnOpenAddingDialogBankAccount -> {
+                _clientUserState.update { it.copy(
+                    isOpenAddingDialogBankAccount = !it.isOpenAddingDialogBankAccount
+                ) }
+            }
+
+            is ClientUserEvent.OnSelectMonthCountCredit -> {
+                _clientUserState.update { it.copy(
+                    monthCountCredit = event.monthCountCredit
+                ) }
+            }
+
+            is ClientUserEvent.OnSelectSumForCredit -> {
+                _clientUserState.update { it.copy(
+                    sumForCredit = event.sumForCredit
+                ) }
+            }
+
+            is ClientUserEvent.OnChangeStatusBankAccount -> {
+                viewModelScope.launch {
+                    val baseBankAccount =
+                        clientUserUseCases.getBaseBankAccountById(event.cardId).firstOrNull()
+
+                    if(baseBankAccount != null){
+                        when(baseBankAccount.statusBankAccount){
+                            StatusBankAccount.FROZEN -> clientUserUseCases
+                                .changeStatusBaseBankAccountUseCase.invoke(baseBankAccount, StatusBankAccount.NORMAL)
+                            StatusBankAccount.BLOCKED -> {}
+                            StatusBankAccount.NORMAL -> clientUserUseCases
+                                .changeStatusBaseBankAccountUseCase.invoke(baseBankAccount, StatusBankAccount.FROZEN)
+                        }
+                        onEvent(ClientUserEvent.OnLoadStandardBankAccounts(baseUserId = _clientUserState.value.id))
+                        onEvent(ClientUserEvent.OnLoadCreditBankAccounts(baseUserId = _clientUserState.value.id))
+                    }
                 }
             }
         }

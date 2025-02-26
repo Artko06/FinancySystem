@@ -28,7 +28,8 @@ data class CreditBankAccountEntity(
     val interestRate: Double,
     val creditLastDate: String,
     val creditTotalSum: Double,
-    val statusCreditBid: String
+    val statusCreditBid: String,
+    val countMonthsCredit: Int,
 )
 
 fun CreditBankAccountEntity.toDomain(baseBankAccount: BaseBankAccount) = CreditBankAccount(
@@ -37,7 +38,8 @@ fun CreditBankAccountEntity.toDomain(baseBankAccount: BaseBankAccount) = CreditB
     interestRate = interestRate,
     creditLastDate = creditLastDate,
     creditTotalSum = creditTotalSum,
-    statusCreditBid = enumValueOf<StatusCreditBid>(statusCreditBid)
+    statusCreditBid = enumValueOf<StatusCreditBid>(statusCreditBid),
+    countMonthsCredit = countMonthsCredit
 )
 
 fun CreditBankAccount.toEntity(baseBankAccountId: Int) = CreditBankAccountEntity(
@@ -46,5 +48,6 @@ fun CreditBankAccount.toEntity(baseBankAccountId: Int) = CreditBankAccountEntity
     interestRate = interestRate,
     creditLastDate = creditLastDate,
     creditTotalSum = creditTotalSum,
-    statusCreditBid = statusCreditBid.toString()
+    statusCreditBid = statusCreditBid.toString(),
+    countMonthsCredit = countMonthsCredit
 )

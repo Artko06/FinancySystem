@@ -9,17 +9,20 @@ data class BankEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    val bic: String // БИК банка
+    val bic: String, // БИК банка
+    val interestRate: Double
 )
 
 fun BankEntity.toDomain() = Bank(
     id = id,
     name = name,
-    bic = bic
+    bic = bic,
+    interestRate = interestRate
 )
 
 fun Bank.toEntity() = BankEntity(
     id = id,
     name = name,
-    bic = bic
+    bic = bic,
+    interestRate = interestRate
 )

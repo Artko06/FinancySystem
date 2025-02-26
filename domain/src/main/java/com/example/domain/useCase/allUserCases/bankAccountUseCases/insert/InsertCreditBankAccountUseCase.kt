@@ -17,7 +17,7 @@ class InsertCreditBankAccountUseCase(
         bank: Bank,
         baseUser: BaseUser,
         balance: Double,
-        interestRate: Double,
+        countMonthsCredit: Int,
         creditLastDate: String,
         creditTotalSum: Double
     )
@@ -37,10 +37,11 @@ class InsertCreditBankAccountUseCase(
             bankAccount = CreditBankAccount(
                 id = 0,
                 baseBankAccount = baseBankAccount,
-                interestRate = interestRate,
+                interestRate = bank.interestRate,
                 creditLastDate = creditLastDate,
                 creditTotalSum = creditTotalSum,
-                statusCreditBid = StatusCreditBid.WAITING
+                statusCreditBid = StatusCreditBid.WAITING,
+                countMonthsCredit = countMonthsCredit
             )
         )
     }

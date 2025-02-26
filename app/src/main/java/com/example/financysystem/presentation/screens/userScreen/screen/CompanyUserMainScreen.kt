@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.AccountBalanceWallet
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Factory
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -39,7 +39,7 @@ fun CompanyUserMainScreen(
 )
 {
     val navItems = listOf(
-        BottomNavItem(label = "Профиль", icon = Icons.Filled.AccountCircle),
+        BottomNavItem(label = "Профиль", icon = Icons.Filled.AcUnit),
         BottomNavItem(label = "Счета", icon = Icons.Filled.AccountBalanceWallet),
         BottomNavItem(label = "Проекты", icon = Icons.Filled.Factory),
     )

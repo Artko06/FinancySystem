@@ -3,6 +3,7 @@ package com.example.domain.useCase.UserRoleUseCases
 import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
 import com.example.domain.useCase.allUserCases.actionLogUseCases.insert.InsertActionLogUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusBaseBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetBaseBankAccountById
 import com.example.domain.useCase.roles.ClientUserRole
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCreditBankAccountByBaseUserUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetStandardBankAccountsByBaseUserUseCase
@@ -22,6 +23,7 @@ class ClientUserUseCases(
     override val getAllBanksUseCases: GetAllBanksUseCases,
     override val getAllCompanyUseCase: GetAllCompanyUseCase,
     override val getBaseUserUseCase: GetBaseUserUseCase,
+    override val getBaseBankAccountById: GetBaseBankAccountById,
 
 
     // INSERT

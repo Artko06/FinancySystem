@@ -4,4 +4,5 @@ data class Bank(
     val id: Int,
     val name: String,
     val bic: String,   // БИК банка
+    val interestRate: Double
 )

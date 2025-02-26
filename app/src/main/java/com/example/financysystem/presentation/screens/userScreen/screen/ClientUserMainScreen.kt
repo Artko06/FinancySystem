@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AddBusiness
+import androidx.compose.material.icons.filled.AddCard
 import androidx.compose.material.icons.filled.Factory
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,11 +31,11 @@ import com.example.financysystem.presentation.screens.components.BottomNavItem
 import com.example.financysystem.presentation.screens.components.BottomNavigationBar
 import com.example.financysystem.presentation.screens.components.HeaderBackground
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent
+import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.AddingDialogWindow
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.ClientUserBankAccountScreen
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.ClientUserProfileScreen
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.ClientUserSalaryProjectScreen
 import com.example.financysystem.presentation.screens.userScreen.state.clientUserState.ClientUserState
-import com.example.financysystem.presentation.screens.userScreen.state.clientUserState.TypeBankAccount
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.ClientSelectedContent
 import com.example.financysystem.presentation.screens.userScreen.viewModel.ClientUserViewModel
 import com.example.financysystem.ui.theme.gray
@@ -66,6 +70,42 @@ fun ClientUserMainScreen(
                     )
                 }
             )
+        },
+        floatingActionButton = {
+            if (clientUserState.clientSelectedContent == ClientSelectedContent.BANK_ACCOUNT ||
+                clientUserState.clientSelectedContent == ClientSelectedContent.SALARY_PROJECT) {
+                FloatingActionButton(
+                    onClick = {
+                        when(clientUserState.clientSelectedContent){
+                            ClientSelectedContent.BANK_ACCOUNT -> {
+                                clientUserViewModel.onEvent(ClientUserEvent.OnOpenAddingDialogBankAccount)
+                            }
+                            ClientSelectedContent.SALARY_PROJECT -> {
+
+                            }
+
+                            ClientSelectedContent.PROFILE -> {}
+                        }
+                    }
+                ) {
+                    when (clientUserState.clientSelectedContent) {
+                        ClientSelectedContent.PROFILE -> {}
+                        ClientSelectedContent.BANK_ACCOUNT -> {
+                            Icon(
+                                imageVector = Icons.Filled.AddCard,
+                                contentDescription = "Add Button"
+                            )
+                        }
+
+                        ClientSelectedContent.SALARY_PROJECT -> {
+                            Icon(
+                                imageVector = Icons.Filled.AddBusiness,
+                                contentDescription = "Add Button"
+                            )
+                        }
+                    }
+                }
+            }
         }
     ) { paddingValues ->
 
@@ -98,30 +138,44 @@ fun ClientUserMainScreen(
         ContentScreen(
             modifier = Modifier.padding(top = 160.dp),
             clientUserState = clientUserState,
-            onSelectBank = { index ->
-                clientUserViewModel.onEvent(ClientUserEvent.onSelectBank(index))
+            onShowBankAccountDialog = { cardId ->
+                clientUserViewModel.onEvent(ClientUserEvent.OnShowBankAccountDialog(cardId))
             },
-            onSelectTypeBankAccount = { typeAccount ->
-                clientUserViewModel.onEvent(ClientUserEvent.onSelectTypeBankAccount(
-                    typeBankAccount = enumValueOf<TypeBankAccount>(typeAccount)
-                ))
-            },
-            onToggleMenuBank = { clientUserViewModel.onEvent(ClientUserEvent.onToggleMenuBank) },
-            onAddBankAccount = {clientUserViewModel.onEvent(ClientUserEvent.OnAddBankAccount)}
-
+            onChangeStatusBankAccount = { cardId ->
+                clientUserViewModel.onEvent(ClientUserEvent.OnChangeStatusBankAccount(cardId))
+            }
         )
+
+        if (clientUserState.clientSelectedContent == ClientSelectedContent.BANK_ACCOUNT &&
+            clientUserState.isOpenAddingDialogBankAccount){
+            AddingDialogWindow(
+                onOpenDialogWindow = { clientUserViewModel.onEvent(ClientUserEvent.OnOpenAddingDialogBankAccount) },
+                modifier = Modifier,
+                onSelectBank ={ index -> clientUserViewModel.onEvent(ClientUserEvent.onSelectBank(index)) },
+                onToggleMenuBank = { clientUserViewModel.onEvent(ClientUserEvent.onToggleMenuBank) },
+                onSelectTypeBankAccount = {
+                    clientUserViewModel.onEvent(ClientUserEvent.onSelectTypeBankAccount(it)) },
+                onAddBankAccount = { clientUserViewModel.onEvent(ClientUserEvent.OnAddBankAccount) },
+                onSelectSumForCredit = { clientUserViewModel.onEvent(ClientUserEvent.OnSelectSumForCredit(it)) },
+                onSelectMountForCredit = { clientUserViewModel.onEvent(ClientUserEvent.OnSelectMonthCountCredit(it)) },
+                isOpenMenuBank = clientUserState.isOpenMenuBank,
+                selectIndexBank = clientUserState.selectedIndexBank,
+                selectedTypeBankAccount = clientUserState.selectedTypeBankAccount,
+                selectedSumForCredit = clientUserState.sumForCredit,
+                selectedMonthCountCredit = clientUserState.monthCountCredit,
+                banks = clientUserState.banks
+            )
+        }
 
     }
 }
 
 @Composable
 fun ContentScreen(
-    onSelectBank: (Int) -> Unit,
-    onToggleMenuBank: () -> Unit,
-    onSelectTypeBankAccount: (String) -> Unit,
-    onAddBankAccount: () -> Unit,
     clientUserState: ClientUserState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onShowBankAccountDialog: (Int) -> Unit,
+    onChangeStatusBankAccount: (Int) -> Unit
 )
 {
     when(clientUserState.clientSelectedContent){
@@ -136,10 +190,8 @@ fun ContentScreen(
         ClientSelectedContent.BANK_ACCOUNT -> ClientUserBankAccountScreen(
             modifier = modifier,
             clientUserState = clientUserState,
-            onSelectBank = onSelectBank,
-            onToggleMenuBank = onToggleMenuBank,
-            onSelectTypeBankAccount = onSelectTypeBankAccount,
-            onAddBankAccount = onAddBankAccount
+            onShowBankAccountDialog = onShowBankAccountDialog,
+            onChangeStatusBankAccount = onChangeStatusBankAccount
         )
         ClientSelectedContent.SALARY_PROJECT -> ClientUserSalaryProjectScreen(modifier = modifier)
     }

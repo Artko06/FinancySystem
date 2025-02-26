@@ -42,17 +42,26 @@ class DatabaseInitializer @Inject constructor(
         BankEntity(
             id = 1,
             name = "Банк ВТБ",
-            bic = "SLANBY22"
+            bic = "SLANBY22",
+            interestRate = 7.5
         ),
         BankEntity(
             id = 2,
             name = "Альфа-Банк",
-            bic = "ALFABY2X"
+            bic = "ALFABY2X",
+            interestRate = 8.0
         ),
         BankEntity(
             id = 3,
             name = "АСБ Беларусбанк",
-            bic = "AKBBBY2X"
+            bic = "AKBBBY2X",
+            interestRate = 14.0
+        ),
+        BankEntity(
+            id = 4,
+            name = "Гойдабанк",
+            bic = "GOIDA",
+            interestRate = 3.0
         )
     )
 

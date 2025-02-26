@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "85b4b8fc03cad2e64e8dc1c0bc133143",
+    "identityHash": "0d9efb0e1ae521edde7a2629ebe677ca",
     "entities": [
       {
         "tableName": "action_logs",
@@ -50,7 +50,7 @@
       },
       {
         "tableName": "banks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `bic` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `bic` TEXT NOT NULL, `interestRate` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -68,6 +68,12 @@
             "fieldPath": "bic",
             "columnName": "bic",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "interestRate",
+            "columnName": "interestRate",
+            "affinity": "REAL",
             "notNull": true
           }
         ],
@@ -174,7 +180,7 @@
       },
       {
         "tableName": "credit_bank_accounts",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `baseBankAccountId` INTEGER NOT NULL, `interestRate` REAL NOT NULL, `creditLastDate` TEXT NOT NULL, `creditTotalSum` REAL NOT NULL, `statusCreditBid` TEXT NOT NULL, FOREIGN KEY(`baseBankAccountId`) REFERENCES `base_bank_accounts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `baseBankAccountId` INTEGER NOT NULL, `interestRate` REAL NOT NULL, `creditLastDate` TEXT NOT NULL, `creditTotalSum` REAL NOT NULL, `statusCreditBid` TEXT NOT NULL, `countMonthsCredit` INTEGER NOT NULL, FOREIGN KEY(`baseBankAccountId`) REFERENCES `base_bank_accounts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -210,6 +216,12 @@
             "fieldPath": "statusCreditBid",
             "columnName": "statusCreditBid",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "countMonthsCredit",
+            "columnName": "countMonthsCredit",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -814,7 +826,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '85b4b8fc03cad2e64e8dc1c0bc133143')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d9efb0e1ae521edde7a2629ebe677ca')"
     ]
   }
 }
