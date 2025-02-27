@@ -12,7 +12,8 @@ import com.example.domain.useCase.allUserCases.bankUseCases.get.GetAllBanksUseCa
 import com.example.domain.useCase.allUserCases.companyUseCases.get.GetAllCompanyUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetSalaryProjectsByClientBaseUserUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.insert.InsertSalaryProjectUseCase
-import com.example.domain.useCase.allUserCases.transferUseCases.insert.InsertTransferUseCase
+import com.example.domain.useCase.allUserCases.transferUseCases.other.CreateTransferUseCase
+import com.example.domain.useCase.allUserCases.transferUseCases.other.validateTransfer.ValidateTransferUseCase
 
 interface ClientUserRole {
     // GET
@@ -29,12 +30,14 @@ interface ClientUserRole {
     val insertCreditBankAccountUseCase: InsertCreditBankAccountUseCase
     val insertStandardBankAccountUseCase: InsertStandardBankAccountUseCase
     val insertSalaryProjectUseCase: InsertSalaryProjectUseCase
-    val insertTransferUseCase: InsertTransferUseCase
-
-    //DELETE
 
 
     // CHANGE
     val changeBalanceBaseBankAccountUseCase: ChangeStatusBaseBankAccountUseCase
     val changeStatusBaseBankAccountUseCase: ChangeStatusBaseBankAccountUseCase
+
+
+    // OTHER
+    val createTransferUseCase: CreateTransferUseCase
+    val validateTransferUseCase: ValidateTransferUseCase
 }

@@ -17,6 +17,12 @@ sealed class ClientUserEvent {
     data class OnSelectMonthCountCredit(val monthCountCredit: MonthCountCredit): ClientUserEvent()
     data class OnChangeStatusBankAccount(val cardId: Int) : ClientUserEvent()
 
+    object OnCreateTransfer : ClientUserEvent()
+    data class OnShowTransferDialog(val cardId: Int): ClientUserEvent()
+    data class OnChangeTransferSum(val sum: String): ClientUserEvent()
+    data class OnChangeFromCardId(val cardId: String): ClientUserEvent()
+    data class OnChangeToCardId(val cardId: String): ClientUserEvent()
+
 
     object OnAddBankAccount : ClientUserEvent()
     data class OnLoadStandardBankAccounts(val baseUserId: Int) : ClientUserEvent()

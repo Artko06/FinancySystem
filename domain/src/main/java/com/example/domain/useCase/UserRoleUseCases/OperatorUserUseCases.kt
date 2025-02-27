@@ -18,9 +18,6 @@ data class OperatorUserUseCases(
     // INSERT
 
 
-    // DELETE
-
-
     // CHANGE
     override val changeStatusSalaryProjectUseCase: ChangeStatusSalaryProjectUseCase,
     override val changeStatusCreditBankAccountUseCase: ChangeStatusCreditBankAccountUseCase

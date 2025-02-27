@@ -17,16 +17,12 @@ data class StartUserUseCases(
     override val getBaseUserUseCase: GetBaseUserUseCase,
 
 
-
     // INSERT
     override val insertAdminUserUseCase: InsertAdminUserUseCase,
     override val insertClientUserUseCase: InsertClientUserUseCase,
     override val insertCompanyUserUseCase: InsertCompanyUserUseCase,
     override val insertManagerUserUseCase: InsertManagerUserUseCase,
     override val insertOperatorUserUseCase: InsertOperatorUserUseCase,
-
-    // DELETE
-
 
     // CHANGE
 

@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.AccountBalanceWallet
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AddBusiness
 import androidx.compose.material.icons.filled.Factory
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,7 +28,9 @@ import com.example.financysystem.presentation.screens.components.BottomNavItem
 import com.example.financysystem.presentation.screens.components.BottomNavigationBar
 import com.example.financysystem.presentation.screens.components.HeaderBackground
 import com.example.financysystem.presentation.screens.userScreen.event.CompanyUserEvent
+import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.companyUser.AddingSalaryProjectDialog
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.companyUser.CompanyUserProfileScreen
+import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.companyUser.CompanyUserSalaryProjectScreen
 import com.example.financysystem.presentation.screens.userScreen.state.CompanyUserState
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.CompanySelectedContent
 import com.example.financysystem.presentation.screens.userScreen.viewModel.CompanyUserViewModel
@@ -39,7 +44,7 @@ fun CompanyUserMainScreen(
 )
 {
     val navItems = listOf(
-        BottomNavItem(label = "Профиль", icon = Icons.Filled.AcUnit),
+        BottomNavItem(label = "Профиль", icon = Icons.Filled.AccountCircle),
         BottomNavItem(label = "Счета", icon = Icons.Filled.AccountBalanceWallet),
         BottomNavItem(label = "Проекты", icon = Icons.Filled.Factory),
     )
@@ -60,6 +65,27 @@ fun CompanyUserMainScreen(
                     )
                 }
             )
+        },
+        floatingActionButton = {
+            if(companyUserState.companySelectedContent == CompanySelectedContent.SALARY_PROJECT){
+                FloatingActionButton(
+                    onClick = {
+                        when(companyUserState.companySelectedContent){
+                            CompanySelectedContent.BANK_ACCOUNT -> {}
+                            CompanySelectedContent.SALARY_PROJECT -> {
+                                companyUserViewModel.onEvent(CompanyUserEvent.OnOpenAddingSalaryProject)
+                            }
+
+                            CompanySelectedContent.PROFILE -> {}
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.AddBusiness,
+                        contentDescription = "Add Button"
+                    )
+                }
+            }
         }
     ) { paddingValues ->
 
@@ -94,6 +120,28 @@ fun CompanyUserMainScreen(
             companyUserState = companyUserState
         )
 
+        if (companyUserState.companySelectedContent == CompanySelectedContent.SALARY_PROJECT &&
+            companyUserState.isOpenDialogAddingSalaryProject){
+            AddingSalaryProjectDialog(
+                modifier = Modifier,
+                onOpenDialogAddingSalaryProject = {
+                    companyUserViewModel.onEvent(CompanyUserEvent.OnOpenAddingSalaryProject)
+                },
+                onChangeInfoSalaryProject = { info ->
+                    companyUserViewModel.onEvent(CompanyUserEvent.OnChangeInfoSalaryProject(info))
+                },
+                onChangeSumSalaryProject = { sum ->
+                    companyUserViewModel.onEvent(CompanyUserEvent.OnChangeSumSalaryProject(sum))
+                },
+                onAddSalaryProject = {
+                    companyUserViewModel.onEvent(CompanyUserEvent.OnAddSalaryProject)
+                },
+                infoSalaryProject = companyUserState.infoSalaryProject,
+                sumSalaryProject = companyUserState.sumSalaryProject,
+                errorInputSalaryProject = companyUserState.errorInputSalaryProject
+            )
+        }
+
     }
 }
 
@@ -112,7 +160,20 @@ fun ContentScreen(
             phone = companyUserState.phone,
             email = companyUserState.email,
         )
-        CompanySelectedContent.BANK_ACCOUNT -> {}//ClientUserBankAccountScreen(modifier = modifier)
-        CompanySelectedContent.SALARY_PROJECT -> {}//ClientUserSalaryProjectScreen(modifier = modifier)
+
+        CompanySelectedContent.BANK_ACCOUNT -> CompanyUserProfileScreen(
+            modifier = modifier,
+            firstName = companyUserState.firstName,
+            lastName = companyUserState.lastName,
+            surName = companyUserState.surName,
+            phone = companyUserState.phone,
+            email = companyUserState.email,
+        )
+
+        CompanySelectedContent.SALARY_PROJECT -> CompanyUserSalaryProjectScreen(
+            modifier = modifier,
+            companyUserState = companyUserState
+        )
+
     }
 }

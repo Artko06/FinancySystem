@@ -22,6 +22,13 @@ data class ClientUserState(
     val idOpenDialogBankAccount: Int = 0,
     val isOpenAddingDialogBankAccount: Boolean = false,
 
+    val errorCreateTransfer: String? = null,
+    val isOpenTransferDialog: Boolean = false,
+    val idOpenTransferDialog: Int = 0,
+    val inputTransferSum: String = "",
+    val inputFromCardId: String = "",
+    val inputToCardId: String = "",
+
     override val id: Int = 0,
     override val email: String = "",
     override val phone: String = "",

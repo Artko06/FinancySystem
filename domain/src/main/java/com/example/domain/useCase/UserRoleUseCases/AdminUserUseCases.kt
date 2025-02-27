@@ -12,8 +12,5 @@ data class AdminUserUseCases(
     // INSERT
 
 
-    // DELETE
-
-
     // CHANGE
 ): AdminUserRole

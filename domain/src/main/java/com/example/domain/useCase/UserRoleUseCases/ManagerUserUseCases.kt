@@ -19,9 +19,6 @@ data class ManagerUserUseCases(
     // INSERT
 
 
-    // DELETE
-
-
     // CHANGE
     override val changeStatusSalaryProjectUseCase: ChangeStatusSalaryProjectUseCase,
     override val changeStatusCreditBankAccountUseCase: ChangeStatusCreditBankAccountUseCase

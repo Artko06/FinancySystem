@@ -1,5 +1,6 @@
 package com.example.financysystem.presentation.screens.userScreen.viewModel
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,8 +19,7 @@ import javax.inject.Inject
 class CompanyUserViewModel @Inject constructor(
     private val companyUserUseCases: CompanyUserUseCases,
     private val savedStateHandle: SavedStateHandle
-): ViewModel()
-{
+) : ViewModel() {
     private val _userEmail = MutableStateFlow(savedStateHandle.get<String>("userEmail") ?: "")
 
     private val _companyUserState = MutableStateFlow(CompanyUserState())
@@ -38,16 +38,86 @@ class CompanyUserViewModel @Inject constructor(
                     surName = it.surName,
                 )
             }
+            onLoadCompany()
+            onLoadSalaryProject()
         }
     }
 
-    fun onEvent(event: CompanyUserEvent){
-        when(event){
+    private suspend fun onLoadCompany(){
+        val companyUser =
+            companyUserUseCases.getCompanyUserByBaseUserUseCase.invoke(_companyUserState.value.id)
+                .firstOrNull()!!
+        Log.d("CompanyUserEvent","OnLoadCompany")
+        _companyUserState.update {
+            it.copy(
+                company = companyUser.company
+            )
+        }
+    }
+
+    private suspend fun onLoadSalaryProject(){
+        Log.d("CompanyUserEvent","OnLoadSalaryProjects")
+        val salaryProjects =
+            companyUserUseCases.getSalaryProjectsByCompanyUseCase(_companyUserState.value.company.id)
+                .firstOrNull()!!
+
+        _companyUserState.update {
+            it.copy(
+                salaryProjects = salaryProjects
+            )
+        }
+    }
+
+    fun onEvent(event: CompanyUserEvent) {
+        when (event) {
             is CompanyUserEvent.onContentWindowChange -> {
-                _companyUserState.update { it.copy(
-                    companySelectedContent = event.newContentWindow
-                )
+                _companyUserState.update {
+                    it.copy(
+                        companySelectedContent = event.newContentWindow
+                    )
                 }
+            }
+
+            CompanyUserEvent.OnAddSalaryProject -> {
+                viewModelScope.launch {
+                    if(_companyUserState.value.sumSalaryProject.toDoubleOrNull() == null){
+                        _companyUserState.update { it.copy(
+                            errorInputSalaryProject = "Неверный ввод заработной платы"
+                        )
+                        }
+                        return@launch
+                    }
+
+                    companyUserUseCases.insertSalaryProjectUseCase.invoke(
+                        info = _companyUserState.value.infoSalaryProject,
+                        sum = _companyUserState.value.sumSalaryProject.toDouble(),
+                        company = _companyUserState.value.company
+                    )
+                    _companyUserState.update { it.copy(
+                        isOpenDialogAddingSalaryProject = false
+                    )
+                    }
+                    onLoadSalaryProject()
+                }
+            }
+
+            is CompanyUserEvent.OnChangeInfoSalaryProject -> {
+                _companyUserState.update { it.copy(
+                    infoSalaryProject = event.info
+                ) }
+            }
+
+            is CompanyUserEvent.OnChangeSumSalaryProject -> {
+                _companyUserState.update { it.copy(
+                    sumSalaryProject = event.sum
+                ) }
+            }
+
+            CompanyUserEvent.OnOpenAddingSalaryProject -> {
+                _companyUserState.update { it.copy(
+                    isOpenDialogAddingSalaryProject = !it.isOpenDialogAddingSalaryProject,
+                    errorInputSalaryProject = null
+                ) }
             }
         }
     }

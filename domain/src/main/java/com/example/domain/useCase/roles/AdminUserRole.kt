@@ -11,8 +11,5 @@ interface AdminUserRole {
     // INSERT
 
 
-    // DELETE
-
-
     // CHANGE
 }

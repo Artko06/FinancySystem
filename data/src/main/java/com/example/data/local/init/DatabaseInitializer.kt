@@ -2,11 +2,14 @@ package com.example.data.local.init
 
 import android.app.Application
 import android.util.Log
+import com.example.data.local.dao.BankAccountDao
 import com.example.data.local.dao.BankDao
 import com.example.data.local.dao.CompanyDao
 import com.example.data.local.dao.UserDao
 import com.example.data.local.database.FinancialDataBase
 import com.example.data.local.entity.bank.BankEntity
+import com.example.data.local.entity.bank.bankAccount.BaseBankAccountEntity
+import com.example.data.local.entity.bank.bankAccount.companyBankAccount.CompanyBankAccountEntity
 import com.example.data.local.entity.company.CompanyEntity
 import com.example.data.local.entity.user.CertificateUserEntity
 import com.example.data.local.entity.user.adminUser.AdminUserEntity
@@ -14,6 +17,7 @@ import com.example.data.local.entity.user.clientUser.ClientUserEntity
 import com.example.data.local.entity.user.companyUser.CompanyUserEntity
 import com.example.data.local.entity.user.managerUser.ManagerUserEntity
 import com.example.data.local.entity.user.operatorUser.OperatorUserEntity
+import com.example.domain.models.bank.bankAccount.StatusBankAccount
 import com.example.domain.models.user.TypeOfUser
 import com.example.domain.util.PasswordHasher
 import jakarta.inject.Inject
@@ -26,7 +30,8 @@ import java.io.File
 class DatabaseInitializer @Inject constructor(
     private val userDao: UserDao,
     private val bankDao: BankDao,
-    private val companyDao: CompanyDao
+    private val bankAccountDao: BankAccountDao,
+    private val companyDao: CompanyDao,
 ) {
     companion object {
         const val COUNT_BASE_USERS: Int = 50
@@ -170,6 +175,48 @@ class DatabaseInitializer @Inject constructor(
         )
     }
 
+    val initialBaseBankAccount = listOf<BaseBankAccountEntity>(
+        BaseBankAccountEntity(
+            id = 1,
+            bankId = 1,
+            baseUserId = 41,
+            balance = 1_000_000.0,
+            statusBankAccount = StatusBankAccount.NORMAL.toString()
+        ),
+        BaseBankAccountEntity(
+            id = 2,
+            bankId = 2,
+            baseUserId = 42,
+            balance = 1_000_000.0,
+            statusBankAccount = StatusBankAccount.NORMAL.toString()
+        ),
+        BaseBankAccountEntity(
+            id = 3,
+            bankId = 1,
+            baseUserId = 43,
+            balance = 1_000_000.0,
+            statusBankAccount = StatusBankAccount.NORMAL.toString()
+        ),
+    )
+
+    val initialCompanyAccount = listOf<CompanyBankAccountEntity>(
+        CompanyBankAccountEntity(
+            id = 1,
+            baseBankAccountId = 1,
+            companyId = 1
+        ),
+        CompanyBankAccountEntity(
+            id = 2,
+            baseBankAccountId = 2,
+            companyId = 2
+        ),
+        CompanyBankAccountEntity(
+            id = 3,
+            baseBankAccountId = 3,
+            companyId = 3
+        ),
+    )
+
 
     fun fillDatabase(appContext: Application) {
         if (!databaseExist(appContext = appContext)) {
@@ -197,6 +244,8 @@ class DatabaseInitializer @Inject constructor(
                 userDao.insertListOfManagerUser(managerUsers = initialManagerUser)
                 userDao.insertListOfOperatorUser(operatorUsers = initialOperatorUser)
                 userDao.insertListOfAdminUser(adminUsers = initialAdminUser)
+                bankAccountDao.insertListOfBaseBankAccount(bankAccounts = initialBaseBankAccount)
+                bankAccountDao.insertListOfCompanyBankAccount(bankAccounts = initialCompanyAccount)
 
                 saveGenerateValuesToFile(appContext = appContext)
                 Log.d("Init", "Finish init")

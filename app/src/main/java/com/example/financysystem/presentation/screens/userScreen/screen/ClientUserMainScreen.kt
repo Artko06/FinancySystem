@@ -143,6 +143,21 @@ fun ClientUserMainScreen(
             },
             onChangeStatusBankAccount = { cardId ->
                 clientUserViewModel.onEvent(ClientUserEvent.OnChangeStatusBankAccount(cardId))
+            },
+            onShowTransferDialog = { cardId ->
+                clientUserViewModel.onEvent(ClientUserEvent.OnShowTransferDialog(cardId))
+            },
+            onChangeTransferSum = { sum ->
+                clientUserViewModel.onEvent(ClientUserEvent.OnChangeTransferSum(sum))
+            },
+            onCreateTransfer = {
+                clientUserViewModel.onEvent(ClientUserEvent.OnCreateTransfer)
+            },
+            onChangeToCardId = { cardId ->
+                clientUserViewModel.onEvent(ClientUserEvent.OnChangeToCardId(cardId))
+            },
+            onChangeFromCardId = { cardId ->
+                clientUserViewModel.onEvent(ClientUserEvent.OnChangeFromCardId(cardId))
             }
         )
 
@@ -175,7 +190,12 @@ fun ContentScreen(
     clientUserState: ClientUserState,
     modifier: Modifier = Modifier,
     onShowBankAccountDialog: (Int) -> Unit,
-    onChangeStatusBankAccount: (Int) -> Unit
+    onChangeStatusBankAccount: (Int) -> Unit,
+    onShowTransferDialog: (Int) -> Unit,
+    onChangeTransferSum: (String) -> Unit,
+    onCreateTransfer: () -> Unit,
+    onChangeToCardId: (String) -> Unit,
+    onChangeFromCardId: (String) -> Unit
 )
 {
     when(clientUserState.clientSelectedContent){
@@ -191,7 +211,12 @@ fun ContentScreen(
             modifier = modifier,
             clientUserState = clientUserState,
             onShowBankAccountDialog = onShowBankAccountDialog,
-            onChangeStatusBankAccount = onChangeStatusBankAccount
+            onChangeStatusBankAccount = onChangeStatusBankAccount,
+            onShowTransferDialog = onShowTransferDialog,
+            onChangeTransferSum = onChangeTransferSum,
+            onCreateTransfer = onCreateTransfer,
+            onChangeToCardId = onChangeToCardId,
+            onChangeFromCardId =onChangeFromCardId
         )
         ClientSelectedContent.SALARY_PROJECT -> ClientUserSalaryProjectScreen(modifier = modifier)
     }

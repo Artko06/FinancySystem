@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.Flow
 interface SalaryProjectRepository {
     fun getAllSalaryProjects() : Flow<List<ISalaryProjectCompany>>
     fun getSalaryProjectsByCompanyId(companyId: Int) : Flow<List<ISalaryProjectCompany>>
-    fun getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int) : Flow<List<ISalaryProjectCompany>>
+    fun getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int?) : Flow<List<ISalaryProjectCompany>>
+    fun getSalaryProjectsByStatus(status: StatusJobBid) : Flow<List<ISalaryProjectCompany>>
     suspend fun changeStatusSalaryProject(salaryProjectCompany: SalaryProjectCompany, statusJobBid: StatusJobBid)
     suspend fun insertSalaryProject(salaryProjectCompany: ISalaryProjectCompany)
     suspend fun deleteSalaryProject(salaryProjectCompany: ISalaryProjectCompany)

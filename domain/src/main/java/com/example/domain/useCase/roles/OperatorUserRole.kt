@@ -17,9 +17,6 @@ interface OperatorUserRole {
     // INSERT
 
 
-    // DELETE
-
-
     // CHANGE
     val changeStatusSalaryProjectUseCase: ChangeStatusSalaryProjectUseCase
     val changeStatusCreditBankAccountUseCase: ChangeStatusCreditBankAccountUseCase

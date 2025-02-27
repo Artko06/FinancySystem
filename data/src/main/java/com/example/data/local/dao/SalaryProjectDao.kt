@@ -17,7 +17,10 @@ interface SalaryProjectDao {
     fun getSalaryProjectsByCompanyId(companyId: Int) : Flow<List<SalaryProjectCompanyEntity>>
 
     @Query("Select * FROM salary_project_companies WHERE clientBaseUserId = :clientBaseUserId")
-    fun getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int) : Flow<List<SalaryProjectCompanyEntity>>
+    fun getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int?) : Flow<List<SalaryProjectCompanyEntity>>
+
+    @Query("Select * FROM salary_project_companies WHERE status = :status")
+    fun getSalaryProjectsByStatus(status: String) : Flow<List<SalaryProjectCompanyEntity>>
 
     @Query("UPDATE salary_project_companies SET status = :newStatusJobBid WHERE id = :salaryProjectId")
     suspend fun changeStatusSalaryProject(salaryProjectId: Int, newStatusJobBid: String)

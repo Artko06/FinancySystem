@@ -13,7 +13,8 @@ import com.example.domain.useCase.allUserCases.bankUseCases.get.GetAllBanksUseCa
 import com.example.domain.useCase.allUserCases.companyUseCases.get.GetAllCompanyUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetSalaryProjectsByClientBaseUserUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.insert.InsertSalaryProjectUseCase
-import com.example.domain.useCase.allUserCases.transferUseCases.insert.InsertTransferUseCase
+import com.example.domain.useCase.allUserCases.transferUseCases.other.CreateTransferUseCase
+import com.example.domain.useCase.allUserCases.transferUseCases.other.validateTransfer.ValidateTransferUseCase
 
 class ClientUserUseCases(
     // GET
@@ -31,12 +32,14 @@ class ClientUserUseCases(
     override val insertCreditBankAccountUseCase: InsertCreditBankAccountUseCase,
     override val insertStandardBankAccountUseCase: InsertStandardBankAccountUseCase,
     override val insertSalaryProjectUseCase: InsertSalaryProjectUseCase,
-    override val insertTransferUseCase: InsertTransferUseCase,
-
-    //DELETE
 
 
     // CHANGE
     override val changeBalanceBaseBankAccountUseCase: ChangeStatusBaseBankAccountUseCase,
     override val changeStatusBaseBankAccountUseCase: ChangeStatusBaseBankAccountUseCase,
+
+
+    // OTHER
+    override val createTransferUseCase: CreateTransferUseCase,
+    override val validateTransferUseCase: ValidateTransferUseCase,
 ): ClientUserRole

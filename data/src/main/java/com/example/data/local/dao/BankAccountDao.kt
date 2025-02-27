@@ -34,6 +34,9 @@ interface BankAccountDao {
     @Upsert
     suspend fun insertBaseBankAccount(bankAccount: BaseBankAccountEntity)
 
+    @Upsert
+    suspend fun insertListOfBaseBankAccount(bankAccounts: List<BaseBankAccountEntity>)
+
     @Delete
     suspend fun deleteBaseBankAccount(bankAccount: BaseBankAccountEntity)
 
@@ -75,6 +78,9 @@ interface BankAccountDao {
 
     @Upsert
     suspend fun insertCompanyBankAccount(bankAccount: CompanyBankAccountEntity)
+
+    @Upsert
+    suspend fun insertListOfCompanyBankAccount(bankAccounts: List<CompanyBankAccountEntity>)
 
     @Delete
     suspend fun deleteCompanyBankAccount(bankAccount: CompanyBankAccountEntity)

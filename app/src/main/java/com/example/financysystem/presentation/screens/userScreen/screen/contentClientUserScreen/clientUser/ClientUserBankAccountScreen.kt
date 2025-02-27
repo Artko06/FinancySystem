@@ -26,7 +26,12 @@ fun ClientUserBankAccountScreen(
     modifier: Modifier = Modifier,
     clientUserState: ClientUserState,
     onShowBankAccountDialog: (Int) -> Unit,
-    onChangeStatusBankAccount: (Int) -> Unit
+    onShowTransferDialog: (Int) -> Unit,
+    onChangeStatusBankAccount: (Int) -> Unit,
+    onChangeTransferSum: (String) -> Unit,
+    onCreateTransfer: () -> Unit,
+    onChangeToCardId: (String) -> Unit,
+    onChangeFromCardId: (String) -> Unit
 )
 {
     Column {
@@ -64,10 +69,21 @@ fun ClientUserBankAccountScreen(
                             creditLastDate = null,
                             creditTotalSum = null,
                             interestRate = null,
+                            isOpenInfoDialog = clientUserState.isOpenDialogBankAccount,
+                            idOpenInfoDialog = clientUserState.idOpenDialogBankAccount.toString(),
                             onShowBankAccountDialog = onShowBankAccountDialog,
-                            isOpenDialog = clientUserState.isOpenDialogBankAccount,
-                            idOpenDialog = clientUserState.idOpenDialogBankAccount.toString(),
-                            onChangeStatusBankAccount = onChangeStatusBankAccount
+                            onChangeStatusBankAccount = onChangeStatusBankAccount,
+
+                            onShowTransferDialog = onShowTransferDialog,
+                            isOpenTransferDialog = clientUserState.isOpenTransferDialog,
+                            idOpenTransferDialog = clientUserState.idOpenTransferDialog.toString(),
+                            onCreateTransfer = onCreateTransfer,
+                            onChangeToCardId = onChangeToCardId,
+                            onChangeFromCardId = onChangeFromCardId,
+                            onChangeTransferSum = onChangeTransferSum,
+                            transferSum = clientUserState.inputTransferSum,
+                            toCardId = clientUserState.inputToCardId,
+                            errorTransfer = clientUserState.errorCreateTransfer
                         )
                 }
             }
@@ -91,9 +107,20 @@ fun ClientUserBankAccountScreen(
                             creditTotalSum = account.creditTotalSum.toString(),
                             interestRate = account.interestRate.toString(),
                             onShowBankAccountDialog = onShowBankAccountDialog,
-                            isOpenDialog = clientUserState.isOpenDialogBankAccount,
-                            idOpenDialog = clientUserState.idOpenDialogBankAccount.toString(),
-                            onChangeStatusBankAccount = onChangeStatusBankAccount
+                            isOpenInfoDialog = clientUserState.isOpenDialogBankAccount,
+                            idOpenInfoDialog = clientUserState.idOpenDialogBankAccount.toString(),
+                            onChangeStatusBankAccount = onChangeStatusBankAccount,
+
+                            onShowTransferDialog = onShowTransferDialog,
+                            isOpenTransferDialog = clientUserState.isOpenTransferDialog,
+                            idOpenTransferDialog = clientUserState.idOpenTransferDialog.toString(),
+                            onCreateTransfer = onCreateTransfer,
+                            onChangeToCardId = onChangeToCardId,
+                            onChangeFromCardId = onChangeFromCardId,
+                            onChangeTransferSum = onChangeTransferSum,
+                            transferSum = clientUserState.inputTransferSum,
+                            toCardId = clientUserState.inputToCardId,
+                            errorTransfer = clientUserState.errorCreateTransfer
                         )
                 }
             }

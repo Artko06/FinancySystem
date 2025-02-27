@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
 import com.example.domain.useCase.UserRoleUseCases.ClientUserUseCases
+import com.example.domain.useCase.allUserCases.transferUseCases.other.validateTransfer.ValidateTransfer
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent.OnLoadCreditBankAccounts
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent.OnLoadStandardBankAccounts
@@ -21,6 +22,8 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -89,7 +92,7 @@ class ClientUserViewModel @Inject constructor(
                                     balance = _clientUserState.value.sumForCredit.sum,
                                     creditLastDate = LocalDate.now()
                                         .plusMonths(_clientUserState.value.monthCountCredit.months.toLong())
-                                        .toString(),
+                                        .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
                                     creditTotalSum = _clientUserState.value.sumForCredit.sum,
                                     countMonthsCredit = _clientUserState.value.monthCountCredit.months
                                 )
@@ -203,10 +206,80 @@ class ClientUserViewModel @Inject constructor(
                             StatusBankAccount.NORMAL -> clientUserUseCases
                                 .changeStatusBaseBankAccountUseCase.invoke(baseBankAccount, StatusBankAccount.FROZEN)
                         }
-                        onEvent(ClientUserEvent.OnLoadStandardBankAccounts(baseUserId = _clientUserState.value.id))
-                        onEvent(ClientUserEvent.OnLoadCreditBankAccounts(baseUserId = _clientUserState.value.id))
+                        onEvent(OnLoadStandardBankAccounts(baseUserId = _clientUserState.value.id))
+                        onEvent(OnLoadCreditBankAccounts(baseUserId = _clientUserState.value.id))
                     }
                 }
+            }
+
+            ClientUserEvent.OnCreateTransfer -> {
+                viewModelScope.launch {
+                    val validateTransfer = clientUserUseCases.validateTransferUseCase.invoke(
+                        cardFromId = _clientUserState.value.inputFromCardId,
+                        cardToId = _clientUserState.value.inputToCardId,
+                        sum = _clientUserState.value.inputTransferSum
+                    )
+
+                    _clientUserState.update { it.copy(
+                        errorCreateTransfer = when(validateTransfer){
+                            ValidateTransfer.INCORRECT_CARD_GETTER -> "Неверные данные карты получателя"
+                            ValidateTransfer.INCORRECT_CARD_SENDER -> "Неверные данные карты отправителя"
+                            ValidateTransfer.INCORRECT_SUM -> "Неверно указана сумма"
+                            ValidateTransfer.FROZEN_BLOCKED_ACCOUNT_SENDER -> "Этот счёт заморожен или заблокрирован"
+                            ValidateTransfer.BLOCK_ACCOUNT_GETTER -> "Аккаунт получателя заблокирован"
+                            ValidateTransfer.NOT_ACCEPTED_CREDIT_ACCOUNT -> "Кредитный аккаунт не подтверждён"
+                            ValidateTransfer.NOT_ENOUGH_SUM -> "Недостаточно средств"
+                            ValidateTransfer.OK -> null
+                        }
+                    )
+                    }
+
+                    if(_clientUserState.value.errorCreateTransfer != null) return@launch
+
+                    val fromBankAccount =
+                        clientUserUseCases.getBaseBankAccountById(_clientUserState.value.inputFromCardId.toInt()).firstOrNull()
+                    val toBankAccount =
+                        clientUserUseCases.getBaseBankAccountById(_clientUserState.value.inputToCardId.toInt()).firstOrNull()
+
+                    if(_clientUserState.value.errorCreateTransfer == null){
+                        clientUserUseCases.createTransferUseCase.invoke(
+                            fromBaseBankAccount = fromBankAccount!!,
+                            toBaseBankAccount = toBankAccount!!,
+                            amount = _clientUserState.value.inputTransferSum.toDouble(),
+                            dateTransfer = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                            timeTransfer = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+                        )
+                    }
+
+                    onEvent(OnLoadStandardBankAccounts(baseUserId = _clientUserState.value.id))
+                    onEvent(OnLoadCreditBankAccounts(baseUserId = _clientUserState.value.id))
+                }
+            }
+
+            is ClientUserEvent.OnShowTransferDialog -> {
+                _clientUserState.update { it.copy(
+                    isOpenTransferDialog = !it.isOpenTransferDialog,
+                    idOpenTransferDialog = event.cardId,
+                    errorCreateTransfer = null
+                ) }
+            }
+
+            is ClientUserEvent.OnChangeFromCardId -> {
+                _clientUserState.update { it.copy(
+                    inputFromCardId = event.cardId,
+                ) }
+            }
+
+            is ClientUserEvent.OnChangeToCardId -> {
+                _clientUserState.update { it.copy(
+                    inputToCardId = event.cardId,
+                ) }
+            }
+
+            is ClientUserEvent.OnChangeTransferSum -> {
+                _clientUserState.update { it.copy(
+                    inputTransferSum = event.sum,
+                ) }
             }
         }
     }

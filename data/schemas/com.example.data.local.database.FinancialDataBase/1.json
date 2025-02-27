@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0d9efb0e1ae521edde7a2629ebe677ca",
+    "identityHash": "22db15c8315ad3524e9eee97b0e36320",
     "entities": [
       {
         "tableName": "action_logs",
@@ -356,7 +356,7 @@
       },
       {
         "tableName": "salary_project_companies",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `clientBaseUserId` INTEGER NOT NULL, `companyId` INTEGER NOT NULL, `status` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `clientBaseUserId` INTEGER, `companyId` INTEGER NOT NULL, `status` TEXT NOT NULL, `sum` REAL NOT NULL, `info` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -368,7 +368,7 @@
             "fieldPath": "clientBaseUserId",
             "columnName": "clientBaseUserId",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "companyId",
@@ -379,6 +379,18 @@
           {
             "fieldPath": "status",
             "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sum",
+            "columnName": "sum",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info",
+            "columnName": "info",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -826,7 +838,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0d9efb0e1ae521edde7a2629ebe677ca')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '22db15c8315ad3524e9eee97b0e36320')"
     ]
   }
 }

@@ -11,28 +11,34 @@ import com.example.domain.models.user.BaseUser
 data class SalaryProjectCompanyEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val clientBaseUserId: Int,
+    val clientBaseUserId: Int?,
     val companyId: Int,
-    val status: String
+    val status: String,
+    val sum: Double,
+    val info: String
 )
 
 fun SalaryProjectCompanyEntity.toDomain(
-    clientBaseUser: BaseUser,
+    clientBaseUser: BaseUser?,
     company: Company
 ) = SalaryProjectCompany(
     id = id,
     clientBaseUser = clientBaseUser,
     company = company,
-    status = enumValueOf<StatusJobBid>(status)
+    status = enumValueOf<StatusJobBid>(status),
+    sum = sum,
+    info = info
 )
 
 fun SalaryProjectCompany.toEntity(
-    clientBaseUserId: Int,
+    clientBaseUserId: Int?,
     companyId: Int
 ) = SalaryProjectCompanyEntity(
     id = id,
     clientBaseUserId = clientBaseUserId,
     companyId = companyId,
-    status = status.toString()
+    status = status.toString(),
+    sum = sum,
+    info = info
 )
 

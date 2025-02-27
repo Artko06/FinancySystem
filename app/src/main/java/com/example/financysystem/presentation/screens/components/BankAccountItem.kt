@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
+import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.TransferDialogWindow
 import com.example.financysystem.ui.theme.brightBlue
 import com.example.financysystem.ui.theme.green
 import com.example.financysystem.ui.theme.redOrange
@@ -62,9 +63,19 @@ fun BankAccountItem(
     creditTotalSum: String?,
     interestRate: String?,
     onShowBankAccountDialog: (Int) -> Unit,
-    isOpenDialog: Boolean,
-    idOpenDialog: String,
-    onChangeStatusBankAccount: (Int) -> Unit
+    onShowTransferDialog: (Int) -> Unit,
+    isOpenTransferDialog: Boolean,
+    idOpenTransferDialog: String,
+    isOpenInfoDialog: Boolean,
+    idOpenInfoDialog: String,
+    onChangeStatusBankAccount: (Int) -> Unit,
+    onCreateTransfer: () -> Unit,
+    onChangeToCardId: (String) -> Unit,
+    onChangeFromCardId: (String) -> Unit,
+    onChangeTransferSum: (String) -> Unit,
+    transferSum: String,
+    toCardId: String,
+    errorTransfer: String?
 ) {
     Box(
         modifier = Modifier
@@ -93,7 +104,7 @@ fun BankAccountItem(
                         textAlign = TextAlign.Center
                     )
 
-                    if(isOpenDialog && cardId == idOpenDialog){
+                    if(isOpenInfoDialog && cardId == idOpenInfoDialog){
                         InfoDialogWindow(
                             firstName = firstName,
                             lastName = lastName,
@@ -109,6 +120,20 @@ fun BankAccountItem(
                             creditTotalSum = creditTotalSum,
                             interestRate = interestRate,
                             onShowBankAccountDialog = {onShowBankAccountDialog(cardId.toInt())}
+                        )
+                    }
+
+                    if(isOpenTransferDialog && cardId == idOpenTransferDialog){
+                        onChangeFromCardId(cardId.toString())
+                        TransferDialogWindow(
+                            onShowTransferDialog = onShowTransferDialog,
+                            onCreateTransfer = onCreateTransfer,
+                            onChangeToCardId = onChangeToCardId,
+                            onChangeTransferSum = onChangeTransferSum,
+                            transferSum = transferSum,
+                            fromCardId = cardId,
+                            toCardId = toCardId,
+                            errorTransfer = errorTransfer
                         )
                     }
 
@@ -161,7 +186,7 @@ fun BankAccountItem(
 
                     IconButton(
                         onClick = {
-
+                            onShowTransferDialog(cardId.toInt())
                         },
                     ) {
                         Icon(
@@ -335,8 +360,18 @@ fun BankAccountItemPreview() {
         creditTotalSum = null,
         interestRate = null,
         onShowBankAccountDialog = {},
-        isOpenDialog = false,
-        idOpenDialog = "",
-        onChangeStatusBankAccount = {}
+        onShowTransferDialog = {},
+        isOpenInfoDialog = false,
+        isOpenTransferDialog = false,
+        idOpenInfoDialog = "",
+        idOpenTransferDialog = "",
+        onChangeStatusBankAccount = {},
+        onCreateTransfer= {},
+        onChangeToCardId= {},
+        onChangeTransferSum= {},
+        onChangeFromCardId = {},
+        transferSum= "",
+        toCardId= "",
+        errorTransfer= "",
     )
 }

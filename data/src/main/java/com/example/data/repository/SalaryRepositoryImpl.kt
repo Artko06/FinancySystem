@@ -1,5 +1,6 @@
 package com.example.data.repository
 
+import android.util.Log
 import com.example.data.local.dao.CompanyDao
 import com.example.data.local.dao.SalaryProjectDao
 import com.example.data.local.dao.UserDao
@@ -13,8 +14,10 @@ import com.example.domain.models.salaryProject.StatusJobBid
 import com.example.domain.repository.SalaryProjectRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SalaryRepositoryImpl(
@@ -23,17 +26,90 @@ class SalaryRepositoryImpl(
     private val companyDao: CompanyDao
 ) : SalaryProjectRepository
 {
+
     override fun getAllSalaryProjects(): Flow<List<ISalaryProjectCompany>> {
         return salaryProjectDao.getAllSalaryProjects()
             .flatMapMerge { entities ->
                 val transformedFlows = entities.map { entity ->
-                    combine(
-                        userDao.getBaseUserById(entity.clientBaseUserId),
-                        companyDao.getCompanyById(entity.companyId)
-                    ) { baseUser, company ->
-                        if (baseUser != null && company != null) {
+                    val userFlow = if (entity.clientBaseUserId != null) {
+                        userDao.getBaseUserById(entity.clientBaseUserId)
+                    } else {
+                        flowOf(null)
+                    }
+
+                    val companyFlow = companyDao.getCompanyById(entity.companyId)
+
+                    combine(userFlow, companyFlow) { baseUser, company ->
+                        if (company != null) { // Компания обязательна, а клиент может быть null
                             entity.toDomain(
-                                clientBaseUser = baseUser.toDomain(),
+                                clientBaseUser = baseUser?.toDomain(),
+                                company = company.toDomain()
+                            )
+                        } else {
+                            null // Если компании нет, убираем всю запись
+                        }
+                    }
+                }
+
+                if (transformedFlows.isEmpty()) {
+                    flowOf(emptyList()) // Если нет данных, отдаём пустой список
+                } else {
+                    combine(transformedFlows) { it.filterNotNull() }
+                }
+            }
+
+    }
+
+    override fun getSalaryProjectsByCompanyId(companyId: Int): Flow<List<ISalaryProjectCompany>> {
+        return salaryProjectDao.getSalaryProjectsByCompanyId(companyId)
+            .flatMapMerge { entities ->
+                val transformedFlows = entities.map { entity ->
+                    val userFlow = if (entity.clientBaseUserId != null) {
+                        userDao.getBaseUserById(entity.clientBaseUserId)
+                    } else {
+                        flowOf(null)
+                    }
+
+                    val companyFlow = companyDao.getCompanyById(entity.companyId)
+
+                    combine(userFlow, companyFlow) { baseUser, company ->
+                        if (company != null) {
+                            entity.toDomain(
+                                clientBaseUser = baseUser?.toDomain(),
+                                company = company.toDomain()
+                            )
+                        } else {
+                            null
+                        }
+                    }.catch { e ->
+                        Log.e("SalaryRepository", "Error fetching data for Salary Project: ${e.message}")
+                    }
+                }
+
+                if (transformedFlows.isEmpty()) {
+                    flowOf(emptyList())
+                } else {
+                    combine(transformedFlows) { it.filterNotNull() }
+                }
+            }
+    }
+
+    override fun getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int?): Flow<List<ISalaryProjectCompany>> {
+        return salaryProjectDao.getSalaryProjectsByClientBaseUserId(clientBaseUserId)
+            .flatMapMerge { entities ->
+                val transformedFlows = entities.map { entity ->
+                    val userFlow = if (entity.clientBaseUserId != null) {
+                        userDao.getBaseUserById(entity.clientBaseUserId)
+                    } else {
+                        flowOf(null)
+                    }
+
+                    val companyFlow = companyDao.getCompanyById(entity.companyId)
+
+                    combine(userFlow, companyFlow) { baseUser, company ->
+                        if (company != null) {
+                            entity.toDomain(
+                                clientBaseUser = baseUser?.toDomain(),
                                 company = company.toDomain()
                             )
                         } else {
@@ -41,49 +117,44 @@ class SalaryRepositoryImpl(
                         }
                     }
                 }
-                combine(transformedFlows) { it.filterNotNull() }
+
+                if (transformedFlows.isEmpty()) {
+                    flowOf(emptyList())
+                } else {
+                    combine(transformedFlows) { it.filterNotNull() }
+                }
             }
     }
 
-    override fun getSalaryProjectsByCompanyId(companyId: Int): Flow<List<ISalaryProjectCompany>> {
-        return salaryProjectDao.getSalaryProjectsByCompanyId(companyId)
+    override fun getSalaryProjectsByStatus(status: StatusJobBid): Flow<List<ISalaryProjectCompany>> {
+        return salaryProjectDao.getSalaryProjectsByStatus(status.toString())
             .flatMapMerge { entities ->
                 val transformedFlows = entities.map { entity ->
-                    combine(
-                        userDao.getBaseUserById(entity.clientBaseUserId),
-                        companyDao.getCompanyById(entity.companyId)
-                    ) { baseUser, company ->
-                        if (baseUser != null && company != null) {
+                    val userFlow = if (entity.clientBaseUserId != null) {
+                        userDao.getBaseUserById(entity.clientBaseUserId)
+                    } else {
+                        flowOf(null)
+                    }
+
+                    val companyFlow = companyDao.getCompanyById(entity.companyId)
+
+                    combine(userFlow, companyFlow) { baseUser, company ->
+                        if (company != null) {
                             entity.toDomain(
-                                clientBaseUser = baseUser.toDomain(),
-                                company = company.toDomain())
+                                clientBaseUser = baseUser?.toDomain(),
+                                company = company.toDomain()
+                            )
                         } else {
                             null
                         }
                     }
                 }
-                combine(transformedFlows) { it.filterNotNull() }
-            }
-    }
 
-    override fun getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int): Flow<List<ISalaryProjectCompany>> {
-        return salaryProjectDao.getSalaryProjectsByClientBaseUserId(clientBaseUserId)
-            .flatMapMerge { entities ->
-                val transformedFlows = entities.map { entity ->
-                    combine(
-                        userDao.getBaseUserById(entity.clientBaseUserId),
-                        companyDao.getCompanyById(entity.companyId)
-                    ) { baseUser, company ->
-                        if (baseUser != null && company != null) {
-                            entity.toDomain(
-                                clientBaseUser = baseUser.toDomain(),
-                                company = company.toDomain())
-                        } else {
-                            null
-                        }
-                    }
+                if (transformedFlows.isEmpty()) {
+                    flowOf(emptyList())
+                } else {
+                    combine(transformedFlows) { it.filterNotNull() }
                 }
-                combine(transformedFlows) { it.filterNotNull() }
             }
     }
 
@@ -102,7 +173,7 @@ class SalaryRepositoryImpl(
             is SalaryProjectCompany -> {
                 salaryProjectDao.insertSalaryProject(
                     salaryProjectCompanyEntity = salaryProjectCompany.toEntity(
-                        clientBaseUserId = salaryProjectCompany.clientBaseUser.id,
+                        clientBaseUserId = salaryProjectCompany.clientBaseUser?.id,
                         companyId = salaryProjectCompany.company.id
                     )
                 )
@@ -118,7 +189,7 @@ class SalaryRepositoryImpl(
             is SalaryProjectCompany -> {
                 salaryProjectDao.deleteSalaryProject(
                     salaryProjectCompanyEntity = salaryProjectCompany.toEntity(
-                        clientBaseUserId = salaryProjectCompany.clientBaseUser.id,
+                        clientBaseUserId = salaryProjectCompany.clientBaseUser?.id,
                         companyId = salaryProjectCompany.company.id
                     )
                 )

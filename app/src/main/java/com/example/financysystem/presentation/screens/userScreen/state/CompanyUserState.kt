@@ -1,10 +1,19 @@
 package com.example.financysystem.presentation.screens.userScreen.state
 
+import com.example.domain.models.company.Company
+import com.example.domain.models.salaryProject.ISalaryProjectCompany
 import com.example.domain.models.user.TypeOfUser
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.CompanySelectedContent
 
 data class CompanyUserState(
     val companySelectedContent: CompanySelectedContent = CompanySelectedContent.PROFILE,
+    val salaryProjects: List<ISalaryProjectCompany> = emptyList<ISalaryProjectCompany>(),
+    val company: Company = Company(id = 0, type = "", name = "", unp = "", address = ""),
+
+    val sumSalaryProject: String = "",
+    val infoSalaryProject: String = "",
+    val errorInputSalaryProject: String? = null,
+    val isOpenDialogAddingSalaryProject: Boolean = false,
 
     override val id: Int = 0,
     override val email: String = "",

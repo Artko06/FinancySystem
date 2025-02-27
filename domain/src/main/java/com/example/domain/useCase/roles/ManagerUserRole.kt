@@ -14,8 +14,5 @@ interface ManagerUserRole {
     // INSERT
 
 
-    // DELETE
-
-
     // CHANGE
 }
