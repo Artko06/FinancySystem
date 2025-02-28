@@ -2,7 +2,6 @@ package com.example.domain.useCase.roles
 
 import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeBalanceBankAccount
-import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusCreditBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCreditBankAccountByBaseUserUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.change.ChangeStatusSalaryProjectUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetAllSalaryProjectUseCase
@@ -23,7 +22,6 @@ interface OperatorUserRole {
 
     // CHANGE
     val changeStatusSalaryProjectUseCase: ChangeStatusSalaryProjectUseCase
-    val changeStatusCreditBankAccountUseCase: ChangeStatusCreditBankAccountUseCase
     val changeStatusTransferUseCase: ChangeStatusTransferUseCase
     val changeBalanceBankAccount: ChangeBalanceBankAccount
 }

@@ -1,5 +1,6 @@
 package com.example.financysystem.presentation.screens.userScreen.event
 
+import com.example.domain.models.salaryProject.SalaryProjectCompany
 import com.example.financysystem.presentation.screens.userScreen.state.clientUserState.MonthCountCredit
 import com.example.financysystem.presentation.screens.userScreen.state.clientUserState.SumForCredit
 import com.example.financysystem.presentation.screens.userScreen.state.clientUserState.TypeBankAccount
@@ -23,6 +24,7 @@ sealed class ClientUserEvent {
     data class OnChangeFromCardId(val cardId: String): ClientUserEvent()
     data class OnChangeToCardId(val cardId: String): ClientUserEvent()
 
+    data class OnChangeClientSalaryProject(val salaryProject: SalaryProjectCompany) : ClientUserEvent()
 
     object OnAddBankAccount : ClientUserEvent()
     data class OnLoadStandardBankAccounts(val baseUserId: Int) : ClientUserEvent()

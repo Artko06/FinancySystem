@@ -10,6 +10,7 @@ interface SalaryProjectRepository {
     fun getSalaryProjectsByCompanyId(companyId: Int) : Flow<List<ISalaryProjectCompany>>
     fun getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int?) : Flow<List<ISalaryProjectCompany>>
     fun getSalaryProjectsByStatus(status: StatusJobBid) : Flow<List<ISalaryProjectCompany>>
+    suspend fun changeClientSalaryProject(salaryProjectId: Int, clientBaseUserId: Int?)
     suspend fun changeStatusSalaryProject(salaryProjectCompany: SalaryProjectCompany, statusJobBid: StatusJobBid)
     suspend fun insertSalaryProject(salaryProjectCompany: ISalaryProjectCompany)
     suspend fun deleteSalaryProject(salaryProjectCompany: ISalaryProjectCompany)

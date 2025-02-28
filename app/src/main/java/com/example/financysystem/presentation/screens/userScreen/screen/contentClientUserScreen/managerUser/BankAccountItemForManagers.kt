@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.financysystem.presentation.screens.components
+package com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.managerUser
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,6 @@ import androidx.compose.material.icons.outlined.AcUnit
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,18 +35,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
-import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.clientUser.TransferDialogWindow
+import com.example.domain.models.bank.bankAccount.creditBankAccount.StatusCreditBid
 import com.example.financysystem.ui.theme.brightBlue
 import com.example.financysystem.ui.theme.green
 import com.example.financysystem.ui.theme.redOrange
 import com.example.financysystem.ui.theme.whiteGray
+import com.example.financysystem.ui.theme.yellow
 
 @Composable
-fun BankAccountItem(
+fun BankAccountItemForManager(
     modifier: Modifier = Modifier,
     firstName: String,
     lastName: String,
@@ -62,21 +61,11 @@ fun BankAccountItem(
     creditLastDate: String?,
     creditTotalSum: String?,
     interestRate: String?,
-    onShowBankAccountDialog: (Int) -> Unit,
-    onShowTransferDialog: (Int) -> Unit,
-    isOpenTransferDialog: Boolean,
-    idOpenTransferDialog: String,
     isOpenInfoDialog: Boolean,
     idOpenInfoDialog: String,
+    onShowBankAccountDialog: (Int) -> Unit,
     onChangeStatusBankAccount: (Int) -> Unit,
-    onCreateTransfer: () -> Unit,
-    onChangeToCardId: (String) -> Unit,
-    onChangeFromCardId: (String) -> Unit,
-    onChangeTransferSum: (String) -> Unit,
-    transferSum: String,
-    toCardId: String,
-    errorTransfer: String?
-) {
+){
     Box(
         modifier = Modifier
             .then(modifier)
@@ -105,7 +94,7 @@ fun BankAccountItem(
                     )
 
                     if(isOpenInfoDialog && cardId == idOpenInfoDialog){
-                        InfoDialogWindow(
+                        InfoDialogWindowForManager(
                             firstName = firstName,
                             lastName = lastName,
                             surName = surName,
@@ -119,21 +108,7 @@ fun BankAccountItem(
                             creditLastDate = creditLastDate,
                             creditTotalSum = creditTotalSum,
                             interestRate = interestRate,
-                            onShowBankAccountDialog = {onShowBankAccountDialog(cardId.toInt())}
-                        )
-                    }
-
-                    if(isOpenTransferDialog && cardId == idOpenTransferDialog){
-                        onChangeFromCardId(cardId.toString())
-                        TransferDialogWindow(
-                            onShowTransferDialog = onShowTransferDialog,
-                            onCreateTransfer = onCreateTransfer,
-                            onChangeToCardId = onChangeToCardId,
-                            onChangeTransferSum = onChangeTransferSum,
-                            transferSum = transferSum,
-                            fromCardId = cardId,
-                            toCardId = toCardId,
-                            errorTransfer = errorTransfer
+                            onShowBankAccountDialog = { onShowBankAccountDialog(cardId.toInt()) }
                         )
                     }
 
@@ -180,21 +155,6 @@ fun BankAccountItem(
                             }
                         }
                     }
-
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    IconButton(
-                        onClick = {
-                            onShowTransferDialog(cardId.toInt())
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.MonetizationOn,
-                            contentDescription = null,
-                            tint = green
-                        )
-                    }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -224,6 +184,32 @@ fun BankAccountItem(
                 textAlign = TextAlign.Start
             )
 
+            if(statusCreditBid != null) {
+                Row {
+                    Text(
+                        text = "Статус кредита: ",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 12.sp,
+                        color = Color.Black
+                    )
+
+                    Text(
+                        text = when (enumValueOf<StatusCreditBid>(statusCreditBid)) {
+                            StatusCreditBid.ACCEPTED -> "Одобрено"
+                            StatusCreditBid.WAITING -> "В ожидании"
+                            StatusCreditBid.REJECTED -> "Отклонено"
+                        },
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        color = when (enumValueOf<StatusCreditBid>(statusCreditBid)) {
+                            StatusCreditBid.REJECTED -> redOrange
+                            StatusCreditBid.WAITING -> yellow
+                            StatusCreditBid.ACCEPTED -> green
+                        }
+                    )
+                }
+            }
+
             // Bank name in bottom-right corner
             Text(
                 text = bankName,
@@ -236,8 +222,9 @@ fun BankAccountItem(
     }
 }
 
+
 @Composable
-fun InfoDialogWindow(
+fun InfoDialogWindowForManager(
     modifier: Modifier = Modifier,
     firstName: String,
     lastName: String,
@@ -297,7 +284,7 @@ fun InfoDialogWindow(
                         statusCreditBid != null &&
                         countMonthsCredit != null &&
                         accountType == "Кредитный"
-                        )
+                    )
                     {
                         Text(text = "Cтатус заявки кредита: $statusCreditBid")
 
@@ -318,60 +305,4 @@ fun InfoDialogWindow(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OpenDialogWindowPreview() {
-    InfoDialogWindow(
-        firstName = "Aртём",
-        lastName = "Кохан",
-        surName = "Игоревич",
-        bankName = "Беларусбанк",
-        accountType = "Кредитный",
-        cardId = "1",
-        balance = "5000",
-        statusBankAccount = "WAITING",
-        statusCreditBid = "WAITING",
-        countMonthsCredit = null,
-        creditLastDate = null,
-        interestRate = null,
-        creditTotalSum = null,
-        onShowBankAccountDialog = {}
-    )
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun BankAccountItemPreview() {
-    BankAccountItem(
-        modifier = Modifier.padding(top = 120.dp),
-        firstName = "Aртём",
-        lastName = "Кохан",
-        surName = "Игоревич",
-        bankName = "Беларусбанк",
-        accountType = "Кредитный",
-        cardId = "1",
-        balance = "5000",
-        statusBankAccount = "WAITING",
-        statusCreditBid = "WAITING",
-        countMonthsCredit = null,
-        creditLastDate = null,
-        creditTotalSum = null,
-        interestRate = null,
-        onShowBankAccountDialog = {},
-        onShowTransferDialog = {},
-        isOpenInfoDialog = false,
-        isOpenTransferDialog = false,
-        idOpenInfoDialog = "",
-        idOpenTransferDialog = "",
-        onChangeStatusBankAccount = {},
-        onCreateTransfer= {},
-        onChangeToCardId= {},
-        onChangeTransferSum= {},
-        onChangeFromCardId = {},
-        transferSum= "",
-        toCardId= "",
-        errorTransfer= "",
-    )
 }

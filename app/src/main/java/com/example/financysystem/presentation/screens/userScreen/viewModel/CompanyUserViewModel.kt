@@ -1,6 +1,5 @@
 package com.example.financysystem.presentation.screens.userScreen.viewModel
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -47,7 +46,7 @@ class CompanyUserViewModel @Inject constructor(
         val companyUser =
             companyUserUseCases.getCompanyUserByBaseUserUseCase.invoke(_companyUserState.value.id)
                 .firstOrNull()!!
-        Log.d("CompanyUserEvent","OnLoadCompany")
+
         _companyUserState.update {
             it.copy(
                 company = companyUser.company
@@ -56,7 +55,6 @@ class CompanyUserViewModel @Inject constructor(
     }
 
     private suspend fun onLoadSalaryProject(){
-        Log.d("CompanyUserEvent","OnLoadSalaryProjects")
         val salaryProjects =
             companyUserUseCases.getSalaryProjectsByCompanyUseCase(_companyUserState.value.company.id)
                 .firstOrNull()!!

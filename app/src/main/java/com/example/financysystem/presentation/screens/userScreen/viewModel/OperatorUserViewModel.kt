@@ -41,6 +41,7 @@ class OperatorUserViewModel @Inject constructor(
                 )
             }
             onLoadAllTransfers()
+            onLoadSalaryProjects()
         }
     }
 
@@ -50,6 +51,16 @@ class OperatorUserViewModel @Inject constructor(
         _operatorUserState.update { it.copy(
             transfers = transfers
         )
+        }
+    }
+
+    private suspend fun onLoadSalaryProjects(){
+        val salaryProjects = operatorUserUseCases.getAllSalaryProjectUseCase.invoke().firstOrNull()!!
+
+        _operatorUserState.update {
+            it.copy(
+                salaryProjects = salaryProjects
+            )
         }
     }
 
@@ -85,8 +96,20 @@ class OperatorUserViewModel @Inject constructor(
                         onLoadAllTransfers()
                     }
                 }
-
             }
+
+            is OperatorUserEvent.OnChangeStatusSalaryProject -> {
+                viewModelScope.launch {
+                    operatorUserUseCases.changeStatusSalaryProjectUseCase(
+                        event.salaryProject,
+                        event.newStatusJobBid
+                    )
+
+                    onLoadSalaryProjects()
+                }
+            }
+
+
         }
     }
 }

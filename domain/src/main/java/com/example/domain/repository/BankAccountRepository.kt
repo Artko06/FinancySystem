@@ -3,7 +3,6 @@ package com.example.domain.repository
 import com.example.domain.models.bank.bankAccount.BaseBankAccount
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
 import com.example.domain.models.bank.bankAccount.companyBankAccount.ICompanyBankAccount
-import com.example.domain.models.bank.bankAccount.creditBankAccount.CreditBankAccount
 import com.example.domain.models.bank.bankAccount.creditBankAccount.ICreditBankAccount
 import com.example.domain.models.bank.bankAccount.creditBankAccount.StatusCreditBid
 import com.example.domain.models.bank.bankAccount.standartBankAccount.IStandardBankAccount
@@ -31,7 +30,7 @@ interface BankAccountRepository {
     fun getAllCreditBankAccounts(): Flow<List<ICreditBankAccount>>
     fun getCreditBankAccountByBaseBankAccountId(baseBankAccountId: Int): Flow<ICreditBankAccount?>
     fun getCreditBankAccountByBaseUserId(baseUserId: Int) : Flow<List<ICreditBankAccount>>
-    suspend fun changeStatusCreditBankAccount(bankAccount: CreditBankAccount, statusCreditBid: StatusCreditBid)
+    suspend fun changeStatusCreditBankAccount(creditBankAccount: Int, statusCreditBid: StatusCreditBid)
     suspend fun insertCreditBankAccount(bankAccount: ICreditBankAccount)
     suspend fun deleteCreditBankAccount(bankAccount: ICreditBankAccount)
 

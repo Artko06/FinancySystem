@@ -3,6 +3,7 @@ package com.example.financysystem.presentation.screens.userScreen.state.clientUs
 import com.example.domain.models.bank.Bank
 import com.example.domain.models.bank.bankAccount.creditBankAccount.ICreditBankAccount
 import com.example.domain.models.bank.bankAccount.standartBankAccount.IStandardBankAccount
+import com.example.domain.models.salaryProject.ISalaryProjectCompany
 import com.example.domain.models.user.TypeOfUser
 import com.example.financysystem.presentation.screens.userScreen.state.GeneralInfoUsers
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.ClientSelectedContent
@@ -11,6 +12,7 @@ data class ClientUserState(
     val clientSelectedContent: ClientSelectedContent = ClientSelectedContent.PROFILE,
     val standardBankAccounts: List<IStandardBankAccount> = emptyList<IStandardBankAccount>(),
     val creditBankAccounts: List<ICreditBankAccount> = emptyList<ICreditBankAccount>(),
+    val salaryProjects: List<ISalaryProjectCompany> = emptyList<ISalaryProjectCompany>(),
 
     val banks: List<Bank> = emptyList<Bank>(),
     val selectedIndexBank: Int = 0,

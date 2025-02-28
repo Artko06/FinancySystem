@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material3.Icon
@@ -42,7 +41,7 @@ fun TransferItem(
     dataTransfer: String,
     status: StatusTransfer,
     onCancelTransfer: (Int) -> Unit
-){
+) {
     Box(
         modifier = Modifier
             .then(modifier)
@@ -83,7 +82,7 @@ fun TransferItem(
             Column(
                 verticalArrangement = Arrangement.spacedBy(3.dp),
                 modifier = Modifier.fillMaxWidth()
-                ) {
+            ) {
                 Row {
                     Column {
                         Text(
@@ -101,18 +100,18 @@ fun TransferItem(
                         )
                     }
 
-                    IconButton(
-                        onClick = {
-                            if(status == StatusTransfer.SUCCESS){
+                    if (status == StatusTransfer.SUCCESS) {
+                        IconButton(
+                            onClick = {
                                 onCancelTransfer(idTransfer.toInt())
                             }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Cancel,
+                                contentDescription = "Transfer Icon",
+                                tint = redOrange
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Cancel,
-                            contentDescription = "Transfer Icon",
-                            tint = redOrange,
-                        )
                     }
                 }
 
@@ -129,6 +128,7 @@ fun TransferItem(
                     fontSize = 14.sp,
                     color = Color.Black
                 )
+
                 Row {
                     Text(
                         text = "Статус: ",
@@ -138,13 +138,13 @@ fun TransferItem(
                     )
 
                     Text(
-                        text = when(status){
+                        text = when (status) {
                             StatusTransfer.REJECTED_BY_OPERATOR -> "Отменён"
                             StatusTransfer.SUCCESS -> "Успешный"
                         },
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
-                        color = when(status){
+                        color = when (status) {
                             StatusTransfer.REJECTED_BY_OPERATOR -> redOrange
                             StatusTransfer.SUCCESS -> green
                         }
@@ -159,7 +159,7 @@ fun TransferItem(
 
 @Preview(showBackground = true)
 @Composable
-fun TransferItemPreview(){
+fun TransferItemPreview() {
     TransferItem(
         idTransfer = "10",
         toCardId = "10",

@@ -90,7 +90,7 @@ fun AdminUserMainScreen(
         }
 
         ContentScreen(
-            modifier = Modifier.padding(top = 200.dp),
+            modifier = Modifier.padding(top = 160.dp),
             adminUserState = adminUserState
         )
 

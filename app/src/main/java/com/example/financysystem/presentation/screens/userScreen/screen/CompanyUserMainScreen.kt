@@ -116,7 +116,7 @@ fun CompanyUserMainScreen(
         }
 
         ContentScreen(
-            modifier = Modifier.padding(top = 200.dp),
+            modifier = Modifier.padding(top = 160.dp),
             companyUserState = companyUserState
         )
 

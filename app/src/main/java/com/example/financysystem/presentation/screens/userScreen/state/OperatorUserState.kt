@@ -1,5 +1,6 @@
 package com.example.financysystem.presentation.screens.userScreen.state
 
+import com.example.domain.models.salaryProject.ISalaryProjectCompany
 import com.example.domain.models.transfer.ITransfer
 import com.example.domain.models.user.TypeOfUser
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.OperatorSelectedContent
@@ -7,6 +8,7 @@ import com.example.financysystem.presentation.screens.userScreen.state.contentSt
 data class OperatorUserState(
     val operatorSelectedContent: OperatorSelectedContent = OperatorSelectedContent.PROFILE,
     val transfers: List<ITransfer> = emptyList<ITransfer>(),
+    val salaryProjects: List<ISalaryProjectCompany> = emptyList<ISalaryProjectCompany>(),
 
     override val id: Int = 0,
     override val email: String = "",

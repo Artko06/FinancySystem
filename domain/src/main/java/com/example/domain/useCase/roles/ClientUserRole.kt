@@ -9,9 +9,9 @@ import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetStanda
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.insert.InsertCreditBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.insert.InsertStandardBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankUseCases.get.GetAllBanksUseCases
-import com.example.domain.useCase.allUserCases.companyUseCases.get.GetAllCompanyUseCase
+import com.example.domain.useCase.allUserCases.salaryProjectUseCases.change.ChangeClientSalaryProjectUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetSalaryProjectsByClientBaseUserUseCase
-import com.example.domain.useCase.allUserCases.salaryProjectUseCases.insert.InsertSalaryProjectUseCase
+import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetSalaryProjectsByStatus
 import com.example.domain.useCase.allUserCases.transferUseCases.other.CreateTransferUseCase
 import com.example.domain.useCase.allUserCases.transferUseCases.other.validateTransfer.ValidateTransferUseCase
 
@@ -21,20 +21,20 @@ interface ClientUserRole {
     val getCreditBankAccountByBaseUserUseCase: GetCreditBankAccountByBaseUserUseCase
     val getSalaryProjectsByClientBaseUserUseCase: GetSalaryProjectsByClientBaseUserUseCase
     val getAllBanksUseCases: GetAllBanksUseCases
-    val getAllCompanyUseCase: GetAllCompanyUseCase
     val getBaseUserUseCase: GetBaseUserUseCase
     val getBaseBankAccountById: GetBaseBankAccountById
+    val getSalaryProjectsByStatus: GetSalaryProjectsByStatus
 
     // INSERT
     val insertActionLogUseCase: InsertActionLogUseCase
     val insertCreditBankAccountUseCase: InsertCreditBankAccountUseCase
     val insertStandardBankAccountUseCase: InsertStandardBankAccountUseCase
-    val insertSalaryProjectUseCase: InsertSalaryProjectUseCase
 
 
     // CHANGE
     val changeBalanceBaseBankAccountUseCase: ChangeStatusBaseBankAccountUseCase
     val changeStatusBaseBankAccountUseCase: ChangeStatusBaseBankAccountUseCase
+    val changeClientSalaryProjectUseCase: ChangeClientSalaryProjectUseCase
 
 
     // OTHER

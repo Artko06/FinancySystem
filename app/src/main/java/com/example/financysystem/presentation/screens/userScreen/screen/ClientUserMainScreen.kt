@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.AddBusiness
 import androidx.compose.material.icons.filled.AddCard
 import androidx.compose.material.icons.filled.Factory
 import androidx.compose.material3.FloatingActionButton
@@ -27,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.domain.models.salaryProject.SalaryProjectCompany
 import com.example.financysystem.presentation.screens.components.BottomNavItem
 import com.example.financysystem.presentation.screens.components.BottomNavigationBar
 import com.example.financysystem.presentation.screens.components.HeaderBackground
@@ -72,38 +72,16 @@ fun ClientUserMainScreen(
             )
         },
         floatingActionButton = {
-            if (clientUserState.clientSelectedContent == ClientSelectedContent.BANK_ACCOUNT ||
-                clientUserState.clientSelectedContent == ClientSelectedContent.SALARY_PROJECT) {
+            if (clientUserState.clientSelectedContent == ClientSelectedContent.BANK_ACCOUNT) {
                 FloatingActionButton(
                     onClick = {
-                        when(clientUserState.clientSelectedContent){
-                            ClientSelectedContent.BANK_ACCOUNT -> {
-                                clientUserViewModel.onEvent(ClientUserEvent.OnOpenAddingDialogBankAccount)
-                            }
-                            ClientSelectedContent.SALARY_PROJECT -> {
-
-                            }
-
-                            ClientSelectedContent.PROFILE -> {}
-                        }
+                        clientUserViewModel.onEvent(ClientUserEvent.OnOpenAddingDialogBankAccount)
                     }
                 ) {
-                    when (clientUserState.clientSelectedContent) {
-                        ClientSelectedContent.PROFILE -> {}
-                        ClientSelectedContent.BANK_ACCOUNT -> {
-                            Icon(
-                                imageVector = Icons.Filled.AddCard,
-                                contentDescription = "Add Button"
-                            )
-                        }
-
-                        ClientSelectedContent.SALARY_PROJECT -> {
-                            Icon(
-                                imageVector = Icons.Filled.AddBusiness,
-                                contentDescription = "Add Button"
-                            )
-                        }
-                    }
+                    Icon(
+                        imageVector = Icons.Filled.AddCard,
+                        contentDescription = "Add Button"
+                    )
                 }
             }
         }
@@ -158,6 +136,9 @@ fun ClientUserMainScreen(
             },
             onChangeFromCardId = { cardId ->
                 clientUserViewModel.onEvent(ClientUserEvent.OnChangeFromCardId(cardId))
+            },
+            onChangeClientSalaryProject = {
+                clientUserViewModel.onEvent(ClientUserEvent.OnChangeClientSalaryProject(it))
             }
         )
 
@@ -195,7 +176,8 @@ fun ContentScreen(
     onChangeTransferSum: (String) -> Unit,
     onCreateTransfer: () -> Unit,
     onChangeToCardId: (String) -> Unit,
-    onChangeFromCardId: (String) -> Unit
+    onChangeFromCardId: (String) -> Unit,
+    onChangeClientSalaryProject: (SalaryProjectCompany) -> Unit
 )
 {
     when(clientUserState.clientSelectedContent){
@@ -218,7 +200,11 @@ fun ContentScreen(
             onChangeToCardId = onChangeToCardId,
             onChangeFromCardId =onChangeFromCardId
         )
-        ClientSelectedContent.SALARY_PROJECT -> ClientUserSalaryProjectScreen(modifier = modifier)
+        ClientSelectedContent.SALARY_PROJECT -> ClientUserSalaryProjectScreen(
+            modifier = modifier,
+            clientUserState = clientUserState,
+            onChangeClientSalaryProject = onChangeClientSalaryProject
+        )
     }
 }
 

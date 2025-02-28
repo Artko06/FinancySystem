@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.bank.bankAccount.creditBankAccount.CreditBankAccount
 import com.example.domain.models.bank.bankAccount.standartBankAccount.StandardBankAccount
-import com.example.financysystem.presentation.screens.components.BankAccountItem
 import com.example.financysystem.presentation.screens.userScreen.state.clientUserState.ClientUserState
 
 @OptIn(ExperimentalMaterial3Api::class)

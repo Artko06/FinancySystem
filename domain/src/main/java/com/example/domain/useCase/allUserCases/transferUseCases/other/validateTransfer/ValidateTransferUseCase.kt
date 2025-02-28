@@ -1,6 +1,7 @@
 package com.example.domain.useCase.allUserCases.transferUseCases.other.validateTransfer
 
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
+import com.example.domain.models.bank.bankAccount.creditBankAccount.StatusCreditBid
 import com.example.domain.repository.BankAccountRepository
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -31,8 +32,8 @@ class ValidateTransferUseCase(
             fromBankAccount.statusBankAccount != StatusBankAccount.NORMAL
                 -> ValidateTransfer.FROZEN_BLOCKED_ACCOUNT_SENDER
 
-//            fromCreditAccount != null && fromCreditAccount.statusCreditBid != StatusCreditBid.ACCEPTED
-//                -> ValidateTransfer.NOT_ACCEPTED_CREDIT_ACCOUNT
+            fromCreditAccount != null && fromCreditAccount.statusCreditBid != StatusCreditBid.ACCEPTED
+                -> ValidateTransfer.NOT_ACCEPTED_CREDIT_ACCOUNT
 
             else -> ValidateTransfer.OK
         }

@@ -6,9 +6,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
+import com.example.domain.models.salaryProject.StatusJobBid
 import com.example.domain.useCase.UserRoleUseCases.ClientUserUseCases
 import com.example.domain.useCase.allUserCases.transferUseCases.other.validateTransfer.ValidateTransfer
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent
+import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent.*
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent.OnLoadCreditBankAccounts
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent.OnLoadStandardBankAccounts
 import com.example.financysystem.presentation.screens.userScreen.state.clientUserState.ClientUserState
@@ -54,7 +56,18 @@ class ClientUserViewModel @Inject constructor(
                 onEvent(ClientUserEvent.OnLoadStandardBankAccounts(baseUserId = it.id))
                 onEvent(ClientUserEvent.OnLoadCreditBankAccounts(baseUserId = it.id))
             }
+            onLoadSalaryProjects()
+        }
+    }
 
+    private suspend fun onLoadSalaryProjects(){
+        val salaryProjects = clientUserUseCases.getSalaryProjectsByStatus
+            .invoke(statusJobBid = StatusJobBid.ACCEPTED).firstOrNull()!!
+
+        _clientUserState.update {
+            it.copy(
+                salaryProjects = salaryProjects
+            )
         }
     }
 
@@ -251,7 +264,7 @@ class ClientUserViewModel @Inject constructor(
                         )
                     }
 
-                    onEvent(ClientUserEvent.OnShowTransferDialog(cardId = _clientUserState.value.inputFromCardId.toInt()))
+                    onEvent(OnShowTransferDialog(cardId = _clientUserState.value.inputFromCardId.toInt()))
                     onEvent(OnLoadStandardBankAccounts(baseUserId = _clientUserState.value.id))
                     onEvent(OnLoadCreditBankAccounts(baseUserId = _clientUserState.value.id))
                 }
@@ -282,6 +295,20 @@ class ClientUserViewModel @Inject constructor(
                     inputTransferSum = event.sum,
                 ) }
             }
+
+            is ClientUserEvent.OnChangeClientSalaryProject -> {
+                viewModelScope.launch {
+                    clientUserUseCases.changeClientSalaryProjectUseCase.invoke(
+                        salaryProjectId = event.salaryProject.id,
+                        clientUserId = if(event.salaryProject.clientBaseUser == null)
+                            _clientUserState.value.id else null
+                    )
+                    onLoadSalaryProjects()
+                }
+            }
+
+
+
         }
     }
 }

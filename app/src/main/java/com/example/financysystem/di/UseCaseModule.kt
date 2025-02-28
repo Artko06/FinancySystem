@@ -3,7 +3,6 @@ package com.example.financysystem.di
 import com.example.domain.repository.ActionLogRepository
 import com.example.domain.repository.BankAccountRepository
 import com.example.domain.repository.BankRepository
-import com.example.domain.repository.CompanyRepository
 import com.example.domain.repository.SalaryProjectRepository
 import com.example.domain.repository.TransferRepository
 import com.example.domain.repository.UserRepository
@@ -29,15 +28,17 @@ import com.example.domain.useCase.allUserCases.auth_regUseCases.ValidateRegister
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeBalanceBankAccount
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusBaseBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusCreditBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetAllCompanyBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetAllCreditBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetAllStandardBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetBaseBankAccountById
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCompanyBankAccountsByCompanyUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCreditBankAccountByBaseUserUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetStandardBankAccountsByBaseUserUseCase
-import com.example.domain.useCase.allUserCases.bankAccountUseCases.insert.InsertCompanyBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.insert.InsertCreditBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.insert.InsertStandardBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankUseCases.get.GetAllBanksUseCases
-import com.example.domain.useCase.allUserCases.companyUseCases.get.GetAllCompanyUseCase
+import com.example.domain.useCase.allUserCases.salaryProjectUseCases.change.ChangeClientSalaryProjectUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.change.ChangeStatusSalaryProjectUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetAllSalaryProjectUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetSalaryProjectsByClientBaseUserUseCase
@@ -88,7 +89,6 @@ object UseCaseModule {
         actionLogRepository: ActionLogRepository,
         bankAccountRepository: BankAccountRepository,
         bankRepository: BankRepository,
-        companyRepository: CompanyRepository,
         salaryProjectRepository: SalaryProjectRepository,
         transferRepository: TransferRepository,
         userRepository: UserRepository
@@ -107,15 +107,16 @@ object UseCaseModule {
             getAllBanksUseCases = GetAllBanksUseCases(
                 bankRepository = bankRepository
             ),
-            getAllCompanyUseCase = GetAllCompanyUseCase(
-                companyRepository = companyRepository
-            ),
             getBaseUserUseCase = GetBaseUserUseCase(
                 userRepository = userRepository
             ),
             getBaseBankAccountById = GetBaseBankAccountById(
                 bankAccountRepository = bankAccountRepository
             ),
+            getSalaryProjectsByStatus = GetSalaryProjectsByStatus(
+                salaryProjectRepository = salaryProjectRepository
+            ),
+
 
             // INSERT
             insertActionLogUseCase = InsertActionLogUseCase(
@@ -127,9 +128,6 @@ object UseCaseModule {
             insertStandardBankAccountUseCase = InsertStandardBankAccountUseCase(
                 bankAccountRepository = bankAccountRepository
             ),
-            insertSalaryProjectUseCase = InsertSalaryProjectUseCase(
-                salaryProjectRepository = salaryProjectRepository
-            ),
 
 
             // CHANGE
@@ -138,6 +136,9 @@ object UseCaseModule {
             ),
             changeStatusBaseBankAccountUseCase = ChangeStatusBaseBankAccountUseCase(
                 bankAccountRepository = bankAccountRepository
+            ),
+            changeClientSalaryProjectUseCase = ChangeClientSalaryProjectUseCase(
+                salaryProjectRepository = salaryProjectRepository
             ),
 
 
@@ -176,9 +177,6 @@ object UseCaseModule {
             getBaseUserUseCase = GetBaseUserUseCase(
                 userRepository = userRepository
             ),
-            getSalaryProjectsByStatus = GetSalaryProjectsByStatus(
-                salaryProjectRepository = salaryProjectRepository
-            ),
             getCompanyUserByBaseUserUseCase = GetCompanyUserByBaseUserUseCase(
                 userRepository = userRepository
             ),
@@ -187,9 +185,6 @@ object UseCaseModule {
             // INSERT
             insertActionLogUseCase = InsertActionLogUseCase(
                 actionLogRepository = actionLogRepository
-            ),
-            insertCompanyBankAccountUseCase = InsertCompanyBankAccountUseCase(
-                bankAccountRepository = bankAccountRepository
             ),
             insertSalaryProjectUseCase = InsertSalaryProjectUseCase(
                 salaryProjectRepository = salaryProjectRepository
@@ -238,6 +233,20 @@ object UseCaseModule {
             getTransferById = GetTransferById(
                 transferRepository = transferRepository
             ),
+            getAllStandardBankAccount = GetAllStandardBankAccountUseCase(
+                bankAccountRepository = bankAccountRepository
+            ),
+            getAllCreditBankAccount = GetAllCreditBankAccountUseCase(
+                bankAccountRepository = bankAccountRepository
+            ),
+            getAllCompanyBankAccount = GetAllCompanyBankAccountUseCase(
+                bankAccountRepository = bankAccountRepository
+            ),
+            getBaseBankAccountById = GetBaseBankAccountById(
+                bankAccountRepository = bankAccountRepository
+            ),
+
+
 
             // INSERT
 
@@ -253,6 +262,9 @@ object UseCaseModule {
                 transferRepository = transferRepository
             ),
             changeBalanceBankAccount = ChangeBalanceBankAccount(
+                bankAccountRepository = bankAccountRepository
+            ),
+            changeStatusBaseBankAccountUseCase = ChangeStatusBaseBankAccountUseCase(
                 bankAccountRepository = bankAccountRepository
             )
         )
@@ -284,15 +296,13 @@ object UseCaseModule {
                 transferRepository = transferRepository
             ),
 
+
             // INSERT
 
 
             // CHANGE
             changeStatusSalaryProjectUseCase = ChangeStatusSalaryProjectUseCase(
                 salaryProjectRepository = salaryProjectRepository
-            ),
-            changeStatusCreditBankAccountUseCase = ChangeStatusCreditBankAccountUseCase(
-                bankAccountRepository = bankAccountRepository
             ),
             changeStatusTransferUseCase = ChangeStatusTransferUseCase(
                 transferRepository = transferRepository

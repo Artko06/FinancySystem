@@ -21,11 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.domain.models.salaryProject.SalaryProjectCompany
+import com.example.domain.models.salaryProject.StatusJobBid
 import com.example.financysystem.presentation.screens.components.BottomNavItem
 import com.example.financysystem.presentation.screens.components.BottomNavigationBar
 import com.example.financysystem.presentation.screens.components.HeaderBackground
 import com.example.financysystem.presentation.screens.userScreen.event.OperatorUserEvent
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.operatorUser.OperatorUserProfileScreen
+import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.operatorUser.OperatorUserSalaryProjectScreen
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.operatorUser.OperatorUserTransfersScreen
 import com.example.financysystem.presentation.screens.userScreen.state.OperatorUserState
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.OperatorSelectedContent
@@ -92,10 +95,14 @@ fun OperatorUserMainScreen(
         }
 
         ContentScreen(
-            modifier = Modifier.padding(top = 200.dp),
+            modifier = Modifier.padding(top = 160.dp),
             operatorUserState = operatorUserState,
             onCancelTransfer = { transferId ->
-                operatorUserViewModel.onEvent(OperatorUserEvent.OnCancelTransfer(transferId)) }
+                operatorUserViewModel.onEvent(OperatorUserEvent.OnCancelTransfer(transferId)) },
+            onChangeStatusSalaryProject = { salaryProject, newStatus ->
+                operatorUserViewModel.onEvent(OperatorUserEvent.OnChangeStatusSalaryProject(salaryProject, newStatus))
+            }
+
         )
 
     }
@@ -105,7 +112,8 @@ fun OperatorUserMainScreen(
 fun ContentScreen(
     operatorUserState: OperatorUserState,
     modifier: Modifier = Modifier,
-    onCancelTransfer: (Int) -> Unit
+    onCancelTransfer: (Int) -> Unit,
+    onChangeStatusSalaryProject: (SalaryProjectCompany, StatusJobBid) -> Unit
 )
 {
     when(operatorUserState.operatorSelectedContent){
@@ -124,10 +132,10 @@ fun ContentScreen(
                 onCancelTransfer = onCancelTransfer
             )
         }
-        OperatorSelectedContent.SALARY_PROJECT -> OperatorUserTransfersScreen(
+        OperatorSelectedContent.SALARY_PROJECT -> OperatorUserSalaryProjectScreen(
             modifier = modifier,
             operatorUserState = operatorUserState,
-            onCancelTransfer = onCancelTransfer
+            onChangeStatusSalaryProject = onChangeStatusSalaryProject
         )
     }
 }

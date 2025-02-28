@@ -2,7 +2,12 @@ package com.example.domain.useCase.UserRoleUseCases
 
 import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeBalanceBankAccount
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusBaseBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeStatusCreditBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetAllCompanyBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetAllCreditBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetAllStandardBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetBaseBankAccountById
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCreditBankAccountByBaseUserUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.change.ChangeStatusSalaryProjectUseCase
 import com.example.domain.useCase.roles.ManagerUserRole
@@ -19,6 +24,11 @@ data class ManagerUserUseCases(
     override val getCreditBankAccountByBaseUserUseCase: GetCreditBankAccountByBaseUserUseCase,
     override val getBaseUserUseCase: GetBaseUserUseCase,
     override val getTransferById: GetTransferById,
+    override val getAllStandardBankAccount: GetAllStandardBankAccountUseCase,
+    override val getAllCreditBankAccount: GetAllCreditBankAccountUseCase,
+    override val getAllCompanyBankAccount: GetAllCompanyBankAccountUseCase,
+    override val getBaseBankAccountById: GetBaseBankAccountById,
+
 
     // INSERT
 
@@ -27,5 +37,6 @@ data class ManagerUserUseCases(
     override val changeStatusSalaryProjectUseCase: ChangeStatusSalaryProjectUseCase,
     override val changeStatusCreditBankAccountUseCase: ChangeStatusCreditBankAccountUseCase,
     override val changeStatusTransferUseCase: ChangeStatusTransferUseCase,
-    override val changeBalanceBankAccount: ChangeBalanceBankAccount
+    override val changeBalanceBankAccount: ChangeBalanceBankAccount,
+    override val changeStatusBaseBankAccountUseCase: ChangeStatusBaseBankAccountUseCase,
 ): ManagerUserRole, OperatorUserRole

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,9 @@ import com.example.domain.models.company.Company
 import com.example.domain.models.salaryProject.SalaryProjectCompany
 import com.example.domain.models.salaryProject.StatusJobBid
 import com.example.financysystem.ui.theme.green
+import com.example.financysystem.ui.theme.redOrange
 import com.example.financysystem.ui.theme.whiteGray
+import com.example.financysystem.ui.theme.yellow
 
 @Composable
 fun SalaryProjectItem(
@@ -44,7 +47,7 @@ fun SalaryProjectItem(
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text(
                 text = "Зарплатный проект",
@@ -55,13 +58,6 @@ fun SalaryProjectItem(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            salaryProject.id
-            Text(
-                text = "Project ID: ${salaryProject.id}",
-                fontSize = 14.sp,
-                color = Color.Black
-            )
-
             Text(
                 text = "Адрес: ${salaryProject.company.address}",
                 fontSize = 14.sp,
@@ -71,7 +67,7 @@ fun SalaryProjectItem(
             if(salaryProject.clientBaseUser != null){
                 Text(
                     text = "${salaryProject.clientBaseUser!!.lastName} " +
-                            "${salaryProject.clientBaseUser!!.firstName} +" +
+                            "${salaryProject.clientBaseUser!!.firstName} " +
                             salaryProject.clientBaseUser!!.surName,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
@@ -91,12 +87,28 @@ fun SalaryProjectItem(
                 fontSize = 14.sp,
                 color = Color.Black
             )
+            Row {
+                Text(
+                    text = "Статус: ",
+                    fontSize = 14.sp,
+                    color = Color.Black
+                )
 
-            Text(
-                text = "Статус: ${salaryProject.status}",
-                fontSize = 14.sp,
-                color = Color.Black
-            )
+                Text(
+                    text = when(salaryProject.status){
+                        StatusJobBid.REJECTED -> "Отклонено банком"
+                        StatusJobBid.WAITING -> "В ожидании"
+                        StatusJobBid.ACCEPTED -> "Подтверждено банком"
+                    },
+                    fontSize = 14.sp,
+                    color = when(salaryProject.status){
+                        StatusJobBid.REJECTED -> redOrange
+                        StatusJobBid.WAITING -> yellow
+                        StatusJobBid.ACCEPTED -> green
+                    },
+                    fontWeight = FontWeight.Bold,
+                )
+            }
 
             Text(
                 text = salaryProject.company.name,

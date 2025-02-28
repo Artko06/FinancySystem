@@ -25,6 +25,9 @@ interface SalaryProjectDao {
     @Query("UPDATE salary_project_companies SET status = :newStatusJobBid WHERE id = :salaryProjectId")
     suspend fun changeStatusSalaryProject(salaryProjectId: Int, newStatusJobBid: String)
 
+    @Query("UPDATE salary_project_companies SET clientBaseUserId = :clientBaseUserId WHERE id = :salaryProjectId")
+    suspend fun changeClientSalaryProject(salaryProjectId: Int, clientBaseUserId: Int?)
+
     @Upsert
     suspend fun insertSalaryProject(salaryProjectCompanyEntity: SalaryProjectCompanyEntity)
 

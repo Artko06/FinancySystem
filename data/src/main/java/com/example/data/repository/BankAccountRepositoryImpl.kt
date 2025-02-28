@@ -210,12 +210,12 @@ class BankAccountRepositoryImpl(
     }
 
     override suspend fun changeStatusCreditBankAccount(
-        bankAccount: CreditBankAccount,
+        creditBankAccountId: Int,
         statusCreditBid: StatusCreditBid
     )
     {
         bankAccountDao.changeStatusCreditBankAccount(
-            creditBankAccountId = bankAccount.id,
+            creditBankAccountId = creditBankAccountId,
             newStatusCreditBid = statusCreditBid.toString()
         )
     }

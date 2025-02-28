@@ -158,6 +158,16 @@ class SalaryRepositoryImpl(
             }
     }
 
+    override suspend fun changeClientSalaryProject(
+        salaryProjectId: Int,
+        clientBaseUserId: Int?
+    ) {
+        salaryProjectDao.changeClientSalaryProject(
+            salaryProjectId = salaryProjectId,
+            clientBaseUserId = clientBaseUserId
+        )
+    }
+
     override suspend fun changeStatusSalaryProject(
         salaryProjectCompany: SalaryProjectCompany,
         statusJobBid: StatusJobBid
