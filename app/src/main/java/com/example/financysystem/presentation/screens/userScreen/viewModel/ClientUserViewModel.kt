@@ -251,6 +251,7 @@ class ClientUserViewModel @Inject constructor(
                         )
                     }
 
+                    onEvent(ClientUserEvent.OnShowTransferDialog(cardId = _clientUserState.value.inputFromCardId.toInt()))
                     onEvent(OnLoadStandardBankAccounts(baseUserId = _clientUserState.value.id))
                     onEvent(OnLoadCreditBankAccounts(baseUserId = _clientUserState.value.id))
                 }

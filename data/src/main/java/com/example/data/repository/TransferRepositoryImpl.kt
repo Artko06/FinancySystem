@@ -66,6 +66,47 @@ class TransferRepositoryImpl(
             }
     }
 
+    override fun getTransferById(transferId: Int): Flow<ITransfer?> {
+        return transferDao.getTransferById(transferId)
+            .flatMapMerge { transferEntity ->
+                if (transferEntity == null) {
+                    flowOf(null)
+                } else {
+                    combine(
+                        bankAccountDao.getBaseBankAccountById(transferEntity.fromBaseBankAccountId),
+                        bankAccountDao.getBaseBankAccountById(transferEntity.toBaseBankAccountId)
+                    ) { fromBaseBankAccountEntity, toBaseBankAccountEntity ->
+                        if (fromBaseBankAccountEntity != null && toBaseBankAccountEntity != null) {
+                            combine(
+                                userDao.getBaseUserById(fromBaseBankAccountEntity.baseUserId),
+                                userDao.getBaseUserById(toBaseBankAccountEntity.baseUserId),
+                                bankDao.getBankById(fromBaseBankAccountEntity.bankId),
+                                bankDao.getBankById(toBaseBankAccountEntity.bankId)
+                            ) { fromBaseUser, toBaseUser, fromBank, toBank ->
+                                if (fromBaseUser != null && toBaseUser != null && fromBank != null && toBank != null) {
+                                    transferEntity.toDomain(
+                                        fromBaseBankAccount = fromBaseBankAccountEntity.toDomain(
+                                            baseUser = fromBaseUser.toDomain(),
+                                            bank = fromBank.toDomain()
+                                        ),
+                                        toBaseBankAccount = toBaseBankAccountEntity.toDomain(
+                                            baseUser = toBaseUser.toDomain(),
+                                            bank = toBank.toDomain()
+                                        )
+                                    )
+                                } else {
+                                    null
+                                }
+                            }
+                        } else {
+                            flowOf(null)
+                        }
+                    }.flatMapMerge { it }
+                }
+            }
+    }
+
+
     override suspend fun changeStatusTransfer(
         transfer: Transfer,
         statusTransfer: StatusTransfer

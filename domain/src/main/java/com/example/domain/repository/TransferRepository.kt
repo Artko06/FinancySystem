@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TransferRepository {
     fun getAllTransfers(): Flow<List<ITransfer>>
+    fun getTransferById(transferId: Int): Flow<ITransfer?>
     suspend fun changeStatusTransfer(transfer: Transfer, statusTransfer: StatusTransfer)
     suspend fun insertTransfer(transfer: ITransfer)
     suspend fun deleteTransfer(transfer: ITransfer)

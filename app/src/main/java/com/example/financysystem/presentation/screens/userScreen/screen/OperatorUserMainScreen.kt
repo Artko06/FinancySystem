@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Factory
+import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,6 +26,7 @@ import com.example.financysystem.presentation.screens.components.BottomNavigatio
 import com.example.financysystem.presentation.screens.components.HeaderBackground
 import com.example.financysystem.presentation.screens.userScreen.event.OperatorUserEvent
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.operatorUser.OperatorUserProfileScreen
+import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.operatorUser.OperatorUserTransfersScreen
 import com.example.financysystem.presentation.screens.userScreen.state.OperatorUserState
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.OperatorSelectedContent
 import com.example.financysystem.presentation.screens.userScreen.viewModel.OperatorUserViewModel
@@ -41,7 +42,7 @@ fun OperatorUserMainScreen(
 {
     val navItems = listOf(
         BottomNavItem(label = "Профиль", icon = Icons.Filled.AccountCircle),
-        BottomNavItem(label = "Счета", icon =  Icons.Filled.AccountBalanceWallet),
+        BottomNavItem(label = "Переводы", icon =  Icons.Filled.MonetizationOn),
         BottomNavItem(label = "Проекты", icon = Icons.Filled.Factory),
     )
 
@@ -92,7 +93,9 @@ fun OperatorUserMainScreen(
 
         ContentScreen(
             modifier = Modifier.padding(top = 200.dp),
-            operatorUserState = operatorUserState
+            operatorUserState = operatorUserState,
+            onCancelTransfer = { transferId ->
+                operatorUserViewModel.onEvent(OperatorUserEvent.OnCancelTransfer(transferId)) }
         )
 
     }
@@ -101,7 +104,8 @@ fun OperatorUserMainScreen(
 @Composable
 fun ContentScreen(
     operatorUserState: OperatorUserState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCancelTransfer: (Int) -> Unit
 )
 {
     when(operatorUserState.operatorSelectedContent){
@@ -113,7 +117,17 @@ fun ContentScreen(
             phone = operatorUserState.phone,
             email = operatorUserState.email,
         )
-        OperatorSelectedContent.BANK_ACCOUNT -> {}//ClientUserBankAccountScreen(modifier = modifier)
-        OperatorSelectedContent.SALARY_PROJECT -> {}//ClientUserSalaryProjectScreen(modifier = modifier)
+        OperatorSelectedContent.TRANSFERS -> {
+            OperatorUserTransfersScreen(
+                modifier = modifier,
+                operatorUserState = operatorUserState,
+                onCancelTransfer = onCancelTransfer
+            )
+        }
+        OperatorSelectedContent.SALARY_PROJECT -> OperatorUserTransfersScreen(
+            modifier = modifier,
+            operatorUserState = operatorUserState,
+            onCancelTransfer = onCancelTransfer
+        )
     }
 }

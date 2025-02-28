@@ -4,4 +4,5 @@ import com.example.financysystem.presentation.screens.userScreen.state.contentSt
 
 sealed class OperatorUserEvent {
     data class onContentWindowChange(val newContentWindow: OperatorSelectedContent): OperatorUserEvent()
+    data class OnCancelTransfer(val transferId: Int): OperatorUserEvent()
 }

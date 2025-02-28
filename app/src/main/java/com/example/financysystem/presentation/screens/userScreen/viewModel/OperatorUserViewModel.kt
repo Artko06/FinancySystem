@@ -3,6 +3,8 @@ package com.example.financysystem.presentation.screens.userScreen.viewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.transfer.StatusTransfer
+import com.example.domain.models.transfer.Transfer
 import com.example.domain.useCase.UserRoleUseCases.OperatorUserUseCases
 import com.example.financysystem.presentation.screens.userScreen.event.OperatorUserEvent
 import com.example.financysystem.presentation.screens.userScreen.state.OperatorUserState
@@ -38,6 +40,16 @@ class OperatorUserViewModel @Inject constructor(
                     surName = it.surName,
                 )
             }
+            onLoadAllTransfers()
+        }
+    }
+
+    private suspend fun onLoadAllTransfers(){
+        val transfers = operatorUserUseCases.getAllTransfersUseCase.invoke().firstOrNull()!!
+
+        _operatorUserState.update { it.copy(
+            transfers = transfers
+        )
         }
     }
 
@@ -48,6 +60,32 @@ class OperatorUserViewModel @Inject constructor(
                     operatorSelectedContent = event.newContentWindow
                 )
                 }
+            }
+
+            is OperatorUserEvent.OnCancelTransfer -> {
+                viewModelScope.launch {
+                    val transfer = operatorUserUseCases.getTransferById(event.transferId).firstOrNull()
+
+                    if(transfer != null){
+                        operatorUserUseCases.changeStatusTransferUseCase(
+                            transfer = transfer as Transfer,
+                            statusTransfer = StatusTransfer.REJECTED_BY_OPERATOR
+                        )
+
+                        operatorUserUseCases.changeBalanceBankAccount.invoke(
+                            account = transfer.fromBaseBankAccount,
+                            newBalance = transfer.fromBaseBankAccount.balance + transfer.amount
+                        )
+
+                        operatorUserUseCases.changeBalanceBankAccount.invoke(
+                            account = transfer.toBaseBankAccount,
+                            newBalance = transfer.toBaseBankAccount.balance - transfer.amount
+                        )
+
+                        onLoadAllTransfers()
+                    }
+                }
+
             }
         }
     }
