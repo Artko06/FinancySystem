@@ -177,6 +177,9 @@ object UseCaseModule {
             getBaseUserUseCase = GetBaseUserUseCase(
                 userRepository = userRepository
             ),
+            getBaseBankAccountById = GetBaseBankAccountById(
+                bankAccountRepository = bankAccountRepository
+            ),
             getCompanyUserByBaseUserUseCase = GetCompanyUserByBaseUserUseCase(
                 userRepository = userRepository
             ),
@@ -204,6 +207,9 @@ object UseCaseModule {
             createTransferUseCase = CreateTransferUseCase(
                 bankAccountRepository = bankAccountRepository,
                 transferRepository = transferRepository
+            ),
+            validateTransferUseCase = ValidateTransferUseCase(
+                bankAccountRepository = bankAccountRepository
             )
         )
     }

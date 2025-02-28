@@ -1,5 +1,7 @@
 package com.example.financysystem.presentation.screens.userScreen.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +31,7 @@ import com.example.financysystem.presentation.screens.components.BottomNavigatio
 import com.example.financysystem.presentation.screens.components.HeaderBackground
 import com.example.financysystem.presentation.screens.userScreen.event.CompanyUserEvent
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.companyUser.AddingSalaryProjectDialog
+import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.companyUser.CompanyUserBankAccountScreen
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.companyUser.CompanyUserProfileScreen
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.companyUser.CompanyUserSalaryProjectScreen
 import com.example.financysystem.presentation.screens.userScreen.state.CompanyUserState
@@ -38,6 +41,7 @@ import com.example.financysystem.ui.theme.gray
 import com.example.financysystem.ui.theme.green
 import com.example.financysystem.ui.theme.white
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CompanyUserMainScreen(
     companyUserViewModel: CompanyUserViewModel = hiltViewModel()
@@ -117,7 +121,28 @@ fun CompanyUserMainScreen(
 
         ContentScreen(
             modifier = Modifier.padding(top = 160.dp),
-            companyUserState = companyUserState
+            companyUserState = companyUserState,
+            onCreateTransfer = {
+                companyUserViewModel.onEvent(CompanyUserEvent.OnCreateTransfer)
+            },
+            onChangeToCardId = { cardId ->
+                companyUserViewModel.onEvent(CompanyUserEvent.OnChangeToCardId(cardId))
+            },
+            onChangeTransferSum = { sum ->
+                companyUserViewModel.onEvent(CompanyUserEvent.OnChangeTransferSum(sum))
+            },
+            onChangeFromCardId = { cardId ->
+                companyUserViewModel.onEvent(CompanyUserEvent.OnChangeFromCardId(cardId))
+            },
+            onShowTransferDialog = { cardId ->
+                companyUserViewModel.onEvent(CompanyUserEvent.OnShowTransferDialog(cardId))
+            },
+            onShowBankAccountDialog = { cardId ->
+                companyUserViewModel.onEvent(CompanyUserEvent.OnShowBankAccountDialog(cardId))
+            },
+            onChangeStatusBankAccount = { cardId ->
+                companyUserViewModel.onEvent(CompanyUserEvent.OnChangeStatusBankAccount(cardId))
+            }
         )
 
         if (companyUserState.companySelectedContent == CompanySelectedContent.SALARY_PROJECT &&
@@ -148,7 +173,14 @@ fun CompanyUserMainScreen(
 @Composable
 fun ContentScreen(
     companyUserState: CompanyUserState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onShowBankAccountDialog: (Int) -> Unit,
+    onShowTransferDialog: (Int) -> Unit,
+    onChangeStatusBankAccount: (Int) -> Unit,
+    onChangeTransferSum: (String) -> Unit,
+    onCreateTransfer: () -> Unit,
+    onChangeToCardId: (String) -> Unit,
+    onChangeFromCardId: (String) -> Unit
 )
 {
     when(companyUserState.companySelectedContent){
@@ -161,13 +193,16 @@ fun ContentScreen(
             email = companyUserState.email,
         )
 
-        CompanySelectedContent.BANK_ACCOUNT -> CompanyUserProfileScreen(
+        CompanySelectedContent.BANK_ACCOUNT -> CompanyUserBankAccountScreen(
             modifier = modifier,
-            firstName = companyUserState.firstName,
-            lastName = companyUserState.lastName,
-            surName = companyUserState.surName,
-            phone = companyUserState.phone,
-            email = companyUserState.email,
+            companyUserState = companyUserState,
+            onShowBankAccountDialog = onShowBankAccountDialog,
+            onShowTransferDialog = onShowTransferDialog,
+            onChangeStatusBankAccount = onChangeStatusBankAccount,
+            onChangeTransferSum = onChangeTransferSum,
+            onCreateTransfer = onCreateTransfer,
+            onChangeFromCardId = onChangeFromCardId,
+            onChangeToCardId = onChangeToCardId
         )
 
         CompanySelectedContent.SALARY_PROJECT -> CompanyUserSalaryProjectScreen(

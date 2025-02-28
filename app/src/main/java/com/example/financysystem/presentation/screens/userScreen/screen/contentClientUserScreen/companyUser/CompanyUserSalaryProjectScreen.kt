@@ -42,7 +42,7 @@ fun CompanyUserSalaryProjectScreen(
             }
 
 
-            items(companyUserState.salaryProjects) { project ->
+            items(companyUserState.salaryProjects.reversed()) { project ->
                 when (project) {
                     is SalaryProjectCompany -> {
                         SalaryProjectItem(
