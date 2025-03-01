@@ -74,10 +74,12 @@ object UseCaseModule {
             ),
             getBaseUserUseCase = GetBaseUserUseCase(
                 userRepository = userRepository
-            )
+            ),
 
             // INSERT
-
+            insertActionLogUseCase = InsertActionLogUseCase(
+                actionLogRepository = actionLogRepository
+            )
 
             // CHANGE
         )
@@ -220,7 +222,8 @@ object UseCaseModule {
         bankAccountRepository: BankAccountRepository,
         salaryProjectRepository: SalaryProjectRepository,
         transferRepository: TransferRepository,
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        actionLogRepository: ActionLogRepository
     ): ManagerUserUseCases {
         return ManagerUserUseCases(
             // GET
@@ -255,6 +258,9 @@ object UseCaseModule {
 
 
             // INSERT
+            insertActionLogUseCase = InsertActionLogUseCase(
+                actionLogRepository = actionLogRepository
+            ),
 
 
             // CHANGE
@@ -282,7 +288,8 @@ object UseCaseModule {
         bankAccountRepository: BankAccountRepository,
         salaryProjectRepository: SalaryProjectRepository,
         transferRepository: TransferRepository,
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        actionLogRepository: ActionLogRepository
     ): OperatorUserUseCases {
         return OperatorUserUseCases(
             // GET
@@ -304,7 +311,9 @@ object UseCaseModule {
 
 
             // INSERT
-
+            insertActionLogUseCase = InsertActionLogUseCase(
+                actionLogRepository = actionLogRepository
+            ),
 
             // CHANGE
             changeStatusSalaryProjectUseCase = ChangeStatusSalaryProjectUseCase(

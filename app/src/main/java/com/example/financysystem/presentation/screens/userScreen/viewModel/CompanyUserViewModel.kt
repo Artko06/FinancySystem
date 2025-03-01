@@ -5,7 +5,9 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.actionLog.ActionType
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
+import com.example.domain.models.user.BaseUser
 import com.example.domain.useCase.UserRoleUseCases.CompanyUserUseCases
 import com.example.domain.useCase.allUserCases.transferUseCases.other.validateTransfer.ValidateTransfer
 import com.example.financysystem.presentation.screens.userScreen.event.CompanyUserEvent
@@ -13,6 +15,7 @@ import com.example.financysystem.presentation.screens.userScreen.state.CompanyUs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,6 +24,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class CompanyUserViewModel @Inject constructor(
     private val companyUserUseCases: CompanyUserUseCases,
@@ -43,11 +47,21 @@ class CompanyUserViewModel @Inject constructor(
                     lastName = it.lastName,
                     surName = it.surName,
                 )
+                onCreateActionLog(baseUser = it, ActionType.AUTHORIZATION)
             }
             onLoadCompany()
             onLoadSalaryProject()
             onLoadCompanyBankAccounts()
         }
+    }
+
+    private suspend fun onCreateActionLog(baseUser: BaseUser, actionType: ActionType){
+        companyUserUseCases.insertActionLogUseCase.invoke(
+            baseUser = baseUser,
+            actionType = actionType,
+            date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+            time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+        )
     }
 
     private suspend fun onLoadCompany(){
@@ -114,6 +128,11 @@ class CompanyUserViewModel @Inject constructor(
                         isOpenDialogAddingSalaryProject = false
                     )
                     }
+
+                    val baseUser = companyUserUseCases.getBaseUserUseCase
+                        .invoke(_companyUserState.value.email).first()!!
+
+                    onCreateActionLog(baseUser = baseUser, ActionType.REQUEST_TO_SALARY_PROJECT_BY_COMPANY)
                     onLoadSalaryProject()
                 }
             }
@@ -156,6 +175,11 @@ class CompanyUserViewModel @Inject constructor(
                             StatusBankAccount.NORMAL -> companyUserUseCases
                                 .changeStatusBaseBankAccountUseCase.invoke(baseBankAccount, StatusBankAccount.FROZEN)
                         }
+
+                        val baseUser = companyUserUseCases.getBaseUserUseCase
+                            .invoke(_companyUserState.value.email).first()!!
+
+                        onCreateActionLog(baseUser = baseUser, ActionType.CHANGE_STATUS_BANK_ACCOUNT_BY_COMPANY)
                         onLoadCompanyBankAccounts()
                     }
                 }
@@ -227,6 +251,10 @@ class CompanyUserViewModel @Inject constructor(
                         )
                     }
 
+                    val baseUser = companyUserUseCases.getBaseUserUseCase
+                        .invoke(_companyUserState.value.email).first()!!
+
+                    onCreateActionLog(baseUser = baseUser, ActionType.TRANSFER)
                     onEvent(CompanyUserEvent.OnShowTransferDialog(cardId = _companyUserState.value.inputFromCardId.toInt()))
                     onLoadCompanyBankAccounts()
                 }

@@ -1,0 +1,847 @@
+@startuml
+
+package domain {
+
+    package models{
+        interface IActionLog {
+            +baseUser: BaseUser
+            +actionType: ActionType
+            +date: String
+            +time: String
+        }
+        class ActionLog implements IActionLog {
+            +id: Int
+            +baseUser: BaseUser
+            +actionType: ActionType
+            +date: String
+            +time: String
+        }
+
+        class Bank {
+            +id: Int
+            +name: String
+            +bic: String
+            +interestRate: Double
+        }
+
+        class BaseBankAccount {
+            +id: Int
+            +bank: Bank
+            +baseUser: BaseUser
+            +balance: Double
+            +statusBankAccount: StatusBankAccount
+        }
+
+        interface IStandardBankAccount
+        class StandardBankAccount implements IStandardBankAccount {
+            +id: Int
+            +baseBankAccount: BaseBankAccount
+        }
+
+        interface ICreditBankAccount {
+            +interestRate: Double
+            +countMonthsCredit: Int
+            +creditLastDate: String
+            +creditTotalSum: Double
+            +statusCreditBid: StatusCreditBid
+        }
+        class CreditBankAccount implements ICreditBankAccount {
+            +id: Int
+            +baseBankAccount: BaseBankAccount
+            +interestRate: Double
+            +creditLastDate: String
+            +creditTotalSum: Double
+            +statusCreditBid: StatusCreditBid
+            +countMonthsCredit: Int
+        }
+
+        interface ICompanyBankAccount {
+            +company: Company
+        }
+        class CompanyBankAccount implements ICompanyBankAccount {
+            +id: Int
+            +baseBankAccount: BaseBankAccount
+            +company: Company
+        }
+
+        class Company {
+            +id: Int
+            +type: String
+            +name: String
+            +unp: String
+            +address: String
+        }
+
+        interface ISalaryProjectCompany {
+            +clientBaseUser: BaseUser?
+            +company: Company
+            +status: StatusJobBid
+            +sum: Double
+            +info: String
+        }
+        class SalaryProjectCompany implements ISalaryProjectCompany {
+            +id: Int
+            +clientBaseUser: BaseUser?
+            +company: Company
+            +status: StatusJobBid
+            +sum: Double
+            +info: String
+        }
+
+        interface ITransfer {
+            +fromBaseBankAccount: BaseBankAccount
+            +toBaseBankAccount: BaseBankAccount
+            +amount: Double
+            +dateTransfer: String
+            +timeTransfer: String
+            +status: StatusTransfer
+        }
+        class Transfer implements ITransfer {
+            +id: Int
+            +fromBaseBankAccount: BaseBankAccount
+            +toBaseBankAccount: BaseBankAccount
+            +amount: Double
+            +dateTransfer: String
+            +timeTransfer: String
+            +status: StatusTransfer
+        }
+
+        class BaseUser {
+            +id: Int
+            +firstName: String
+            +lastName: String
+            +surName: String
+            +seriesPassport: String
+            +numberPassport: String
+            +identityNumber: String
+            +phone: String
+            +email: String
+            +typeOfUser: TypeOfUser
+        }
+
+        class CertificateUser {
+            +baseUser: BaseUser
+            +id: Int
+            +hashedPassword: String
+        }
+
+        class OperatorUser {
+            +baseUser: BaseUser
+            +operatorUserId: Int
+        }
+
+        class ManagerUser {
+            +baseUser: BaseUser
+            +managerUserId: Int
+        }
+
+        class CompanyUser {
+            +baseUser: BaseUser
+            +companyUserId: Int
+            +company: Company
+        }
+
+        class ClientUser {
+            +baseUser: BaseUser
+            +clientUserId: Int
+        }
+
+        class AdminUser {
+            +baseUser: BaseUser
+            +adminUserId: Int
+        }
+    }
+
+    package repositories {
+        interface ActionLogRepository {
+            + getAllActionLogs(): Flow<List<IActionLog>>
+            + insertActionLog(actionLog: IActionLog)
+            + deleteActionLog(actionLog: IActionLog)
+        }
+
+        interface BankAccountRepository {
+            + getAllBaseBankAccounts(): Flow<List<BaseBankAccount>>
+            + getBaseBankAccountById(baseBankAccountId: Int): Flow<BaseBankAccount?>
+            + getBaseBankAccountsByBaseUserId(baseUserId: Int): Flow<List<BaseBankAccount>>
+            + getLatestBaseBankAccountByBaseUserId(baseUserId: Int): Flow<BaseBankAccount?>
+            + changeStatusBaseBankAccount(bankAccount: BaseBankAccount, statusBankAccount: StatusBankAccount)
+            + changeBalanceBaseBankAccount(bankAccount: BaseBankAccount, balance: Double)
+            + insertBaseBankAccount(bankAccount: BaseBankAccount)
+            + deleteBaseBankAccount(bankAccount: BaseBankAccount)
+
+            + getAllStandardBankAccounts(): Flow<List<IStandardBankAccount>>
+            + getStandardBankAccountByBaseBankAccountId(baseBankAccountId: Int): Flow<IStandardBankAccount?>
+            + getStandardBankAccountByBaseUserId(baseUserId: Int): Flow<List<IStandardBankAccount>>
+            + insertStandardBankAccount(bankAccount: IStandardBankAccount)
+            + deleteStandardBankAccount(bankAccount: IStandardBankAccount)
+
+            + getAllCreditBankAccounts(): Flow<List<ICreditBankAccount>>
+            + getCreditBankAccountByBaseBankAccountId(baseBankAccountId: Int): Flow<ICreditBankAccount?>
+            + getCreditBankAccountByBaseUserId(baseUserId: Int): Flow<List<ICreditBankAccount>>
+            + changeStatusCreditBankAccount(creditBankAccount: Int, statusCreditBid: StatusCreditBid)
+            + insertCreditBankAccount(bankAccount: ICreditBankAccount)
+            + deleteCreditBankAccount(bankAccount: ICreditBankAccount)
+
+            + getAllCompanyBankAccounts(): Flow<List<ICompanyBankAccount>>
+            + getCompanyBankAccountsByCompanyId(companyId: Int): Flow<List<ICompanyBankAccount>>
+            + insertCompanyBankAccount(bankAccount: ICompanyBankAccount)
+            + deleteCompanyBankAccount(bankAccount: ICompanyBankAccount)
+        }
+
+        interface BankRepository {
+            + getAllBanks(): Flow<List<Bank>>
+            + getBankById(bankId: Int): Flow<Bank?>
+            + insertBank(bank: Bank)
+            + insertListOfBank(banks: List<Bank>)
+            + deleteBank(bank: Bank)
+        }
+
+        interface CompanyRepository {
+            + getAllCompanies(): Flow<List<Company>>
+            + getCompanyById(companyId: Int): Flow<Company?>
+            + insertCompany(company: Company)
+            + insertListOfCompany(companies: List<Company>)
+            + deleteCompany(company: Company)
+        }
+
+        interface SalaryProjectRepository {
+            + getAllSalaryProjects(): Flow<List<ISalaryProjectCompany>>
+            + getSalaryProjectsByCompanyId(companyId: Int): Flow<List<ISalaryProjectCompany>>
+            + getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int?): Flow<List<ISalaryProjectCompany>>
+            + getSalaryProjectsByStatus(status: StatusJobBid): Flow<List<ISalaryProjectCompany>>
+            + changeClientSalaryProject(salaryProjectId: Int, clientBaseUserId: Int?)
+            + changeStatusSalaryProject(salaryProjectCompany: SalaryProjectCompany, statusJobBid: StatusJobBid)
+            + insertSalaryProject(salaryProjectCompany: ISalaryProjectCompany)
+            + deleteSalaryProject(salaryProjectCompany: ISalaryProjectCompany)
+        }
+
+        interface TransferRepository {
+            + getAllTransfers(): Flow<List<ITransfer>>
+            + getTransferById(transferId: Int): Flow<ITransfer?>
+            + changeStatusTransfer(transfer: Transfer, statusTransfer: StatusTransfer)
+            + insertTransfer(transfer: ITransfer)
+            + deleteTransfer(transfer: ITransfer)
+        }
+
+        interface UserRepository {
+            + getBaseUserById(baseUserId: Int): Flow<BaseUser?>
+            + getBaseUserByEmail(email: String): Flow<BaseUser?>
+            + insertBaseUser(baseUser: BaseUser)
+            + insertListOfBaseUser(baseUsers: List<BaseUser>)
+            + deleteBaseUser(baseUser: BaseUser)
+
+            + getCertificateUserByBaseUserId(baseUserId: Int): Flow<CertificateUser?>
+            + insertCertificateUser(certificateUser: CertificateUser)
+            + insertListOfCertificateUser(certificateUsers: List<CertificateUser>)
+            + deleteCertificateUser(certificateUser: CertificateUser)
+
+            + getAdminUserByBaseUserId(baseUserId: Int): Flow<AdminUser?>
+            + getAdminUserById(adminUserId: Int): Flow<AdminUser?>
+            + insertAdminUser(adminUser: AdminUser)
+            + insertListOfAdminUser(adminUsers: List<AdminUser>)
+            + deleteAdminUser(adminUser: AdminUser)
+
+            + getClientUserByBaseUserId(baseUserId: Int): Flow<ClientUser?>
+            + getClientUserById(clientUserId: Int): Flow<ClientUser?>
+            + insertClientUser(clientUser: ClientUser)
+            + insertListOfClientUser(clientUsers: List<ClientUser>)
+            + deleteClientUser(clientUser: ClientUser)
+
+            + getCompanyUserByBaseUserId(baseUserId: Int): Flow<CompanyUser?>
+            + getCompanyUserById(companyUserId: Int): Flow<CompanyUser?>
+            + insertCompanyUser(companyUser: CompanyUser)
+            + insertListOfCompanyUser(companyUsers: List<CompanyUser>)
+            + deleteCompanyUser(companyUser: CompanyUser)
+
+            + getManagerUserByBaseUserId(baseUserId: Int): Flow<ManagerUser?>
+            + getManagerUserById(managerUserId: Int): Flow<ManagerUser?>
+            + insertManagerUser(managerUser: ManagerUser)
+            + insertListOfManagerUser(managerUsers: List<ManagerUser>)
+            + deleteManagerUser(managerUser: ManagerUser)
+
+            + getOperatorUserByBaseUserId(baseUserId: Int): Flow<OperatorUser?>
+            + getOperatorUserById(operatorUserId: Int): Flow<OperatorUser?>
+            + insertOperatorUser(operatorUser: OperatorUser)
+            + insertListOfOperatorUser(operatorUsers: List<OperatorUser>)
+            + deleteOperatorUser(operatorUser: OperatorUser)
+        }
+    }
+
+    package useCases {
+        class GetAllActionLogsUseCase {
+            - actionLogRepository: ActionLogRepository
+        }
+
+        class InsertActionLogUseCase {
+            - actionLogRepository: ActionLogRepository
+        }
+
+        class ValidateLoginInputUseCase
+        class ValidateRegisterInputUseCase
+
+        class ChangeBalanceBankAccount {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class ChangeStatusBaseBankAccountUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class ChangeStatusCreditBankAccountUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class GetAllCompanyBankAccountUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class GetAllCreditBankAccountUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class GetAllStandardBankAccountUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class GetBaseBankAccountById {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class GetCompanyBankAccountsByCompanyUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class GetCreditBankAccountByBaseUserUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class GetStandardBankAccountsByBaseUserUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class InsertCreditBankAccountUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class InsertStandardBankAccountUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class GetAllBanksUseCases {
+            - bankRepository: BankRepository
+        }
+
+        class ChangeClientSalaryProjectUseCase {
+            - salaryProjectRepository: SalaryProjectRepository
+        }
+
+        class ChangeStatusSalaryProjectUseCase {
+            - salaryProjectRepository: SalaryProjectRepository
+        }
+
+        class GetAllSalaryProjectUseCase {
+            - salaryProjectRepository: SalaryProjectRepository
+        }
+
+        class GetSalaryProjectsByClientBaseUserUseCase {
+            - salaryProjectRepository: SalaryProjectRepository
+        }
+
+        class GetSalaryProjectsByCompanyUseCase {
+            - salaryProjectRepository: SalaryProjectRepository
+        }
+
+        class GetSalaryProjectsByStatus {
+            - salaryProjectRepository: SalaryProjectRepository
+        }
+
+        class InsertSalaryProjectUseCase {
+            - salaryProjectRepository: SalaryProjectRepository
+        }
+
+        class ChangeStatusTransferUseCase {
+            - transferRepository: TransferRepository
+        }
+
+        class GetAllTransfersUseCase {
+            - transferRepository: TransferRepository
+        }
+
+        class GetTransferById {
+            - transferRepository: TransferRepository
+        }
+
+        class ValidateTransferUseCase {
+            - bankAccountRepository: BankAccountRepository
+        }
+
+        class CreateTransferUseCase {
+            - bankAccountRepository: BankAccountRepository
+            - transferRepository: TransferRepository
+        }
+
+        class GetBaseUserUseCase {
+            - userRepository: UserRepository
+        }
+
+        class GetCompanyUserByBaseUserUseCase {
+            - userRepository: UserRepository
+        }
+
+        class InsertAdminUserUseCase {
+            - userRepository: UserRepository
+        }
+
+        class InsertClientUserUseCase {
+            - userRepository: UserRepository
+        }
+
+        class InsertCompanyUserUseCase {
+            - userRepository: UserRepository
+        }
+
+        class InsertManagerUserUseCase {
+            - userRepository: UserRepository
+        }
+
+        class InsertOperatorUserUseCase {
+            - userRepository: UserRepository
+        }
+
+        class ValidateEmailUseCase {
+            - userRepository: UserRepository
+        }
+
+        class ValidatePasswordUseCase {
+            - userRepository: UserRepository
+        }
+
+        package roles{
+            interface AdminUserRole {
+                +GetAllActionLogsUseCase getAllActionLogsUseCase
+                +GetBaseUserUseCase getBaseUserUseCase
+                +InsertActionLogUseCase insertActionLogUseCase
+            }
+
+            interface ClientUserRole {
+                +GetStandardBankAccountsByBaseUserUseCase getStandardBankAccountsByBaseUserUseCase
+                +GetCreditBankAccountByBaseUserUseCase getCreditBankAccountByBaseUserUseCase
+                +GetSalaryProjectsByClientBaseUserUseCase getSalaryProjectsByClientBaseUserUseCase
+                +GetAllBanksUseCases getAllBanksUseCases
+                +GetBaseUserUseCase getBaseUserUseCase
+                +GetBaseBankAccountById getBaseBankAccountById
+                +GetSalaryProjectsByStatus getSalaryProjectsByStatus
+                +InsertActionLogUseCase insertActionLogUseCase
+                +InsertCreditBankAccountUseCase insertCreditBankAccountUseCase
+                +InsertStandardBankAccountUseCase insertStandardBankAccountUseCase
+                +ChangeStatusBaseBankAccountUseCase changeBalanceBaseBankAccountUseCase
+                +ChangeStatusBaseBankAccountUseCase changeStatusBaseBankAccountUseCase
+                +ChangeClientSalaryProjectUseCase changeClientSalaryProjectUseCase
+                +CreateTransferUseCase createTransferUseCase
+                +ValidateTransferUseCase validateTransferUseCase
+            }
+
+            interface CompanyUserRole {
+                +GetCompanyBankAccountsByCompanyUseCase getCompanyBankAccountsByCompanyUseCase
+                +GetAllBanksUseCases getAllBanksUseCases
+                +GetSalaryProjectsByCompanyUseCase getSalaryProjectsByCompanyUseCase
+                +GetBaseUserUseCase getBaseUserUseCase
+                +GetBaseBankAccountById getBaseBankAccountById
+                +GetCompanyUserByBaseUserUseCase getCompanyUserByBaseUserUseCase
+                +InsertActionLogUseCase insertActionLogUseCase
+                +InsertSalaryProjectUseCase insertSalaryProjectUseCase
+                +ChangeStatusBaseBankAccountUseCase changeStatusBaseBankAccountUseCase
+                +ChangeStatusSalaryProjectUseCase changeStatusSalaryProjectUseCase
+                +CreateTransferUseCase createTransferUseCase
+                +ValidateTransferUseCase validateTransferUseCase
+            }
+
+            interface ManagerUserRole {
+                +GetAllSalaryProjectUseCase getAllSalaryProjectUseCase
+                +GetAllTransfersUseCase getAllTransfersUseCase
+                +GetBaseUserUseCase getBaseUserUseCase
+                +GetAllStandardBankAccountUseCase getAllStandardBankAccount
+                +GetAllCreditBankAccountUseCase getAllCreditBankAccount
+                +GetAllCompanyBankAccountUseCase getAllCompanyBankAccount
+                +GetBaseBankAccountById getBaseBankAccountById
+                +InsertActionLogUseCase insertActionLogUseCase
+                +ChangeStatusBaseBankAccountUseCase changeStatusBaseBankAccountUseCase
+                +ChangeStatusCreditBankAccountUseCase changeStatusCreditBankAccountUseCase
+            }
+
+            interface OperatorUserRole {
+                +GetAllSalaryProjectUseCase getAllSalaryProjectUseCase
+                +GetCreditBankAccountByBaseUserUseCase getCreditBankAccountByBaseUserUseCase
+                +GetAllTransfersUseCase getAllTransfersUseCase
+                +GetBaseUserUseCase getBaseUserUseCase
+                +GetTransferById getTransferById
+                +InsertActionLogUseCase insertActionLogUseCase
+                +ChangeStatusSalaryProjectUseCase changeStatusSalaryProjectUseCase
+                +ChangeStatusTransferUseCase changeStatusTransferUseCase
+                +ChangeBalanceBankAccount changeBalanceBankAccount
+            }
+
+            interface StartUserRole {
+                +GetBaseUserUseCase getBaseUserUseCase
+                +InsertAdminUserUseCase insertAdminUserUseCase
+                +InsertClientUserUseCase insertClientUserUseCase
+                +InsertCompanyUserUseCase insertCompanyUserUseCase
+                +InsertManagerUserUseCase insertManagerUserUseCase
+                +InsertOperatorUserUseCase insertOperatorUserUseCase
+                +ValidateEmailUseCase validateEmailUseCase
+                +ValidatePasswordUseCase validatePasswordUseCase
+                +ValidateRegisterInputUseCase validateRegisterInputUseCase
+                +ValidateLoginInputUseCase validateLoginInputUseCase
+            }
+
+            class AdminUserUseCases implements AdminUserRole
+            class ClientUserUseCases implements ClientUserRole
+            class CompanyUserUseCases implements CompanyUserRole
+            class ManagerUserUseCases implements ManagerUserRole
+            class ManagerUserUseCases implements OperatorUserRole
+            class OperatorUserUseCases implements OperatorUserRole
+            class StartUserUseCases implements StartUserRole
+        }
+    }
+
+    package util {
+        object PasswordHasher
+    }
+}
+
+
+
+
+
+
+package data {
+    package entity {
+        entity ActionLogEntity {
+            +id: Int
+            +baseUserId: Int
+            +actionType: String
+            +date: String
+            +time: String
+        }
+
+        entity BankEntity {
+            +id: Int
+            +name: String
+            +bic: String
+            +interestRate: Double
+        }
+
+        entity CompanyEntity {
+            +id: Int
+            +type: String
+            +name: String
+            +unp: String
+            +address: String
+        }
+
+        entity SalaryProjectCompanyEntity {
+            +id: Int
+            +clientBaseUserId: Int?
+            +companyId: Int
+            +status: String
+            +sum: Double
+            +info: String
+        }
+
+        entity TransferEntity {
+            +id: Int
+            +fromBaseBankAccountId: Int
+            +toBaseBankAccountId: Int
+            +amount: Double
+            +dateTransfer: String
+            +timeTransfer: String
+            +status: String
+        }
+
+        entity BaseUserEntity {
+            +id: Int
+            +firstName: String
+            +lastName: String
+            +surName: String
+            +seriesPassport: String
+            +numberPassport: String
+            +identityNumber: String
+            +phone: String
+            +email: String
+            +typeOfUser: String
+        }
+
+        entity CertificateUserEntity {
+            +id: Int
+            +baseUserId: Int
+            +hashedPassword: String
+        }
+
+        entity OperatorUserEntity {
+            +id: Int
+            +baseUserId: Int
+        }
+
+        entity ManagerUserEntity {
+            +id: Int
+            +baseUserId: Int
+        }
+
+        entity CompanyUserEntity {
+            +id: Int
+            +baseUserId: Int
+            +companyId: Int
+        }
+
+        entity ClientUserEntity {
+            +id: Int
+            +baseUserId: Int
+        }
+
+        entity AdminUserEntity {
+            +id: Int
+            +baseUserId: Int
+        }
+
+        entity BaseBankAccountEntity {
+            +id: Int
+            +bankId: Int
+            +baseUserId: Int
+            +balance: Double
+            +statusBankAccount: String
+        }
+
+        entity StandardBankAccountEntity {
+            +id: Int
+            +baseBankAccountId: Int
+        }
+
+        entity CreditBankAccountEntity {
+            +id: Int
+            +baseBankAccountId: Int
+            +interestRate: Double
+            +creditLastDate: String
+            +creditTotalSum: Double
+            +statusCreditBid: String
+            +countMonthsCredit: Int
+        }
+
+        entity CompanyBankAccountEntity {
+            +id: Int
+            +baseBankAccountId: Int
+            +companyId: Int
+        }
+    }
+
+
+    package dao {
+        interface ActionLogDao {
+            +getAllActionLogs(): Flow<List<ActionLogEntity>>
+            +insertActionLog(actionLog: ActionLogEntity)
+            +deleteActionLog(actionLog: ActionLogEntity)
+        }
+
+        interface BankAccountDao {
+            +getAllBaseBankAccounts(): Flow<List<BaseBankAccountEntity>>
+            +getBaseBankAccountById(baseBankAccountId: Int): Flow<BaseBankAccountEntity?>
+            +getBaseBankAccountsByBaseUserId(baseUserId: Int): Flow<List<BaseBankAccountEntity>>
+            +getLatestBaseBankAccountByBaseUserId(baseUserId: Int): Flow<BaseBankAccountEntity?>
+            +changeStatusBaseBankAccount(baseBankAccountId: Int, newStatusBankAccount: String)
+            +changeBalanceBaseBankAccount(baseBankAccountId: Int, newBalance: Double)
+            +insertBaseBankAccount(bankAccount: BaseBankAccountEntity)
+            +insertListOfBaseBankAccount(bankAccounts: List<BaseBankAccountEntity>)
+            +deleteBaseBankAccount(bankAccount: BaseBankAccountEntity)
+
+            +getAllStandardBankAccounts(): Flow<List<StandardBankAccountEntity>>
+            +getStandardBankAccountByBaseBankAccountId(baseBankAccountId: Int): Flow<StandardBankAccountEntity?>
+            +insertStandardBankAccount(bankAccount: StandardBankAccountEntity)
+            +deleteStandardBankAccount(bankAccount: StandardBankAccountEntity)
+
+            +getAllCreditBankAccounts(): Flow<List<CreditBankAccountEntity>>
+            +getCreditBankAccountByBaseBankAccountId(baseBankAccountId: Int): Flow<CreditBankAccountEntity?>
+            +changeStatusCreditBankAccount(creditBankAccountId: Int, newStatusCreditBid: String)
+            +insertCreditBankAccount(bankAccount: CreditBankAccountEntity)
+            +deleteCreditBankAccount(bankAccount: CreditBankAccountEntity)
+
+            +getAllCompanyBankAccounts(): Flow<List<CompanyBankAccountEntity>>
+            +getCompanyBankAccountsByCompanyId(companyId: Int): Flow<List<CompanyBankAccountEntity>>
+            +insertCompanyBankAccount(bankAccount: CompanyBankAccountEntity)
+            +insertListOfCompanyBankAccount(bankAccounts: List<CompanyBankAccountEntity>)
+            +deleteCompanyBankAccount(bankAccount: CompanyBankAccountEntity)
+        }
+
+        interface BankDao {
+            +getAllBanks(): Flow<List<BankEntity>>
+            +getBankById(bankId: Int): Flow<BankEntity?>
+            +insertBank(bank: BankEntity)
+            +insertListOfBank(banks: List<BankEntity>)
+            +deleteBank(bank: BankEntity)
+        }
+
+        interface CompanyDao {
+            +getAllCompanies(): Flow<List<CompanyEntity>>
+            +getCompanyById(companyId: Int): Flow<CompanyEntity?>
+            +insertCompany(company: CompanyEntity)
+            +insertListOfCompany(companies: List<CompanyEntity>)
+            +deleteCompany(company: CompanyEntity)
+        }
+
+        interface SalaryProjectDao {
+            +getAllSalaryProjects(): Flow<List<SalaryProjectCompanyEntity>>
+            +getSalaryProjectsByCompanyId(companyId: Int): Flow<List<SalaryProjectCompanyEntity>>
+            +getSalaryProjectsByClientBaseUserId(clientBaseUserId: Int?): Flow<List<SalaryProjectCompanyEntity>>
+            +getSalaryProjectsByStatus(status: String): Flow<List<SalaryProjectCompanyEntity>>
+            +changeStatusSalaryProject(salaryProjectId: Int, newStatusJobBid: String)
+            +changeClientSalaryProject(salaryProjectId: Int, clientBaseUserId: Int?)
+            +insertSalaryProject(salaryProjectCompanyEntity: SalaryProjectCompanyEntity)
+            +deleteSalaryProject(salaryProjectCompanyEntity: SalaryProjectCompanyEntity)
+        }
+
+        interface TransferDao {
+            +getAllTransfers(): Flow<List<TransferEntity>>
+            +getTransferById(transferId: Int): Flow<TransferEntity?>
+            +changeTransferStatus(transferId: Int, newStatus: String)
+            +insertTransfer(transfer: TransferEntity)
+            +deleteTransfer(transfer: TransferEntity)
+        }
+
+        interface UserDao {
+            +getAllBaseUser(): Flow<List<BaseUserEntity>>
+            +getBaseUserById(baseUserId: Int): Flow<BaseUserEntity?>
+            +getBaseUserByEmail(email: String): Flow<BaseUserEntity?>
+            +insertBaseUser(baseUser: BaseUserEntity)
+            +insertListOfBaseUser(baseUsers: List<BaseUserEntity>)
+            +deleteBaseUser(baseUser: BaseUserEntity)
+
+            +getCertificateUserByBaseUserId(baseUserId: Int): Flow<CertificateUserEntity?>
+            +insertCertificateUser(certificateUser: CertificateUserEntity)
+            +insertListOfCertificateUser(certificateUsers: List<CertificateUserEntity>)
+            +deleteCertificateUser(certificateUser: CertificateUserEntity)
+
+            +getAllAdminUser(): Flow<List<AdminUserEntity>>
+            +getAdminUserByBaseUserId(baseUserId: Int): Flow<AdminUserEntity?>
+            +getAdminUserById(adminUserId: Int): Flow<AdminUserEntity?>
+            +insertAdminUser(adminUser: AdminUserEntity)
+            +insertListOfAdminUser(adminUsers: List<AdminUserEntity>)
+            +deleteAdminUser(adminUser: AdminUserEntity)
+
+            +getAllClientUser(): Flow<List<ClientUserEntity>>
+            +getClientUserByBaseUserId(baseUserId: Int): Flow<ClientUserEntity?>
+            +getClientUserById(clientUserId: Int): Flow<ClientUserEntity?>
+            +insertClientUser(clientUser: ClientUserEntity)
+            +insertListOfClientUser(clientUsers: List<ClientUserEntity>)
+            +deleteClientUser(clientUser: ClientUserEntity)
+
+            +getAllCompanyUser(): Flow<List<CompanyUserEntity>>
+            +getCompanyUserByBaseUserId(baseUserId: Int): Flow<CompanyUserEntity?>
+            +getCompanyUserById(companyUserId: Int): Flow<CompanyUserEntity?>
+            +insertCompanyUser(companyUser: CompanyUserEntity)
+            +insertListOfCompanyUser(companyUsers: List<CompanyUserEntity>)
+            +deleteCompanyUser(companyUser: CompanyUserEntity)
+
+            +getAllManagerUser(): Flow<List<ManagerUserEntity>>
+            +getManagerUserByBaseUserId(baseUserId: Int): Flow<ManagerUserEntity?>
+            +getManagerUserById(managerUserId: Int): Flow<ManagerUserEntity?>
+            +insertManagerUser(managerUser: ManagerUserEntity)
+            +insertListOfManagerUser(managerUsers: List<ManagerUserEntity>)
+            +deleteManagerUser(managerUser: ManagerUserEntity)
+
+            +getAllOperatorUser(): Flow<List<OperatorUserEntity>>
+            +getOperatorUserByBaseUserId(baseUserId: Int): Flow<OperatorUserEntity?>
+            +getOperatorUserById(operatorUserId: Int): Flow<OperatorUserEntity?>
+            +insertOperatorUser(operatorUser: OperatorUserEntity)
+            +insertListOfOperatorUser(operatorUsers: List<OperatorUserEntity>)
+            +deleteOperatorUser(operatorUser: OperatorUserEntity)
+        }
+    }
+
+    package database {
+        class FinancialDataBase {
+            +actionLogDao : ActionLogDao
+            +bankAccountDao : BankAccountDao
+            +bankDao : BankDao
+            +companyDao : CompanyDao
+            +salaryProjectDao : SalaryProjectDao
+            +transferDao : TransferDao
+            +userDao : UserDao
+        }
+    }
+
+    package init {
+        class DatabaseInitializer {
+            +initializeDatabase() : suspend
+        }
+
+        object GeneratorValues
+    }
+
+    package repositories {
+
+        class ActionLogRepositoryImpl {
+            + actionLogDao : ActionLogDao
+            + userDao : UserDao
+        }
+
+        class BankAccountRepositoryImpl {
+            + bankAccountDao : BankAccountDao
+            + bankDao : BankDao
+            + userDao : UserDao
+            + companyDao : CompanyDao
+        }
+
+        class BankRepositoryImpl {
+            + bankDao : BankDao
+        }
+
+        class CompanyRepositoryImpl {
+            + companyDao : CompanyDao
+        }
+
+        class SalaryRepositoryImpl {
+            + salaryProjectDao : SalaryProjectDao
+            + userDao : UserDao
+            + companyDao : CompanyDao
+        }
+
+        class TransferRepositoryImpl {
+            + transferDao : TransferDao
+            + bankAccountDao : BankAccountDao
+            + userDao : UserDao
+            + bankDao : BankDao
+        }
+
+        class UserRepositoryImpl {
+            + userDao : UserDao
+            + companyDao : CompanyDao
+        }
+
+        ' Зависимости от интерфейсов из пакета data
+        ActionLogRepositoryImpl -|> ActionLogRepository
+        BankAccountRepositoryImpl -|> BankAccountRepository
+        BankRepositoryImpl -|> BankRepository
+        CompanyRepositoryImpl -|> CompanyRepository
+        SalaryRepositoryImpl -|> SalaryProjectRepository
+        TransferRepositoryImpl -|> TransferRepository
+        UserRepositoryImpl -|> UserRepository
+
+    }
+}
+
+' Relationships
+ActionLogEntity --> BaseUserEntity : baseUserId
+SalaryProjectCompanyEntity --> BaseUserEntity : clientBaseUserId
+SalaryProjectCompanyEntity --> CompanyEntity : companyId
+TransferEntity --> BaseBankAccountEntity : fromBaseBankAccountId
+TransferEntity --> BaseBankAccountEntity : toBaseBankAccountId
+CertificateUserEntity --> BaseUserEntity : baseUserId
+OperatorUserEntity --> BaseUserEntity : baseUserId
+ManagerUserEntity --> BaseUserEntity : baseUserId
+CompanyUserEntity --> BaseUserEntity : baseUserId
+ClientUserEntity --> BaseUserEntity : baseUserId
+AdminUserEntity --> BaseUserEntity : baseUserId
+StandardBankAccountEntity --> BaseBankAccountEntity : baseBankAccountId
+CreditBankAccountEntity --> BaseBankAccountEntity : baseBankAccountId
+CompanyBankAccountEntity --> BaseBankAccountEntity : baseBankAccountId
+CompanyBankAccountEntity --> CompanyEntity : companyId
+
+@enduml

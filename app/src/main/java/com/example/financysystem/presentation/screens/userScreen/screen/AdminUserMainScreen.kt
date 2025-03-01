@@ -1,5 +1,7 @@
 package com.example.financysystem.presentation.screens.userScreen.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,9 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Factory
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.PermDeviceInformation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,6 +27,7 @@ import com.example.financysystem.presentation.screens.components.BottomNavItem
 import com.example.financysystem.presentation.screens.components.BottomNavigationBar
 import com.example.financysystem.presentation.screens.components.HeaderBackground
 import com.example.financysystem.presentation.screens.userScreen.event.AdminUserEvent
+import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.adminUser.AdminUserActionLogScreen
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.adminUser.AdminUserProfileScreen
 import com.example.financysystem.presentation.screens.userScreen.state.AdminUserState
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.AdminSelectedContent
@@ -33,6 +36,7 @@ import com.example.financysystem.ui.theme.gray
 import com.example.financysystem.ui.theme.green
 import com.example.financysystem.ui.theme.white
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AdminUserMainScreen(
     adminUserViewModel: AdminUserViewModel = hiltViewModel()
@@ -40,8 +44,8 @@ fun AdminUserMainScreen(
 {
     val navItems = listOf(
         BottomNavItem(label = "Профиль", icon = Icons.Filled.AccountCircle),
-        BottomNavItem(label = "Счета", icon = Icons.Filled.AccountBalanceWallet),
-        BottomNavItem(label = "Проекты", icon = Icons.Filled.Factory),
+        BottomNavItem(label = "Логи", icon = Icons.Filled.PermDeviceInformation),
+        BottomNavItem(label = "Удаление", icon = Icons.Filled.DeleteForever),
     )
 
     val adminUserState = adminUserViewModel.adminUserState.collectAsState().value
@@ -112,7 +116,10 @@ fun ContentScreen(
             phone = adminUserState.phone,
             email = adminUserState.email,
         )
-        AdminSelectedContent.BANK_ACCOUNT -> {}//ClientUserBankAccountScreen(modifier = modifier)
-        AdminSelectedContent.SALARY_PROJECT -> {}//ClientUserSalaryProjectScreen(modifier = modifier)
+        AdminSelectedContent.LOGS -> AdminUserActionLogScreen(
+            modifier = modifier,
+            adminUserState = adminUserState
+        )
+        AdminSelectedContent.DELETER -> {}//ClientUserSalaryProjectScreen(modifier = modifier)
     }
 }

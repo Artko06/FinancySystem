@@ -1,22 +1,31 @@
 package com.example.financysystem.presentation.screens.userScreen.viewModel
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.actionLog.ActionType
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
 import com.example.domain.models.transfer.StatusTransfer
 import com.example.domain.models.transfer.Transfer
+import com.example.domain.models.user.BaseUser
 import com.example.domain.useCase.UserRoleUseCases.ManagerUserUseCases
 import com.example.financysystem.presentation.screens.userScreen.event.ManagerUserEvent
 import com.example.financysystem.presentation.screens.userScreen.state.ManagerUserState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ManagerUserViewModel @Inject constructor(
     private val managerUserUseCases: ManagerUserUseCases,
@@ -39,6 +48,7 @@ class ManagerUserViewModel @Inject constructor(
                     lastName = it.lastName,
                     surName = it.surName,
                 )
+                onCreateActionLog(baseUser = it, ActionType.AUTHORIZATION)
             }
             onLoadAllTransfers()
             onLoadSalaryProjects()
@@ -64,6 +74,15 @@ class ManagerUserViewModel @Inject constructor(
                 salaryProjects = salaryProjects
             )
         }
+    }
+
+    private suspend fun onCreateActionLog(baseUser: BaseUser, actionType: ActionType){
+        managerUserUseCases.insertActionLogUseCase.invoke(
+            baseUser = baseUser,
+            actionType = actionType,
+            date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+            time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+        )
     }
 
     private suspend fun onLoadBankAccounts() {
@@ -116,6 +135,10 @@ class ManagerUserViewModel @Inject constructor(
                             newBalance = transfer.toBaseBankAccount.balance - transfer.amount
                         )
 
+                        val baseUser = managerUserUseCases.getBaseUserUseCase
+                            .invoke(_managerUserState.value.email).first()!!
+
+                        onCreateActionLog(baseUser = baseUser, ActionType.CANCEL_TRANSFER)
                         onLoadAllTransfers()
                         onLoadBankAccounts()
                     }
@@ -129,6 +152,10 @@ class ManagerUserViewModel @Inject constructor(
                         event.newStatusJobBid
                     )
 
+                    val baseUser = managerUserUseCases.getBaseUserUseCase
+                        .invoke(_managerUserState.value.email).first()!!
+
+                    onCreateActionLog(baseUser = baseUser, ActionType.CHANGE_STATUS_SALARY_PROJECT)
                     onLoadSalaryProjects()
                 }
             }
@@ -158,6 +185,11 @@ class ManagerUserViewModel @Inject constructor(
                                     StatusBankAccount.FROZEN
                                 )
                         }
+
+                        val baseUser = managerUserUseCases.getBaseUserUseCase
+                            .invoke(_managerUserState.value.email).first()!!
+
+                        onCreateActionLog(baseUser = baseUser, ActionType.CHANGE_STATUS_BANK_ACCOUNT_BY_MANAGER)
                         onLoadBankAccounts()
                     }
                 }

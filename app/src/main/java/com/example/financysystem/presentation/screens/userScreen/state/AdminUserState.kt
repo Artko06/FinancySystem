@@ -1,10 +1,12 @@
 package com.example.financysystem.presentation.screens.userScreen.state
 
+import com.example.domain.models.actionLog.IActionLog
 import com.example.domain.models.user.TypeOfUser
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.AdminSelectedContent
 
 data class AdminUserState(
     val adminSelectedContent: AdminSelectedContent = AdminSelectedContent.PROFILE,
+    val actionLogs: List<IActionLog> = emptyList<IActionLog>(),
 
     override val id: Int = 0,
     override val email: String = "",

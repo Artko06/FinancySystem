@@ -1,6 +1,7 @@
 package com.example.domain.useCase.UserRoleUseCases
 
 import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCase
+import com.example.domain.useCase.allUserCases.actionLogUseCases.insert.InsertActionLogUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.change.ChangeBalanceBankAccount
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCreditBankAccountByBaseUserUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.change.ChangeStatusSalaryProjectUseCase
@@ -20,6 +21,7 @@ data class OperatorUserUseCases(
 
 
     // INSERT
+    override val insertActionLogUseCase: InsertActionLogUseCase,
 
 
     // CHANGE

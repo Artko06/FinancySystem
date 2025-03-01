@@ -5,8 +5,10 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.actionLog.ActionType
 import com.example.domain.models.bank.bankAccount.StatusBankAccount
 import com.example.domain.models.salaryProject.StatusJobBid
+import com.example.domain.models.user.BaseUser
 import com.example.domain.useCase.UserRoleUseCases.ClientUserUseCases
 import com.example.domain.useCase.allUserCases.transferUseCases.other.validateTransfer.ValidateTransfer
 import com.example.financysystem.presentation.screens.userScreen.event.ClientUserEvent
@@ -52,6 +54,7 @@ class ClientUserViewModel @Inject constructor(
                     lastName = it.lastName,
                     surName = it.surName,
                 )
+                onCreateActionLog(baseUser = it, actionType = ActionType.AUTHORIZATION)
                 onEvent(ClientUserEvent.OnLoadBanks)
                 onEvent(ClientUserEvent.OnLoadStandardBankAccounts(baseUserId = it.id))
                 onEvent(ClientUserEvent.OnLoadCreditBankAccounts(baseUserId = it.id))
@@ -69,6 +72,15 @@ class ClientUserViewModel @Inject constructor(
                 salaryProjects = salaryProjects
             )
         }
+    }
+
+    private suspend fun onCreateActionLog(baseUser: BaseUser, actionType: ActionType){
+        clientUserUseCases.insertActionLogUseCase.invoke(
+            baseUser = baseUser,
+            actionType = actionType,
+            date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+            time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+        )
     }
 
     fun onEvent(event: ClientUserEvent){
@@ -113,6 +125,7 @@ class ClientUserViewModel @Inject constructor(
                         }
                     }
 
+                    onCreateActionLog(baseUser = baseUser, actionType = ActionType.CREATE_BANK_ACCOUNT)
                     onEvent(OnLoadStandardBankAccounts(_clientUserState.value.id)) // После добавления обновляем список
                     onEvent(OnLoadCreditBankAccounts(_clientUserState.value.id))
                 }
@@ -210,6 +223,8 @@ class ClientUserViewModel @Inject constructor(
                 viewModelScope.launch {
                     val baseBankAccount =
                         clientUserUseCases.getBaseBankAccountById(event.cardId).firstOrNull()
+                    val baseUser = clientUserUseCases.getBaseUserUseCase
+                        .invoke(email = _clientUserState.value.email).first()!!
 
                     if(baseBankAccount != null){
                         when(baseBankAccount.statusBankAccount){
@@ -219,6 +234,8 @@ class ClientUserViewModel @Inject constructor(
                             StatusBankAccount.NORMAL -> clientUserUseCases
                                 .changeStatusBaseBankAccountUseCase.invoke(baseBankAccount, StatusBankAccount.FROZEN)
                         }
+
+                        onCreateActionLog(baseUser = baseUser, actionType = ActionType.CHANGE_STATUS_BANK_ACCOUNT_BY_CLIENT)
                         onEvent(OnLoadStandardBankAccounts(baseUserId = _clientUserState.value.id))
                         onEvent(OnLoadCreditBankAccounts(baseUserId = _clientUserState.value.id))
                     }
@@ -264,6 +281,10 @@ class ClientUserViewModel @Inject constructor(
                         )
                     }
 
+                    val baseUser = clientUserUseCases.getBaseUserUseCase
+                        .invoke(email = _clientUserState.value.email).first()!!
+
+                    onCreateActionLog(baseUser = baseUser, actionType = ActionType.TRANSFER)
                     onEvent(OnShowTransferDialog(cardId = _clientUserState.value.inputFromCardId.toInt()))
                     onEvent(OnLoadStandardBankAccounts(baseUserId = _clientUserState.value.id))
                     onEvent(OnLoadCreditBankAccounts(baseUserId = _clientUserState.value.id))
@@ -298,10 +319,21 @@ class ClientUserViewModel @Inject constructor(
 
             is ClientUserEvent.OnChangeClientSalaryProject -> {
                 viewModelScope.launch {
+                    val baseUser = clientUserUseCases.getBaseUserUseCase
+                        .invoke(email = _clientUserState.value.email).first()!!
+
                     clientUserUseCases.changeClientSalaryProjectUseCase.invoke(
                         salaryProjectId = event.salaryProject.id,
-                        clientUserId = if(event.salaryProject.clientBaseUser == null)
-                            _clientUserState.value.id else null
+                        clientUserId = if(event.salaryProject.clientBaseUser == null){
+                            onCreateActionLog(
+                                baseUser = baseUser,
+                                actionType = ActionType.REQUEST_TO_SALARY_PROJECT_BY_CLIENT
+                            )
+                            _clientUserState.value.id
+                        } else{
+                            onCreateActionLog(baseUser = baseUser, actionType = ActionType.RECALL_TO_SALARY_PROJECT_BY_CLIENT)
+                            null
+                        }
                     )
                     onLoadSalaryProjects()
                 }
