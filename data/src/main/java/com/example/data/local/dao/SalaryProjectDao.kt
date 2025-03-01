@@ -33,4 +33,7 @@ interface SalaryProjectDao {
 
     @Delete
     suspend fun deleteSalaryProject(salaryProjectCompanyEntity: SalaryProjectCompanyEntity)
+
+    @Query("DELETE FROM salary_project_companies")
+    suspend fun deleteAllSalaryProjects()
 }

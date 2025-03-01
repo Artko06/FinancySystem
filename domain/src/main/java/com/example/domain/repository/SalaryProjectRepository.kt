@@ -14,4 +14,5 @@ interface SalaryProjectRepository {
     suspend fun changeStatusSalaryProject(salaryProjectCompany: SalaryProjectCompany, statusJobBid: StatusJobBid)
     suspend fun insertSalaryProject(salaryProjectCompany: ISalaryProjectCompany)
     suspend fun deleteSalaryProject(salaryProjectCompany: ISalaryProjectCompany)
+    suspend fun deleteAllSalaryProjects()
 }

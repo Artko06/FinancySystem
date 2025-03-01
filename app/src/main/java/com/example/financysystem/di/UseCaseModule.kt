@@ -37,9 +37,11 @@ import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetCredit
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.get.GetStandardBankAccountsByBaseUserUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.insert.InsertCreditBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankAccountUseCases.insert.InsertStandardBankAccountUseCase
+import com.example.domain.useCase.allUserCases.bankUseCases.delete.DeleteAllBankAccountUseCase
 import com.example.domain.useCase.allUserCases.bankUseCases.get.GetAllBanksUseCases
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.change.ChangeClientSalaryProjectUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.change.ChangeStatusSalaryProjectUseCase
+import com.example.domain.useCase.allUserCases.salaryProjectUseCases.delete.DeleteAllSalaryProjectUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetAllSalaryProjectUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetSalaryProjectsByClientBaseUserUseCase
 import com.example.domain.useCase.allUserCases.salaryProjectUseCases.get.GetSalaryProjectsByCompanyUseCase
@@ -65,6 +67,8 @@ object UseCaseModule {
     @Singleton
     fun provideAdminUserUseCases(
         actionLogRepository: ActionLogRepository,
+        bankAccountRepository: BankAccountRepository,
+        salaryProjectRepository: SalaryProjectRepository,
         userRepository: UserRepository
     ): AdminUserUseCases {
         return AdminUserUseCases(
@@ -79,6 +83,14 @@ object UseCaseModule {
             // INSERT
             insertActionLogUseCase = InsertActionLogUseCase(
                 actionLogRepository = actionLogRepository
+            ),
+
+            // DELETE
+            deleteAllBankAccountUseCase = DeleteAllBankAccountUseCase(
+                bankAccountRepository = bankAccountRepository
+            ),
+            deleteAllSalaryProjectUseCase = DeleteAllSalaryProjectUseCase(
+                salaryProjectRepository = salaryProjectRepository
             )
 
             // CHANGE

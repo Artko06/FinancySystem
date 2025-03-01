@@ -95,7 +95,7 @@ class BankAccountRepositoryImpl(
     }
 
     override suspend fun insertBaseBankAccount(bankAccount: BaseBankAccount) {
-        return bankAccountDao.insertBaseBankAccount(bankAccount = bankAccount
+        bankAccountDao.insertBaseBankAccount(bankAccount = bankAccount
             .toEntity(
                 baseUserId = bankAccount.baseUser.id,
                 bankId = bankAccount.bank.id
@@ -104,12 +104,16 @@ class BankAccountRepositoryImpl(
     }
 
     override suspend fun deleteBaseBankAccount(bankAccount: BaseBankAccount) {
-        return bankAccountDao.deleteBaseBankAccount(bankAccount = bankAccount
+        bankAccountDao.deleteBaseBankAccount(bankAccount = bankAccount
             .toEntity(
                 baseUserId = bankAccount.baseUser.id,
                 bankId = bankAccount.bank.id
             )
         )
+    }
+
+    override suspend fun deleteAllBaseBankAccounts() {
+        bankAccountDao.deleteAllBaseBankAccounts()
     }
 
     // StandardBankAccount

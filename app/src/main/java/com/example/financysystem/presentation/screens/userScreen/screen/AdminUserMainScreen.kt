@@ -28,6 +28,7 @@ import com.example.financysystem.presentation.screens.components.BottomNavigatio
 import com.example.financysystem.presentation.screens.components.HeaderBackground
 import com.example.financysystem.presentation.screens.userScreen.event.AdminUserEvent
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.adminUser.AdminUserActionLogScreen
+import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.adminUser.AdminUserDeleterScreen
 import com.example.financysystem.presentation.screens.userScreen.screen.contentClientUserScreen.adminUser.AdminUserProfileScreen
 import com.example.financysystem.presentation.screens.userScreen.state.AdminUserState
 import com.example.financysystem.presentation.screens.userScreen.state.contentState.AdminSelectedContent
@@ -40,8 +41,7 @@ import com.example.financysystem.ui.theme.white
 @Composable
 fun AdminUserMainScreen(
     adminUserViewModel: AdminUserViewModel = hiltViewModel()
-)
-{
+) {
     val navItems = listOf(
         BottomNavItem(label = "Профиль", icon = Icons.Filled.AccountCircle),
         BottomNavItem(label = "Логи", icon = Icons.Filled.PermDeviceInformation),
@@ -54,10 +54,13 @@ fun AdminUserMainScreen(
         bottomBar = {
             BottomNavigationBar(
                 items = navItems,
-                modifier = Modifier.navigationBarsPadding().height(75.dp),
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .height(75.dp),
                 selectedNavItem = adminUserState.adminSelectedContent.selectedContent,
                 onSelectNavItem = { index ->
-                    val selectedEnum = AdminSelectedContent.entries.find { it.selectedContent == index }!!
+                    val selectedEnum =
+                        AdminSelectedContent.entries.find { it.selectedContent == index }!!
 
                     adminUserViewModel.onEvent(
                         event = AdminUserEvent.onContentWindowChange(selectedEnum)
@@ -95,7 +98,13 @@ fun AdminUserMainScreen(
 
         ContentScreen(
             modifier = Modifier.padding(top = 160.dp),
-            adminUserState = adminUserState
+            adminUserState = adminUserState,
+            onDeleteAllBankAccounts = {
+                adminUserViewModel.onEvent(AdminUserEvent.OnDeleteAllBankAccounts)
+            },
+            onDeleteAllSalaryProjects = {
+                adminUserViewModel.onEvent(AdminUserEvent.OnDeleteAllSalaryProjects)
+            }
         )
 
     }
@@ -104,10 +113,11 @@ fun AdminUserMainScreen(
 @Composable
 fun ContentScreen(
     adminUserState: AdminUserState,
-    modifier: Modifier = Modifier
-)
-{
-    when(adminUserState.adminSelectedContent){
+    modifier: Modifier = Modifier,
+    onDeleteAllBankAccounts: () -> Unit,
+    onDeleteAllSalaryProjects: () -> Unit,
+) {
+    when (adminUserState.adminSelectedContent) {
         AdminSelectedContent.PROFILE -> AdminUserProfileScreen(
             modifier = modifier,
             firstName = adminUserState.firstName,
@@ -116,10 +126,16 @@ fun ContentScreen(
             phone = adminUserState.phone,
             email = adminUserState.email,
         )
+
         AdminSelectedContent.LOGS -> AdminUserActionLogScreen(
             modifier = modifier,
             adminUserState = adminUserState
         )
-        AdminSelectedContent.DELETER -> {}//ClientUserSalaryProjectScreen(modifier = modifier)
+
+        AdminSelectedContent.DELETER -> AdminUserDeleterScreen(
+            modifier = modifier,
+            onDeleteAllBankAccounts = onDeleteAllBankAccounts,
+            onDeleteAllSalaryProjects = onDeleteAllSalaryProjects
+        )
     }
 }

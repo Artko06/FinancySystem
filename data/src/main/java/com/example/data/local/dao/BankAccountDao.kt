@@ -40,6 +40,9 @@ interface BankAccountDao {
     @Delete
     suspend fun deleteBaseBankAccount(bankAccount: BaseBankAccountEntity)
 
+    @Query("DELETE FROM base_bank_accounts")
+    suspend fun deleteAllBaseBankAccounts()
+
     // StandardBankAccountEntity
     @Query("SELECT * FROM standard_bank_accounts")
     fun getAllStandardBankAccounts(): Flow<List<StandardBankAccountEntity>>

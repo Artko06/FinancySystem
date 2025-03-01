@@ -148,6 +148,14 @@ fun ActionLogItem(
                         ActionType.CANCEL_TRANSFER -> {
                             "Отменил перевод средств"
                         }
+
+                        ActionType.DELETE_ALL_BANK_ACCOUNTS_BY_ADMIN -> {
+                            "Администратор удалил все банковские аккаунты"
+                        }
+
+                        ActionType.DELETE_ALL_SALARY_PROJECTS_BY_ADMIN -> {
+                            "Администратор удалил все зарплатные проекты"
+                        }
                     },
                     fontWeight = FontWeight.Medium,
                     fontSize = 12.sp,

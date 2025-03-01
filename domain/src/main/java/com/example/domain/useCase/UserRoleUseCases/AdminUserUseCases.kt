@@ -4,6 +4,8 @@ import com.example.domain.useCase.allUserCases.UserUseCases.get.GetBaseUserUseCa
 import com.example.domain.useCase.roles.AdminUserRole
 import com.example.domain.useCase.allUserCases.actionLogUseCases.get.GetAllActionLogsUseCase
 import com.example.domain.useCase.allUserCases.actionLogUseCases.insert.InsertActionLogUseCase
+import com.example.domain.useCase.allUserCases.bankUseCases.delete.DeleteAllBankAccountUseCase
+import com.example.domain.useCase.allUserCases.salaryProjectUseCases.delete.DeleteAllSalaryProjectUseCase
 
 data class AdminUserUseCases(
     // GET
@@ -11,7 +13,12 @@ data class AdminUserUseCases(
     override val getBaseUserUseCase: GetBaseUserUseCase,
 
     // INSERT
-    override val insertActionLogUseCase: InsertActionLogUseCase
+    override val insertActionLogUseCase: InsertActionLogUseCase,
+
+
+    // DELETE
+    override val deleteAllSalaryProjectUseCase: DeleteAllSalaryProjectUseCase,
+    override val deleteAllBankAccountUseCase: DeleteAllBankAccountUseCase
 
 
     // CHANGE

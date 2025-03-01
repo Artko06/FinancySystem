@@ -18,6 +18,7 @@ interface BankAccountRepository {
     suspend fun changeBalanceBaseBankAccount(bankAccount: BaseBankAccount, balance: Double)
     suspend fun insertBaseBankAccount(bankAccount: BaseBankAccount)
     suspend fun deleteBaseBankAccount(bankAccount: BaseBankAccount)
+    suspend fun deleteAllBaseBankAccounts()
 
     // StandardBankAccount
     fun getAllStandardBankAccounts(): Flow<List<IStandardBankAccount>>

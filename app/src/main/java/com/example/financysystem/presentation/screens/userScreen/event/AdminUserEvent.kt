@@ -4,4 +4,6 @@ import com.example.financysystem.presentation.screens.userScreen.state.contentSt
 
 sealed class AdminUserEvent {
     data class onContentWindowChange(val newContentWindow: AdminSelectedContent): AdminUserEvent()
+    object OnDeleteAllBankAccounts: AdminUserEvent()
+    object OnDeleteAllSalaryProjects: AdminUserEvent()
 }

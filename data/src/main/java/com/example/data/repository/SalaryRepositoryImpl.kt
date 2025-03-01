@@ -209,4 +209,8 @@ class SalaryRepositoryImpl(
             }
         }
     }
+
+    override suspend fun deleteAllSalaryProjects() {
+        salaryProjectDao.deleteAllSalaryProjects()
+    }
 }

@@ -13,6 +13,7 @@ import com.example.financysystem.presentation.screens.userScreen.state.AdminUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -76,6 +77,30 @@ class AdminUserViewModel @Inject constructor(
                 )
                 }
             }
+
+            AdminUserEvent.OnDeleteAllBankAccounts -> {
+
+                viewModelScope.launch {
+                    val baseUser = adminUserUseCases.getBaseUserUseCase
+                        .invoke(email = _adminUserState.value.email).first()!!
+
+
+                    adminUserUseCases.deleteAllBankAccountUseCase.invoke()
+                    onCreateActionLog(baseUser = baseUser, actionType = ActionType.DELETE_ALL_BANK_ACCOUNTS_BY_ADMIN)
+                }
+            }
+
+            AdminUserEvent.OnDeleteAllSalaryProjects -> {
+                viewModelScope.launch {
+                    val baseUser = adminUserUseCases.getBaseUserUseCase
+                        .invoke(email = _adminUserState.value.email).first()!!
+
+                    adminUserUseCases.deleteAllSalaryProjectUseCase.invoke()
+                    onCreateActionLog(baseUser = baseUser, actionType = ActionType.DELETE_ALL_SALARY_PROJECTS_BY_ADMIN)
+                }
+            }
+
+
         }
     }
 }
