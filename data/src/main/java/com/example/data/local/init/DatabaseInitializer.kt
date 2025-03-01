@@ -103,7 +103,6 @@ class DatabaseInitializer @Inject constructor(
 
     private fun saveGenerateValuesToFile(appContext: Application) {
         val file = File(appContext.getExternalFilesDir(null), NAME_FILE)
-        file.setReadOnly()
 
         if(file.exists()){
             file.delete()
@@ -138,6 +137,7 @@ class DatabaseInitializer @Inject constructor(
                         }\n\n"
             )
         }
+        file.setReadOnly()
     }
 
     val initialClientUser = List(COUNT_CLIENT_USERS) { index ->
