@@ -1,0 +1,109 @@
+@startuml
+
+package "useCases" {
+    usecase "GetAllActionLogsUseCase" as UC1
+    usecase "InsertActionLogUseCase" as UC2
+    usecase "ValidateLoginInputUseCase" as UC3
+    usecase "ValidateRegisterInputUseCase" as UC4
+    usecase "ChangeBalanceBankAccount" as UC5
+    usecase "ChangeStatusBaseBankAccountUseCase" as UC6
+    usecase "ChangeStatusCreditBankAccountUseCase" as UC7
+    usecase "GetAllCompanyBankAccountUseCase" as UC8
+    usecase "GetAllCreditBankAccountUseCase" as UC9
+    usecase "GetAllStandardBankAccountUseCase" as UC10
+    usecase "GetBaseBankAccountById" as UC11
+    usecase "GetCompanyBankAccountsByCompanyUseCase" as UC12
+    usecase "GetCreditBankAccountByBaseUserUseCase" as UC13
+    usecase "GetStandardBankAccountsByBaseUserUseCase" as UC14
+    usecase "InsertCreditBankAccountUseCase" as UC15
+    usecase "InsertStandardBankAccountUseCase" as UC16
+    usecase "GetAllBanksUseCases" as UC17
+    usecase "ChangeClientSalaryProjectUseCase" as UC18
+    usecase "ChangeStatusSalaryProjectUseCase" as UC19
+    usecase "GetAllSalaryProjectUseCase" as UC20
+    usecase "GetSalaryProjectsByClientBaseUserUseCase" as UC21
+    usecase "GetSalaryProjectsByCompanyUseCase" as UC22
+    usecase "GetSalaryProjectsByStatus" as UC23
+    usecase "InsertSalaryProjectUseCase" as UC24
+    usecase "ChangeStatusTransferUseCase" as UC25
+    usecase "GetAllTransfersUseCase" as UC26
+    usecase "GetTransferById" as UC27
+    usecase "ValidateTransferUseCase" as UC28
+    usecase "CreateTransferUseCase" as UC29
+    usecase "GetBaseUserUseCase" as UC30
+    usecase "GetCompanyUserByBaseUserUseCase" as UC31
+    usecase "InsertAdminUserUseCase" as UC32
+    usecase "InsertClientUserUseCase" as UC33
+    usecase "InsertCompanyUserUseCase" as UC34
+    usecase "InsertManagerUserUseCase" as UC35
+    usecase "InsertOperatorUserUseCase" as UC36
+    usecase "ValidateEmailUseCase" as UC37
+    usecase "ValidatePasswordUseCase" as UC38
+}
+
+package "roles" {
+    actor "AdminUserRole" as Admin
+    actor "ClientUserRole" as Client
+    actor "CompanyUserRole" as Company
+    actor "ManagerUserRole" as Manager
+    actor "OperatorUserRole" as Operator
+    actor "StartUserRole" as Start
+}
+
+' Группировка связей по ролям
+Admin --> UC1 : "Get Logs"
+Admin --> UC2 : "Insert Log"
+Admin --> UC30 : "Get Base User"
+
+Client --> UC14 : "Get Standard Accounts"
+Client --> UC13 : "Get Credit Accounts"
+Client --> UC21 : "Get Salary Projects"
+Client --> UC17 : "Get Banks"
+Client --> UC30 : "Get Base User"
+Client --> UC23 : "Projects by Status"
+Client --> UC15 : "Insert Credit Account"
+Client --> UC16 : "Insert Standard Account"
+Client --> UC6 : "Change Status Base Account"
+Client --> UC18 : "Change Client Projects"
+Client --> UC29 : "Create Transfer"
+Client --> UC28 : "Validate Transfer"
+
+Company --> UC12 : "Get Company Accounts"
+Company --> UC17 : "Get Banks"
+Company --> UC22 : "Projects by Company"
+Company --> UC30 : "Get Base User"
+Company --> UC31 : "Get Company User"
+Company --> UC24 : "Insert Salary Project"
+Company --> UC19 : "Change Status Project"
+Company --> UC29 : "Create Transfer"
+Company --> UC28 : "Validate Transfer"
+
+Manager --> UC20 : "Get All Projects"
+Manager --> UC26 : "Get All Transfers"
+Manager --> UC30 : "Get Base User"
+Manager --> UC10 : "Get All Standard Accounts"
+Manager --> UC9 : "Get All Credit Accounts"
+Manager --> UC8 : "Get All Company Accounts"
+Manager --> UC11 : "Get Base Account by ID"
+
+Operator --> UC20 : "Get All Projects"
+Operator --> UC13 : "Get Credit Accounts"
+Operator --> UC26 : "Get All Transfers"
+Operator --> UC30 : "Get Base User"
+Operator --> UC27 : "Get Transfer by ID"
+Operator --> UC5 : "Change Balance"
+Operator --> UC19 : "Change Project Status"
+Operator --> UC25 : "Change Transfer Status"
+
+Start --> UC30 : "Get Base User"
+Start --> UC32 : "Insert Admin User"
+Start --> UC33 : "Insert Client User"
+Start --> UC34 : "Insert Company User"
+Start --> UC35 : "Insert Manager User"
+Start --> UC36 : "Insert Operator User"
+Start --> UC37 : "Validate Email"
+Start --> UC38 : "Validate Password"
+Start --> UC4 : "Validate Registration"
+Start --> UC3 : "Validate Login"
+
+@enduml
