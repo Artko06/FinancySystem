@@ -50,9 +50,9 @@ class ManagerUserViewModel @Inject constructor(
                 )
                 onCreateActionLog(baseUser = it, ActionType.AUTHORIZATION)
             }
-            onLoadAllTransfers()
-            onLoadSalaryProjects()
             onLoadBankAccounts()
+            onLoadSalaryProjects()
+            onLoadAllTransfers()
         }
     }
 

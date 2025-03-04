@@ -29,7 +29,7 @@ fun ManagerUserSalaryProjectScreen(
 ) {
     Column {
         LazyColumn(
-            modifier = Modifier.then(modifier).fillMaxWidth().fillMaxHeight(0.4f),
+            modifier = Modifier.then(modifier).fillMaxWidth().fillMaxHeight(0.5f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         )
         {

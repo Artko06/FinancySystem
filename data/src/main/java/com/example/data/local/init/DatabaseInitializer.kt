@@ -61,12 +61,6 @@ class DatabaseInitializer @Inject constructor(
             name = "АСБ Беларусбанк",
             bic = "AKBBBY2X",
             interestRate = 14.0
-        ),
-        BankEntity(
-            id = 4,
-            name = "Гойдабанк",
-            bic = "GOIDA",
-            interestRate = 3.0
         )
     )
 

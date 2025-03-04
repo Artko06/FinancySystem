@@ -36,8 +36,8 @@ fun ManagerUserBankAccountScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         )
         {
-            if (managerUserState.standardBankAccounts.isEmpty() &&
-                managerUserState.creditBankAccounts.isEmpty() &&
+            if (managerUserState.standardBankAccounts.isEmpty() ||
+                managerUserState.creditBankAccounts.isEmpty() ||
                 managerUserState.companyBankAccounts.isEmpty())
             {
                 item {
